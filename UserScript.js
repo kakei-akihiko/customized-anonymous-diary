@@ -77,43 +77,89 @@ class Node {
   }
 }
 
-Node.addCssRules([
-  'html, body {margin: 0; padding: 0; height: 100%}',
-  '.h-100 {height: 100%}',
-  '.h-0 {height: 0}',
-  '.scroll {overflow-y: auto}',
-]);
+class AnonymousDiary {
+  setup() {
+    Node.addCssRules([
+      'html, body {margin: 0; padding: 0; height: 100%}',
+      '.h-100 {height: 100%}',
+      '.h-0 {height: 0}',
+      '.scroll {overflow-y: auto}',
+      '.v-interval > *:nth-child(n+2) {margin-left: 0.5rem}',
+    ]);
 
-['original', 'app'].forEach(id => {
-  const element = document.createElement('div');
-  element.id = id;
-  document.body.appendChild(element);
-});
+    ['original', 'app'].forEach(id => {
+      const element = document.createElement('div');
+      element.id = id;
+      document.body.appendChild(element);
+    });
+    
+    document.body.className = 'd-flex flex-column h-100';
+    
+    const original = Node.fromId('original');
+    
+    Array.apply(null, document.body.childNodes)
+      .filter(child => child.id != 'original' && child.id != 'app')
+      .forEach(child => {original.node.appendChild(child);});
+    
+    original.findByPath([
+      '//div[@id="hatena-anond"]',
+      '//div[@id="original"]/p',
+      '//div[@id="original"]/h1'
+    ].join('|')).forEach(node => {
+      node.node.style = 'display:none'
+    });
+  }
 
-document.body.className = 'd-flex flex-column h-100';
+  async getItems({page}) {
+    const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + page);
+    const html = await response.text();
+    const dom = new DOMParser()
+      .parseFromString(html, "text/html");
 
-const original = Node.fromId('original');
+    const nodes = new Node(dom.body)
+      .findByPath('//div[@class="body"]/div[@class="section"]');
 
-Array.apply(null, document.body.childNodes)
-  .filter(child => child.id != 'original' && child.id != 'app')
-  .forEach(child => {original.node.appendChild(child);});
+    return nodes.map(node => {
+      const headers = node.findByPath('h3');
+      const header = headers.length > 0 ? headers[0].text : '(no title)';
 
+      const anchors = node.findByPath('.//a');
+      const anchor = anchors.length > 0 ? anchors[0].node.href : null;
 
-original.findByPath([
-  '//div[@id="hatena-anond"]',
-  '//div[@id="original"]/p',
-  '//div[@id="original"]/h1'
-].join('|')).forEach(node => {
-  node.node.style = 'display:none'
-});
+      const paragraphs = node.findByPath('p[not(@class)]').map(node => {
+        return node.text;
+      });
+
+      return {header, anchor, paragraphs};
+    });
+  }
+}
+
+const site = new AnonymousDiary();
+site.setup();
+
+const PagingBlock = {
+  template: `
+    <div class="d-flex v-interval">
+      <div v-if="page > 1">
+        <button class="btn btn-link p-0" @click="$emit('back')">← 前の25件</button>
+      </div>
+      <div>
+        <button class="btn btn-link p-0" @click="$emit('next')">→ 次の25件</button>
+      </div>
+    </div>
+  `,
+  name: 'paging-block',
+  props: {page: Number},
+};
 
 new Vue({
   el: '#app',
-  components: {},
   template: `
     <div id="app" class="h-0 flex-grow-1">
-      <div class="h-100 scroll">
+      <div class="h-100 scroll" ref="scroll">
         <div class="container">
+          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext" />
           <div class="card" v-for="entry in entries" :key="entry.anchor">
             <div class="card-body">
               <div class="card-title">
@@ -126,40 +172,31 @@ new Vue({
               </div>
             </div>
           </div>
+          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext" />
         </div>
       </div>
     </div>`,
+  components: {PagingBlock},
   computed: {
   },
   methods: {
+    pagingBack() {
+      this.page--;
+      this.refresh();
+    },
+    pagingNext() {
+      this.page++;
+      this.refresh();
+    },
     async refresh() {
-      const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=2');
-      const html = await response.text();
-      const dom = new DOMParser()
-        .parseFromString(html, "text/html");
-
-      const nodes = new Node(dom.body)
-        .findByPath('//div[@class="body"]/div[@class="section"]');
-
-      this.entries = nodes
-        .map(node => {
-          const headers = node.findByPath('h3');
-          const header = headers.length > 0 ? headers[0].text : '(no title)';
-
-          const anchors = node.findByPath('.//a');
-          const anchor = anchors.length > 0 ? anchors[0].node.href : null;
-
-          const paragraphs = node.findByPath('p[not(@class)]').map(node => {
-            return node.text;
-          });
-
-          return {header, anchor, paragraphs};
-        });
+      const {page} = this;
+      this.entries = await site.getItems({page});
     },
   },
   data() {
     return {
       entries: [],
+      page: 1,
     };
   },
   mounted() {
