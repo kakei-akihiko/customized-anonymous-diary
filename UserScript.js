@@ -123,14 +123,23 @@ class AnonymousDiary {
       const headers = node.findByPath('h3');
       const header = headers.length > 0 ? headers[0].text : '(no title)';
 
-      const anchors = node.findByPath('.//a');
-      const anchor = anchors.length > 0 ? anchors[0].node.href : null;
-
+      const anchors = node.findByPath('h3/a');
+      const anchor = anchors.length >= 1 ? anchors[0].node.href : null;
+      const reference = anchors.length >= 2 ? anchors[1].node.href : null;
       const paragraphs = node.findByPath('p[not(@class)]').map(node => {
         return node.text;
       });
 
-      return {header, anchor, paragraphs};
+      return {
+        header, anchor, paragraphs,
+        refer: {
+          visible: false,
+          header: null,
+          anchor: reference,
+          paragraphs: null,
+          loading: false,
+        },
+      };
     });
   }
 }
@@ -164,8 +173,26 @@ new Vue({
             <div class="card-body">
               <div class="card-title">
                 <a :href="entry.anchor">{{ entry.header }}</a>
+                <button v-if="entry.refer.anchor != null"
+                    class="btn btn-default btn-sm"
+                    @click="referButtonClick(entry)">
+                  言及先を開く
+                </button>
               </div>
               <div class="card-text">
+                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer.loading">
+                  ...
+                </div>
+                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer.visible">
+                  <div class="card-title">
+                    <a :href="entry.refer.anchor">{{ entry.refer.header }}</a>
+                  </div>
+                  <div class="card-text">
+                    <p v-for="p in entry.refer.paragraphs">
+                      {{ p }}
+                    </p>
+                  </div>
+                </div>
                 <p v-for="p in entry.paragraphs">
                   {{ p }}
                 </p>
@@ -187,6 +214,24 @@ new Vue({
     pagingNext() {
       this.page++;
       this.refresh();
+    },
+    async referButtonClick(entry) {
+      if (entry.refer.visible || entry.refer.header != null) {
+        entry.refer.visible = !entry.refer.visible;
+        return;
+      }
+      entry.refer.loading = true;
+      await new Promise((resolve) => {
+        setTimeout(() => {resolve();}, 500);
+      });
+      entry.refer.loading = false;
+
+      const header = 'ダミータイトル';
+      const paragraphs = ['ダミー本文', entry.refer.anchor, 'から取得する予定'];
+      entry.refer = {
+        ...entry.refer,
+        header, paragraphs, visible: true,
+      }
     },
     async refresh() {
       const {page} = this;
