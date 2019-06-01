@@ -110,6 +110,16 @@ class AnonymousDiary {
     });
   }
 
+  async getItem(entryId) {
+    const url = 'https://anond.hatelabo.jp/' + entryId + '?mode=json';
+    const response = await fetch(url);
+    const entry = await response.json();
+    const {id, body, title} = entry;
+    return {
+      id, title, paragraphs: [body],
+    }
+  }
+  
   async getItems({page}) {
     const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + page);
     const html = await response.text();
@@ -121,25 +131,32 @@ class AnonymousDiary {
 
     return nodes.map(node => {
       const headers = node.findByPath('h3');
-      const header = headers.length > 0 ? headers[0].text : '(no title)';
+      const title = headers.length > 0 ? headers[0].text.replace('■', '') : '(no title)';
 
       const anchors = node.findByPath('h3/a');
-      const anchor = anchors.length >= 1 ? anchors[0].node.href : null;
+      const url = anchors.length >= 1 ? anchors[0].node.href : null;
       const reference = anchors.length >= 2 ? anchors[1].node.href : null;
       const paragraphs = node.findByPath('p[not(@class)]').map(node => {
         return node.text;
       });
 
-      return {
-        header, anchor, paragraphs,
-        refer: {
+      const idMatch = url == null ? null : url.match('[0-9]+$');
+      const id = idMatch == null ? -1 : idMatch[0];
+
+      const referMatch = reference == null ? null : reference.match('[0-9]+$');
+      let refer = null;
+      if (referMatch != null) {
+        refer = {
+          id: referMatch[0],
           visible: false,
-          header: null,
-          anchor: reference,
+          title: null,
+          url: reference,
           paragraphs: null,
           loading: false,
-        },
-      };
+        }
+      }
+
+      return {id, title, url, paragraphs, refer};
     });
   }
 }
@@ -169,23 +186,26 @@ new Vue({
       <div class="h-100 scroll" ref="scroll">
         <div class="container">
           <PagingBlock :page="page" @back="pagingBack" @next="pagingNext" />
-          <div class="card" v-for="entry in entries" :key="entry.anchor">
+          <div class="card" v-for="entry in entries" :key="entry.url">
             <div class="card-body">
               <div class="card-title">
-                <a :href="entry.anchor">{{ entry.header }}</a>
-                <button v-if="entry.refer.anchor != null"
+                <a :href="entry.url">■</a>
+                <strong>{{ entry.title }}</strong>
+                <span class="text-dark text-small">({{ entry.id }})</span>
+                <button v-if="entry.refer != null"
                     class="btn btn-default btn-sm"
                     @click="referButtonClick(entry)">
                   言及先を開く
                 </button>
               </div>
               <div class="card-text">
-                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer.loading">
+                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
                   ...
                 </div>
-                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer.visible">
+                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.visible">
                   <div class="card-title">
-                    <a :href="entry.refer.anchor">{{ entry.refer.header }}</a>
+                    <a :href="entry.refer.url">■</a>
+                    <strong>{{ entry.refer.title }}</strong>
                   </div>
                   <div class="card-text">
                     <p v-for="p in entry.refer.paragraphs">
@@ -216,7 +236,7 @@ new Vue({
       this.refresh();
     },
     async referButtonClick(entry) {
-      if (entry.refer.visible || entry.refer.header != null) {
+      if (entry.refer.visible || entry.refer.title != null) {
         entry.refer.visible = !entry.refer.visible;
         return;
       }
@@ -226,11 +246,11 @@ new Vue({
       });
       entry.refer.loading = false;
 
-      const header = 'ダミータイトル';
-      const paragraphs = ['ダミー本文', entry.refer.anchor, 'から取得する予定'];
+      const title = 'ダミータイトル';
+      const paragraphs = ['ダミー本文', entry.refer.url, 'から取得する予定'];
       entry.refer = {
         ...entry.refer,
-        header, paragraphs, visible: true,
+        title, paragraphs, visible: true,
       }
     },
     async refresh() {
