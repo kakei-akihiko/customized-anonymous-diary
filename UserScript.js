@@ -77,89 +77,191 @@ class Node {
   }
 }
 
-Node.addCssRules([
-  'html, body {margin: 0; padding: 0; height: 100%}',
-  '.h-100 {height: 100%}',
-  '.h-0 {height: 0}',
-  '.scroll {overflow-y: auto}',
-]);
+class AnonymousDiary {
+  setup() {
+    Node.addCssRules([
+      'html, body {margin: 0; padding: 0; height: 100%}',
+      '.h-100 {height: 100%}',
+      '.h-0 {height: 0}',
+      '.scroll {overflow-y: auto}',
+      '.v-interval > *:nth-child(n+2) {margin-left: 0.5rem}',
+    ]);
 
-['original', 'app'].forEach(id => {
-  const element = document.createElement('div');
-  element.id = id;
-  document.body.appendChild(element);
-});
+    ['original', 'app'].forEach(id => {
+      const element = document.createElement('div');
+      element.id = id;
+      document.body.appendChild(element);
+    });
+    
+    document.body.className = 'd-flex flex-column h-100';
+    
+    const original = Node.fromId('original');
+    
+    Array.apply(null, document.body.childNodes)
+      .filter(child => child.id != 'original' && child.id != 'app')
+      .forEach(child => {original.node.appendChild(child);});
+    
+    original.findByPath([
+      '//div[@id="hatena-anond"]',
+      '//div[@id="original"]/p',
+      '//div[@id="original"]/h1'
+    ].join('|')).forEach(node => {
+      node.node.style = 'display:none'
+    });
+  }
 
-document.body.className = 'd-flex flex-column h-100';
+  async getItem(entryId) {
+    const url = 'https://anond.hatelabo.jp/' + entryId + '?mode=json';
+    const response = await fetch(url);
+    const entry = await response.json();
+    const {id, body, title} = entry;
+    return {
+      id, title, paragraphs: [body],
+    }
+  }
+  
+  async getItems({page}) {
+    const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + page);
+    const html = await response.text();
+    const dom = new DOMParser()
+      .parseFromString(html, "text/html");
 
-const original = Node.fromId('original');
+    const nodes = new Node(dom.body)
+      .findByPath('//div[@class="body"]/div[@class="section"]');
 
-Array.apply(null, document.body.childNodes)
-  .filter(child => child.id != 'original' && child.id != 'app')
-  .forEach(child => {original.node.appendChild(child);});
+    return nodes.map(node => {
+      const headers = node.findByPath('h3');
+      const title = headers.length > 0 ? headers[0].text.replace('■', '') : '(no title)';
 
+      const anchors = node.findByPath('h3/a');
+      const url = anchors.length >= 1 ? anchors[0].node.href : null;
+      const reference = anchors.length >= 2 ? anchors[1].node.href : null;
+      const paragraphs = node.findByPath('p[not(@class)]').map(node => {
+        return node.text;
+      });
 
-original.findByPath([
-  '//div[@id="hatena-anond"]',
-  '//div[@id="original"]/p',
-  '//div[@id="original"]/h1'
-].join('|')).forEach(node => {
-  node.node.style = 'display:none'
-});
+      const idMatch = url == null ? null : url.match('[0-9]+$');
+      const id = idMatch == null ? -1 : idMatch[0];
+
+      const referMatch = reference == null ? null : reference.match('[0-9]+$');
+      let refer = null;
+      if (referMatch != null) {
+        refer = {
+          id: referMatch[0],
+          visible: false,
+          title: null,
+          url: reference,
+          paragraphs: null,
+          loading: false,
+        }
+      }
+
+      return {id, title, url, paragraphs, refer};
+    });
+  }
+}
+
+const site = new AnonymousDiary();
+site.setup();
+
+const PagingBlock = {
+  template: `
+    <div class="d-flex v-interval">
+      <div v-if="page > 1">
+        <button class="btn btn-link p-0" @click="$emit('back')">← 前の25件</button>
+      </div>
+      <div>
+        <button class="btn btn-link p-0" @click="$emit('next')">→ 次の25件</button>
+      </div>
+    </div>
+  `,
+  name: 'paging-block',
+  props: {page: Number},
+};
 
 new Vue({
   el: '#app',
-  components: {},
   template: `
     <div id="app" class="h-0 flex-grow-1">
-      <div class="h-100 scroll">
+      <div class="h-100 scroll" ref="scroll">
         <div class="container">
-          <div class="card" v-for="entry in entries" :key="entry.anchor">
+          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext" />
+          <div class="card" v-for="entry in entries" :key="entry.url">
             <div class="card-body">
               <div class="card-title">
-                <a :href="entry.anchor">{{ entry.header }}</a>
+                <a :href="entry.url">■</a>
+                <strong>{{ entry.title }}</strong>
+                <span class="text-dark text-small">({{ entry.id }})</span>
+                <button v-if="entry.refer != null"
+                    class="btn btn-default btn-sm"
+                    @click="referButtonClick(entry)">
+                  言及先を開く
+                </button>
               </div>
               <div class="card-text">
+                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
+                  ...
+                </div>
+                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.visible">
+                  <div class="card-title">
+                    <a :href="entry.refer.url">■</a>
+                    <strong>{{ entry.refer.title }}</strong>
+                  </div>
+                  <div class="card-text">
+                    <p v-for="p in entry.refer.paragraphs">
+                      {{ p }}
+                    </p>
+                  </div>
+                </div>
                 <p v-for="p in entry.paragraphs">
                   {{ p }}
                 </p>
               </div>
             </div>
           </div>
+          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext" />
         </div>
       </div>
     </div>`,
+  components: {PagingBlock},
   computed: {
   },
   methods: {
+    pagingBack() {
+      this.page--;
+      this.refresh();
+    },
+    pagingNext() {
+      this.page++;
+      this.refresh();
+    },
+    async referButtonClick(entry) {
+      if (entry.refer.visible || entry.refer.title != null) {
+        entry.refer.visible = !entry.refer.visible;
+        return;
+      }
+      entry.refer.loading = true;
+      await new Promise((resolve) => {
+        setTimeout(() => {resolve();}, 500);
+      });
+      entry.refer.loading = false;
+
+      const title = 'ダミータイトル';
+      const paragraphs = ['ダミー本文', entry.refer.url, 'から取得する予定'];
+      entry.refer = {
+        ...entry.refer,
+        title, paragraphs, visible: true,
+      }
+    },
     async refresh() {
-      const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=2');
-      const html = await response.text();
-      const dom = new DOMParser()
-        .parseFromString(html, "text/html");
-
-      const nodes = new Node(dom.body)
-        .findByPath('//div[@class="body"]/div[@class="section"]');
-
-      this.entries = nodes
-        .map(node => {
-          const headers = node.findByPath('h3');
-          const header = headers.length > 0 ? headers[0].text : '(no title)';
-
-          const anchors = node.findByPath('.//a');
-          const anchor = anchors.length > 0 ? anchors[0].node.href : null;
-
-          const paragraphs = node.findByPath('p[not(@class)]').map(node => {
-            return node.text;
-          });
-
-          return {header, anchor, paragraphs};
-        });
+      const {page} = this;
+      this.entries = await site.getItems({page});
     },
   },
   data() {
     return {
       entries: [],
+      page: 1,
     };
   },
   mounted() {
