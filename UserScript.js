@@ -265,6 +265,7 @@ new Vue({
     async refresh() {
       const {page} = this;
       this.entries = await site.getItems({page});
+      this.$refs.scroll.scrollTop = 0;
     },
   },
   data() {
