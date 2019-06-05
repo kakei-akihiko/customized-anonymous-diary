@@ -10,7 +10,7 @@
 // @grant        none
 // ==/UserScript==
 
-class Node {
+class DomNode {
   static fromId(id, targetDocument) {
     const _document = targetDocument || document;
     const node = _document.getElementById(id);
@@ -18,7 +18,7 @@ class Node {
       console.error('Id is not found. id:', id);
       throw new Error('Id is not found. id: ' + id);
     }
-    return new Node(node);
+    return new DomNode(node);
   }
 
   constructor(node) {
@@ -39,7 +39,7 @@ class Node {
 
   findByTagName(tagName) {
     const nodes = this.node.getElementsByTagName(tagName);
-    return Array.apply(null, nodes).map(node => new Node(node));
+    return Array.apply(null, nodes).map(node => new DomNode(node));
   }
 
   findByPath(expression) {
@@ -51,7 +51,7 @@ class Node {
     for(let i = 0; i < x.snapshotLength; i++) {
       nodes.push(x.snapshotItem(i));
     }
-    return nodes.map(node => new Node(node));
+    return nodes.map(node => new DomNode(node));
   }
 
   removeChildren() {
@@ -79,7 +79,7 @@ class Node {
 
 class AnonymousDiary {
   setup() {
-    Node.addCssRules([
+    DomNode.addCssRules([
       'html, body {margin: 0; padding: 0; height: 100%}',
       '.h-100 {height: 100%}',
       '.h-0 {height: 0}',
@@ -95,7 +95,7 @@ class AnonymousDiary {
     
     document.body.className = 'd-flex flex-column h-100';
     
-    const original = Node.fromId('original');
+    const original = DomNode.fromId('original');
     
     Array.apply(null, document.body.childNodes)
       .filter(child => child.id != 'original' && child.id != 'app')
@@ -136,7 +136,7 @@ class AnonymousDiary {
     const dom = new DOMParser()
       .parseFromString(html, "text/html");
 
-    const nodes = new Node(dom.body)
+    const nodes = new DomNode(dom.body)
       .findByPath('//div[@class="body"]/div[@class="section"]');
 
     return nodes.map(node => {
