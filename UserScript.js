@@ -10,7 +10,7 @@
 // @grant        none
 // ==/UserScript==
 
-class Node {
+class DomNode {
   static fromId(id, targetDocument) {
     const _document = targetDocument || document;
     const node = _document.getElementById(id);
@@ -18,7 +18,7 @@ class Node {
       console.error('Id is not found. id:', id);
       throw new Error('Id is not found. id: ' + id);
     }
-    return new Node(node);
+    return new DomNode(node);
   }
 
   constructor(node) {
@@ -39,7 +39,7 @@ class Node {
 
   findByTagName(tagName) {
     const nodes = this.node.getElementsByTagName(tagName);
-    return Array.apply(null, nodes).map(node => new Node(node));
+    return Array.apply(null, nodes).map(node => new DomNode(node));
   }
 
   findByPath(expression) {
@@ -51,7 +51,7 @@ class Node {
     for(let i = 0; i < x.snapshotLength; i++) {
       nodes.push(x.snapshotItem(i));
     }
-    return nodes.map(node => new Node(node));
+    return nodes.map(node => new DomNode(node));
   }
 
   removeChildren() {
@@ -79,7 +79,7 @@ class Node {
 
 class AnonymousDiary {
   setup() {
-    Node.addCssRules([
+    DomNode.addCssRules([
       'html, body {margin: 0; padding: 0; height: 100%}',
       '.h-100 {height: 100%}',
       '.h-0 {height: 0}',
@@ -95,7 +95,7 @@ class AnonymousDiary {
     
     document.body.className = 'd-flex flex-column h-100';
     
-    const original = Node.fromId('original');
+    const original = DomNode.fromId('original');
     
     Array.apply(null, document.body.childNodes)
       .filter(child => child.id != 'original' && child.id != 'app')
@@ -110,14 +110,26 @@ class AnonymousDiary {
     });
   }
 
+  getUrlFromEntryId(id) {
+    return 'https://anond.hatelabo.jp/' + id + '?mode=json'
+  }
+
   async getItem(entryId) {
-    const url = 'https://anond.hatelabo.jp/' + entryId + '?mode=json';
+    const url = this.getUrlFromEntryId(entryId);
     const response = await fetch(url);
     const entry = await response.json();
-    const {id, body, title} = entry;
-    return {
-      id, title, paragraphs: [body],
-    }
+    
+    const titleDom = new DOMParser()
+      .parseFromString('<body>' + entry.title + '</body>', 'text/html');
+    const title = titleDom.body.textContent;
+
+    const bodyDom = new DOMParser()
+      .parseFromString('<body>' + entry.body + '</body>', 'text/html');
+    const paragraphs = new DomNode(bodyDom.body)
+      .findByPath('p[not(@class)]|blockquote')
+      .map(node => node.text);
+
+    return {id: entryId, title, paragraphs};
   }
   
   async getItems({page}) {
@@ -126,7 +138,7 @@ class AnonymousDiary {
     const dom = new DOMParser()
       .parseFromString(html, "text/html");
 
-    const nodes = new Node(dom.body)
+    const nodes = new DomNode(dom.body)
       .findByPath('//div[@class="body"]/div[@class="section"]');
 
     return nodes.map(node => {
@@ -136,7 +148,7 @@ class AnonymousDiary {
       const anchors = node.findByPath('h3/a');
       const url = anchors.length >= 1 ? anchors[0].node.href : null;
       const reference = anchors.length >= 2 ? anchors[1].node.href : null;
-      const paragraphs = node.findByPath('p[not(@class)]').map(node => {
+      const paragraphs = node.findByPath('p[not(@class)]|blockquote').map(node => {
         return node.text;
       });
 
@@ -196,7 +208,7 @@ new Vue({
                     class="btn btn-default btn-sm"
                     @click="referButtonClick(entry)">
                   言及先を開く
-                </button>
+                </button>{{ entry.refer == null ? '' : entry.refer.id }}
               </div>
               <div class="card-text">
                 <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
@@ -240,22 +252,22 @@ new Vue({
         entry.refer.visible = !entry.refer.visible;
         return;
       }
+      if (entry.refer.loading) {
+        return;
+      }
       entry.refer.loading = true;
-      await new Promise((resolve) => {
-        setTimeout(() => {resolve();}, 500);
-      });
+      const item = await site.getItem(entry.refer.id);
       entry.refer.loading = false;
 
-      const title = 'ダミータイトル';
-      const paragraphs = ['ダミー本文', entry.refer.url, 'から取得する予定'];
+      const {id, title, paragraphs} = item;
       entry.refer = {
-        ...entry.refer,
-        title, paragraphs, visible: true,
-      }
+        id, title, paragraphs, visible: true,
+      };
     },
     async refresh() {
       const {page} = this;
       this.entries = await site.getItems({page});
+      this.$refs.scroll.scrollTop = 0;
     },
   },
   data() {
