@@ -125,9 +125,11 @@ class AnonymousDiary {
 
     const bodyDom = new DOMParser()
       .parseFromString('<body>' + entry.body + '</body>', 'text/html');
-    const body = bodyDom.body.textContent;
+    const paragraphs = new DomNode(bodyDom.body)
+      .findByPath('p[not(@class)]|blockquote')
+      .map(node => node.text);
 
-    return {id: entryId, title, paragraphs: [body]};
+    return {id: entryId, title, paragraphs};
   }
   
   async getItems({page}) {
