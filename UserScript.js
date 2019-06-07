@@ -147,7 +147,8 @@ class AnonymousDiary {
 
       const anchors = node.findByPath('h3/a');
       const url = anchors.length >= 1 ? anchors[0].node.href : null;
-      const reference = anchors.length >= 2 ? anchors[1].node.href : null;
+      const reference = (anchors.length >= 2 && anchors[1].node.textContent.match('anond:[0-9]')) ? anchors[1].node.href : null;
+
       const paragraphs = node.findByPath('p[not(@class)]|blockquote').map(node => {
         return node.text;
       });
@@ -182,6 +183,7 @@ const PagingBlock = {
       <div v-if="page > 1">
         <button class="btn btn-link p-0" @click="$emit('back')">← 前の25件</button>
       </div>
+      <slot></slot>
       <div>
         <button class="btn btn-link p-0" @click="$emit('next')">→ 次の25件</button>
       </div>
@@ -197,18 +199,19 @@ new Vue({
     <div id="app" class="h-0 flex-grow-1">
       <div class="h-100 scroll" ref="scroll">
         <div class="container">
-          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext" />
+          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext">
+            <button class="btn btn-link p-0" @click="refresh">再読み込み</button>
+          </PagingBlock>
           <div class="card" v-for="entry in entries" :key="entry.url">
             <div class="card-body">
               <div class="card-title">
                 <a :href="entry.url">■</a>
                 <strong>{{ entry.title }}</strong>
-                <span class="text-dark text-small">({{ entry.id }})</span>
                 <button v-if="entry.refer != null"
                     class="btn btn-default btn-sm"
                     @click="referButtonClick(entry)">
                   言及先を開く
-                </button>{{ entry.refer == null ? '' : entry.refer.id }}
+                </button>
               </div>
               <div class="card-text">
                 <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
