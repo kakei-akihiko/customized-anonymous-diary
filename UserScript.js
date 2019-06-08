@@ -150,7 +150,9 @@ class AnonymousDiary {
       const reference = (anchors.length >= 2 && anchors[1].node.textContent.match('anond:[0-9]')) ? anchors[1].node.href : null;
 
       const paragraphs = node.findByPath('p[not(@class)]|blockquote').map(node => {
-        return node.text;
+        const text = node.text;
+        const nodeName = node.node.nodeName;
+        return {text, nodeName};
       });
 
       const idMatch = url == null ? null : url.match('[0-9]+$');
@@ -228,9 +230,15 @@ new Vue({
                     </p>
                   </div>
                 </div>
-                <p v-for="p in entry.paragraphs">
-                  {{ p }}
-                </p>
+                <div v-for="item in entry.paragraphs">
+                  <p v-if="item.nodeName == 'P'">
+                    {{ item.text }}
+                  </p>
+                  <blockquote v-if="item.nodeName == 'BLOCKQUOTE'" class="rounded p-1"
+                    style="background-color: rgb(220, 240, 255)">
+                    {{ item.text }}
+                  </blockquote>
+                </div>
               </div>
             </div>
           </div>
