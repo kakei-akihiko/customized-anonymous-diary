@@ -219,7 +219,8 @@ new Vue({
                 <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
                   ...
                 </div>
-                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.visible">
+                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.visible"
+                    style="background-color: honeydew">
                   <div class="card-title">
                     <a :href="entry.refer.url">■</a>
                     <strong>{{ entry.refer.title }}</strong>
