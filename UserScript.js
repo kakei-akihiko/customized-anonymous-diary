@@ -22,29 +22,29 @@ class DomNode {
   }
 
   constructor(node) {
-    this.node = node;
+    this.native = node;
   }
 
   get document() {
-    return this.node.ownerDocument;
+    return this.native.ownerDocument;
   }
 
   get parentNode() {
-    return this.node.parentNode;
+    return this.native.parentNode;
   }
 
   get text() {
-    return this.node.textContent;
+    return this.native.textContent;
   }
 
   findByTagName(tagName) {
-    const nodes = this.node.getElementsByTagName(tagName);
+    const nodes = this.native.getElementsByTagName(tagName);
     return Array.apply(null, nodes).map(node => new DomNode(node));
   }
 
   findByPath(expression) {
     const x = this.document.evaluate(
-      expression, this.node, null,
+      expression, this.native, null,
       XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
     const nodes = [];
@@ -55,14 +55,14 @@ class DomNode {
   }
 
   removeChildren() {
-    const nodes = this.node.childNodes;
+    const nodes = this.native.childNodes;
     while(nodes.length > 0) {
-      this.node.removeChild(nodes[nodes.length - 1]);
+      this.native.removeChild(nodes[nodes.length - 1]);
     }
   }
 
   remove() {
-    this.node.parentNode.removeChild(this.node);
+    this.native.parentNode.removeChild(this.native);
   }
 
   static addCssRules(cssRules) {
@@ -99,14 +99,14 @@ class AnonymousDiary {
     
     Array.apply(null, document.body.childNodes)
       .filter(child => child.id != 'original' && child.id != 'app')
-      .forEach(child => {original.node.appendChild(child);});
+      .forEach(child => {original.native.appendChild(child);});
     
     original.findByPath([
       '//div[@id="hatena-anond"]',
       '//div[@id="original"]/p',
       '//div[@id="original"]/h1'
     ].join('|')).forEach(node => {
-      node.node.style = 'display:none'
+      node.native.style = 'display:none'
     });
   }
 
@@ -146,12 +146,12 @@ class AnonymousDiary {
       const title = headers.length > 0 ? headers[0].text.replace('■', '') : '(no title)';
 
       const anchors = node.findByPath('h3/a');
-      const url = anchors.length >= 1 ? anchors[0].node.href : null;
-      const reference = (anchors.length >= 2 && anchors[1].node.textContent.match('anond:[0-9]')) ? anchors[1].node.href : null;
+      const url = anchors.length >= 1 ? anchors[0].native.href : null;
+      const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
 
       const paragraphs = node.findByPath('p[not(@class)]|blockquote').map(node => {
         const text = node.text;
-        const nodeName = node.node.nodeName;
+        const nodeName = node.native.nodeName;
         return {text, nodeName};
       });
 
