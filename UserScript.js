@@ -182,13 +182,11 @@ site.setup();
 const PagingBlock = {
   template: `
     <div class="d-flex v-interval">
-      <div v-if="page > 1">
-        <button class="btn btn-link p-0" @click="$emit('back')">← 前の25件</button>
-      </div>
-      <slot></slot>
-      <div>
-        <button class="btn btn-link p-0" @click="$emit('next')">→ 次の25件</button>
-      </div>
+      <button class="btn btn-link p-0" @click="$emit('click', page)">再読み込み</button>
+      <button class="btn btn-link p-0" @click="$emit('click', 1)" v-if="page > 1">最新を取得</button>
+      <button class="btn btn-link p-0" @click="$emit('click', page - 1)" v-if="page > 1">← 前の25件</button>
+      <button class="btn btn-link p-0" @click="$emit('click', page + 1)">→ 次の25件</button>
+      <button class="btn btn-link p-0" @click="$emit('click', page + 5)">古い方へ+5p</button>
     </div>
   `,
   name: 'paging-block',
@@ -201,9 +199,7 @@ new Vue({
     <div id="app" class="h-0 flex-grow-1">
       <div class="h-100 scroll" ref="scroll">
         <div class="container">
-          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext">
-            <button class="btn btn-link p-0" @click="refresh">再読み込み</button>
-          </PagingBlock>
+          <PagingBlock :page="page" @click="pagingClick($event)" />
           <div class="card" v-for="entry in entries" :key="entry.url">
             <div class="card-body">
               <div class="card-title">
@@ -243,7 +239,7 @@ new Vue({
               </div>
             </div>
           </div>
-          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext" />
+          <PagingBlock :page="page" @click="pagingClick($event)" />
         </div>
       </div>
     </div>`,
@@ -251,12 +247,8 @@ new Vue({
   computed: {
   },
   methods: {
-    pagingBack() {
-      this.page--;
-      this.refresh();
-    },
-    pagingNext() {
-      this.page++;
+    pagingClick(page) {
+      this.page = page;
       this.refresh();
     },
     async referButtonClick(entry) {
