@@ -79,6 +79,13 @@ class DomNode {
 
 class AnonymousDiary {
   setup() {
+    const head = document.getElementsByTagName('head')[0];
+    const css = document.createElement('style');
+    css.setAttribute('rel', 'stylesheet');
+    css.setAttribute('type', 'text/css');
+    css.setAttribute('href', 'https://bootswatch.com/4/litera/bootstrap.min.css');
+    head.appendChild(css);
+
     DomNode.addCssRules([
       'html, body {margin: 0; padding: 0; height: 100%}',
       '.h-100 {height: 100%}',
