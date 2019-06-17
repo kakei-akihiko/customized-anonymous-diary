@@ -80,7 +80,7 @@ class DomNode {
 class AnonymousDiary {
   setup() {
     const head = document.getElementsByTagName('head')[0];
-    const css = document.createElement('style');
+    const css = document.createElement('link');
     css.setAttribute('rel', 'stylesheet');
     css.setAttribute('type', 'text/css');
     css.setAttribute('href', 'https://bootswatch.com/4/litera/bootstrap.min.css');
@@ -92,6 +92,8 @@ class AnonymousDiary {
       '.h-0 {height: 0}',
       '.scroll {overflow-y: auto}',
       '.v-interval > *:nth-child(n+2) {margin-left: 0.5rem}',
+      ':root {--font-family-sans-serif: sans-serif}',
+      'body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}',
     ]);
 
     ['original', 'app'].forEach(id => {
@@ -133,7 +135,7 @@ class AnonymousDiary {
     const bodyDom = new DOMParser()
       .parseFromString('<body>' + entry.body + '</body>', 'text/html');
     const paragraphs = new DomNode(bodyDom.body)
-      .findByPath('p[not(@class)]|blockquote')
+      .findByPath('p[not(@class)]|blockquote|h4')
       .map(node => node.text);
 
     return {id: entryId, title, paragraphs};
@@ -156,7 +158,7 @@ class AnonymousDiary {
       const url = anchors.length >= 1 ? anchors[0].native.href : null;
       const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
 
-      const paragraphs = node.findByPath('p[not(@class)]|blockquote').map(node => {
+      const paragraphs = node.findByPath('p[not(@class)]|blockquote|h4').map(node => {
         const text = node.text;
         const nodeName = node.native.nodeName;
         return {text, nodeName};
@@ -242,6 +244,9 @@ new Vue({
                     style="background-color: rgb(220, 240, 255)">
                     {{ item.text }}
                   </blockquote>
+                  <h4 v-if="item.nodeName == 'H4'" class="h5 ml-0">
+                    {{ item.text }}
+                  </h4>
                 </div>
               </div>
             </div>
