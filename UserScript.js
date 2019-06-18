@@ -11,6 +11,30 @@
 // ==/UserScript==
 
 class DomNode {
+  static createElement(elementName, {id, appendTo, ownerDocument, className, attributes} = {}) {
+    const element = (ownerDocument || document).createElement(elementName);
+
+    if (id !== undefined) {
+      element.id = id;
+    }
+
+    if (className !== undefined) {
+      element.className = className;
+    }
+
+    if (attributes !== undefined) {
+      Object.keys(attributes).forEach(name => {
+        element.setAttribute(name, attributes[name]);
+      });
+    }
+
+    if (appendTo !== undefined) {
+      appendTo.appendChild(element);
+    }
+
+    return element;
+  }
+
   static fromId(id, targetDocument) {
     const _document = targetDocument || document;
     const node = _document.getElementById(id);
@@ -80,11 +104,15 @@ class DomNode {
 class AnonymousDiary {
   setup() {
     const head = document.getElementsByTagName('head')[0];
-    const css = document.createElement('link');
-    css.setAttribute('rel', 'stylesheet');
-    css.setAttribute('type', 'text/css');
-    css.setAttribute('href', 'https://bootswatch.com/4/litera/bootstrap.min.css');
-    head.appendChild(css);
+
+    DomNode.createElement('link', {
+      attributes: {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: 'https://bootswatch.com/4/litera/bootstrap.min.css',
+      },
+      appendTo: head,
+    });
 
     DomNode.addCssRules([
       'html, body {margin: 0; padding: 0; height: 100%}',
@@ -97,9 +125,7 @@ class AnonymousDiary {
     ]);
 
     ['original', 'app'].forEach(id => {
-      const element = document.createElement('div');
-      element.id = id;
-      document.body.appendChild(element);
+      DomNode.createElement('div', {id, appendTo: document.body});
     });
     
     document.body.className = 'd-flex flex-column h-100';
