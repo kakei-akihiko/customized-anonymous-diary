@@ -11,6 +11,30 @@
 // ==/UserScript==
 
 class DomNode {
+  static createElement(elementName, {id, appendTo, ownerDocument, className, attributes} = {}) {
+    const element = (ownerDocument || document).createElement(elementName);
+
+    if (id !== undefined) {
+      element.id = id;
+    }
+
+    if (className !== undefined) {
+      element.className = className;
+    }
+
+    if (attributes !== undefined) {
+      Object.keys(attributes).forEach(name => {
+        element.setAttribute(name, attributes[name]);
+      });
+    }
+
+    if (appendTo !== undefined) {
+      appendTo.appendChild(element);
+    }
+
+    return element;
+  }
+
   static fromId(id, targetDocument) {
     const _document = targetDocument || document;
     const node = _document.getElementById(id);
@@ -79,18 +103,29 @@ class DomNode {
 
 class AnonymousDiary {
   setup() {
+    const head = document.getElementsByTagName('head')[0];
+
+    DomNode.createElement('link', {
+      attributes: {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: 'https://bootswatch.com/4/litera/bootstrap.min.css',
+      },
+      appendTo: head,
+    });
+
     DomNode.addCssRules([
       'html, body {margin: 0; padding: 0; height: 100%}',
       '.h-100 {height: 100%}',
       '.h-0 {height: 0}',
       '.scroll {overflow-y: auto}',
       '.v-interval > *:nth-child(n+2) {margin-left: 0.5rem}',
+      ':root {--font-family-sans-serif: sans-serif}',
+      'body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}',
     ]);
 
     ['original', 'app'].forEach(id => {
-      const element = document.createElement('div');
-      element.id = id;
-      document.body.appendChild(element);
+      DomNode.createElement('div', {id, appendTo: document.body});
     });
     
     document.body.className = 'd-flex flex-column h-100';
@@ -126,7 +161,7 @@ class AnonymousDiary {
     const bodyDom = new DOMParser()
       .parseFromString('<body>' + entry.body + '</body>', 'text/html');
     const paragraphs = new DomNode(bodyDom.body)
-      .findByPath('p[not(@class)]|blockquote')
+      .findByPath('p[not(@class)]|blockquote|h4')
       .map(node => node.text);
 
     return {id: entryId, title, paragraphs};
@@ -149,7 +184,7 @@ class AnonymousDiary {
       const url = anchors.length >= 1 ? anchors[0].native.href : null;
       const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
 
-      const paragraphs = node.findByPath('p[not(@class)]|blockquote').map(node => {
+      const paragraphs = node.findByPath('p[not(@class)]|blockquote|h4').map(node => {
         const text = node.text;
         const nodeName = node.native.nodeName;
         return {text, nodeName};
@@ -182,13 +217,11 @@ site.setup();
 const PagingBlock = {
   template: `
     <div class="d-flex v-interval">
-      <div v-if="page > 1">
-        <button class="btn btn-link p-0" @click="$emit('back')">← 前の25件</button>
-      </div>
-      <slot></slot>
-      <div>
-        <button class="btn btn-link p-0" @click="$emit('next')">→ 次の25件</button>
-      </div>
+      <button class="btn btn-link p-0" @click="$emit('click', page)">再読み込み</button>
+      <button class="btn btn-link p-0" @click="$emit('click', 1)" v-if="page > 1">最新を取得</button>
+      <button class="btn btn-link p-0" @click="$emit('click', page - 1)" v-if="page > 1">← 前の25件</button>
+      <button class="btn btn-link p-0" @click="$emit('click', page + 1)">→ 次の25件</button>
+      <button class="btn btn-link p-0" @click="$emit('click', page + 5)">古い方へ+5p</button>
     </div>
   `,
   name: 'paging-block',
@@ -201,9 +234,7 @@ new Vue({
     <div id="app" class="h-0 flex-grow-1">
       <div class="h-100 scroll" ref="scroll">
         <div class="container">
-          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext">
-            <button class="btn btn-link p-0" @click="refresh">再読み込み</button>
-          </PagingBlock>
+          <PagingBlock :page="page" @click="pagingClick($event)" />
           <div class="card" v-for="entry in entries" :key="entry.url">
             <div class="card-body">
               <div class="card-title">
@@ -239,11 +270,14 @@ new Vue({
                     style="background-color: rgb(220, 240, 255)">
                     {{ item.text }}
                   </blockquote>
+                  <h4 v-if="item.nodeName == 'H4'" class="h5 ml-0">
+                    {{ item.text }}
+                  </h4>
                 </div>
               </div>
             </div>
           </div>
-          <PagingBlock :page="page" @back="pagingBack" @next="pagingNext" />
+          <PagingBlock :page="page" @click="pagingClick($event)" />
         </div>
       </div>
     </div>`,
@@ -251,12 +285,8 @@ new Vue({
   computed: {
   },
   methods: {
-    pagingBack() {
-      this.page--;
-      this.refresh();
-    },
-    pagingNext() {
-      this.page++;
+    pagingClick(page) {
+      this.page = page;
       this.refresh();
     },
     async referButtonClick(entry) {
