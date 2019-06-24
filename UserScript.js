@@ -308,7 +308,11 @@ new Vue({
     },
     async refresh() {
       const {page} = this;
-      this.entries = await site.getItems({page});
+      const entries = await site.getItems({page});
+      if (this.reverse) {
+        entries.sort((a, b) => b - a);
+      }
+      this.entries = entries;
       this.$refs.scroll.scrollTop = 0;
     },
   },
@@ -316,6 +320,7 @@ new Vue({
     return {
       entries: [],
       page: 1,
+      reverse: true,
     };
   },
   mounted() {
