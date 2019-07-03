@@ -61,6 +61,11 @@ class DomNode {
     return this.native.textContent;
   }
 
+  findByQuery(query) {
+    const nodes = this.native.querySelectorAll(query);
+    return Array.apply(null, nodes).map(node => new DomNode(node));
+  }
+
   findByTagName(tagName) {
     const nodes = this.native.getElementsByTagName(tagName);
     return Array.apply(null, nodes).map(node => new DomNode(node));
@@ -184,10 +189,16 @@ class AnonymousDiary {
       const url = anchors.length >= 1 ? anchors[0].native.href : null;
       const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
 
-      const paragraphs = node.findByPath('p[not(@class)]|blockquote|h4').map(node => {
-        const text = node.text;
+      const paragraphs = node.findByPath('p[not(@class)]|blockquote|h4|ul').map(node => {
         const nodeName = node.native.nodeName;
-        return {text, nodeName};
+
+        if (node.native.nodeName == 'UL') {
+          const texts = node.findByQuery('li').map(li => li.text);
+          return {texts, nodeName};
+        } else {
+          const text = node.text;  
+          return {text, nodeName};
+        }
       });
 
       const idMatch = url == null ? null : url.match('[0-9]+$');
@@ -265,6 +276,11 @@ new Vue({
                 <div v-for="item in entry.paragraphs">
                   <p v-if="item.nodeName == 'P'">
                     {{ item.text }}
+                  </p>
+                  <p v-if="item.nodeName == 'UL'">
+                    <ul>
+                      <li v-for="text in item.texts">{{ text }}</li>
+                    </ul>
                   </p>
                   <blockquote v-if="item.nodeName == 'BLOCKQUOTE'" class="rounded p-1"
                     style="background-color: rgb(220, 240, 255)">
