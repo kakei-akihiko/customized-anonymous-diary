@@ -239,6 +239,33 @@ const PagingBlock = {
   props: {page: Number},
 };
 
+const ArticleSection = {
+  template: `
+    <div>
+      <div v-for="item in items">
+        <p v-if="item.nodeName == 'P'">
+          {{ item.text }}
+        </p>
+        <p v-if="item.nodeName == 'UL'">
+          <ul>
+            <li v-for="text in item.texts">{{ text }}</li>
+          </ul>
+        </p>
+        <blockquote v-if="item.nodeName == 'BLOCKQUOTE'" class="rounded p-1"
+          style="background-color: rgb(220, 240, 255)">
+          {{ item.text }}
+        </blockquote>
+        <h4 v-if="item.nodeName == 'H4'" class="h5 ml-0">
+          {{ item.text }}
+        </h4>
+      </div>
+    </div>`,
+  name: 'article-section',
+  props: {
+    items: {required: true},
+  },
+};
+
 new Vue({
   el: '#app',
   template: `
@@ -273,23 +300,7 @@ new Vue({
                     </p>
                   </div>
                 </div>
-                <div v-for="item in entry.paragraphs">
-                  <p v-if="item.nodeName == 'P'">
-                    {{ item.text }}
-                  </p>
-                  <p v-if="item.nodeName == 'UL'">
-                    <ul>
-                      <li v-for="text in item.texts">{{ text }}</li>
-                    </ul>
-                  </p>
-                  <blockquote v-if="item.nodeName == 'BLOCKQUOTE'" class="rounded p-1"
-                    style="background-color: rgb(220, 240, 255)">
-                    {{ item.text }}
-                  </blockquote>
-                  <h4 v-if="item.nodeName == 'H4'" class="h5 ml-0">
-                    {{ item.text }}
-                  </h4>
-                </div>
+                <ArticleSection :items="entry.paragraphs"/>
               </div>
             </div>
           </div>
@@ -297,7 +308,7 @@ new Vue({
         </div>
       </div>
     </div>`,
-  components: {PagingBlock},
+  components: {ArticleSection, PagingBlock},
   computed: {
   },
   methods: {
