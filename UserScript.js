@@ -127,6 +127,7 @@ class AnonymousDiary {
       '.v-interval > *:nth-child(n+2) {margin-left: 0.5rem}',
       ':root {--font-family-sans-serif: sans-serif}',
       'body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}',
+      '.main-content {max-width: 550pt}',
     ]);
 
     ['original', 'app'].forEach(id => {
@@ -275,8 +276,8 @@ new Vue({
     <div id="app" class="h-0 flex-grow-1">
       <div class="h-100 scroll" ref="scroll">
         <div class="container">
-          <PagingBlock :page="page" @click="pagingClick($event)" />
-          <div class="card" v-for="entry in entries" :key="entry.url">
+          <PagingBlock :page="page" @click="pagingClick($event)" class="main-content" />
+          <div class="card main-content" v-for="entry in entries" :key="entry.url">
             <div class="card-body">
               <div class="card-title">
                 <a :href="entry.url">■</a>
@@ -305,7 +306,7 @@ new Vue({
               </div>
             </div>
           </div>
-          <PagingBlock :page="page" @click="pagingClick($event)" />
+          <PagingBlock :page="page" @click="pagingClick($event)" class="main-content" />
         </div>
       </div>
     </div>`,
