@@ -165,9 +165,8 @@ class AnonymousDiary {
 
     const bodyDom = new DOMParser()
       .parseFromString('<body>' + entry.body + '</body>', 'text/html');
-    const paragraphs = new DomNode(bodyDom.body)
-      .findByPath('p[not(@class)]|blockquote|h4')
-      .map(node => node.text);
+
+    const paragraphs = this.parseEntryBody(new DomNode(bodyDom.body));
 
     return {id: entryId, title, paragraphs};
   }
@@ -189,17 +188,7 @@ class AnonymousDiary {
       const url = anchors.length >= 1 ? anchors[0].native.href : null;
       const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
 
-      const paragraphs = node.findByPath('p[not(@class)]|blockquote|h4|ul').map(node => {
-        const nodeName = node.native.nodeName;
-
-        if (node.native.nodeName == 'UL') {
-          const texts = node.findByQuery('li').map(li => li.text);
-          return {texts, nodeName};
-        } else {
-          const text = node.text;  
-          return {text, nodeName};
-        }
-      });
+      const paragraphs = this.parseEntryBody(node);
 
       const idMatch = url == null ? null : url.match('[0-9]+$');
       const id = idMatch == null ? -1 : idMatch[0];
@@ -218,6 +207,20 @@ class AnonymousDiary {
       }
 
       return {id, title, url, paragraphs, refer};
+    });
+  }
+
+  parseEntryBody(node) {
+    return node.findByPath('p[not(@class)]|blockquote|h4|ul').map(node => {
+      const nodeName = node.native.nodeName;
+
+      if (node.native.nodeName == 'UL') {
+        const texts = node.findByQuery('li').map(li => li.text);
+        return {texts, nodeName};
+      } else {
+        const text = node.text;  
+        return {text, nodeName};
+      }
     });
   }
 }
@@ -295,9 +298,7 @@ new Vue({
                     <strong>{{ entry.refer.title }}</strong>
                   </div>
                   <div class="card-text">
-                    <p v-for="p in entry.refer.paragraphs">
-                      {{ p }}
-                    </p>
+                    <ArticleSection :items="entry.refer.paragraphs"/>
                   </div>
                 </div>
                 <ArticleSection :items="entry.paragraphs"/>
