@@ -61,6 +61,11 @@ class DomNode {
     return this.native.textContent;
   }
 
+  findByQuery(query) {
+    const nodes = this.native.querySelectorAll(query);
+    return Array.apply(null, nodes).map(node => new DomNode(node));
+  }
+
   findByTagName(tagName) {
     const nodes = this.native.getElementsByTagName(tagName);
     return Array.apply(null, nodes).map(node => new DomNode(node));
@@ -122,6 +127,7 @@ class AnonymousDiary {
       '.v-interval > *:nth-child(n+2) {margin-left: 0.5rem}',
       ':root {--font-family-sans-serif: sans-serif}',
       'body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}',
+      '.main-content {max-width: 550pt}',
     ]);
 
     ['original', 'app'].forEach(id => {
@@ -160,9 +166,8 @@ class AnonymousDiary {
 
     const bodyDom = new DOMParser()
       .parseFromString('<body>' + entry.body + '</body>', 'text/html');
-    const paragraphs = new DomNode(bodyDom.body)
-      .findByPath('p[not(@class)]|blockquote|h4')
-      .map(node => node.text);
+
+    const paragraphs = this.parseEntryBody(new DomNode(bodyDom.body));
 
     return {id: entryId, title, paragraphs};
   }
@@ -184,11 +189,7 @@ class AnonymousDiary {
       const url = anchors.length >= 1 ? anchors[0].native.href : null;
       const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
 
-      const paragraphs = node.findByPath('p[not(@class)]|blockquote|h4').map(node => {
-        const text = node.text;
-        const nodeName = node.native.nodeName;
-        return {text, nodeName};
-      });
+      const paragraphs = this.parseEntryBody(node);
 
       const idMatch = url == null ? null : url.match('[0-9]+$');
       const id = idMatch == null ? -1 : idMatch[0];
@@ -207,6 +208,20 @@ class AnonymousDiary {
       }
 
       return {id, title, url, paragraphs, refer};
+    });
+  }
+
+  parseEntryBody(node) {
+    return node.findByPath('p[not(@class)]|blockquote|h4|ul').map(node => {
+      const nodeName = node.native.nodeName;
+
+      if (node.native.nodeName == 'UL') {
+        const texts = node.findByQuery('li').map(li => li.text);
+        return {texts, nodeName};
+      } else {
+        const text = node.text;  
+        return {text, nodeName};
+      }
     });
   }
 }
@@ -228,14 +243,41 @@ const PagingBlock = {
   props: {page: Number},
 };
 
+const ArticleSection = {
+  template: `
+    <div>
+      <div v-for="item in items">
+        <p v-if="item.nodeName == 'P'">
+          {{ item.text }}
+        </p>
+        <p v-if="item.nodeName == 'UL'">
+          <ul>
+            <li v-for="text in item.texts">{{ text }}</li>
+          </ul>
+        </p>
+        <blockquote v-if="item.nodeName == 'BLOCKQUOTE'" class="rounded p-1"
+          style="background-color: rgb(220, 240, 255)">
+          {{ item.text }}
+        </blockquote>
+        <h4 v-if="item.nodeName == 'H4'" class="h5 ml-0">
+          {{ item.text }}
+        </h4>
+      </div>
+    </div>`,
+  name: 'article-section',
+  props: {
+    items: {required: true},
+  },
+};
+
 new Vue({
   el: '#app',
   template: `
     <div id="app" class="h-0 flex-grow-1">
       <div class="h-100 scroll" ref="scroll">
         <div class="container">
-          <PagingBlock :page="page" @click="pagingClick($event)" />
-          <div class="card" v-for="entry in entries" :key="entry.url">
+          <PagingBlock :page="page" @click="pagingClick($event)" class="main-content" />
+          <div class="card main-content" v-for="entry in entries" :key="entry.url">
             <div class="card-body">
               <div class="card-title">
                 <a :href="entry.url">■</a>
@@ -257,31 +299,18 @@ new Vue({
                     <strong>{{ entry.refer.title }}</strong>
                   </div>
                   <div class="card-text">
-                    <p v-for="p in entry.refer.paragraphs">
-                      {{ p }}
-                    </p>
+                    <ArticleSection :items="entry.refer.paragraphs"/>
                   </div>
                 </div>
-                <div v-for="item in entry.paragraphs">
-                  <p v-if="item.nodeName == 'P'">
-                    {{ item.text }}
-                  </p>
-                  <blockquote v-if="item.nodeName == 'BLOCKQUOTE'" class="rounded p-1"
-                    style="background-color: rgb(220, 240, 255)">
-                    {{ item.text }}
-                  </blockquote>
-                  <h4 v-if="item.nodeName == 'H4'" class="h5 ml-0">
-                    {{ item.text }}
-                  </h4>
-                </div>
+                <ArticleSection :items="entry.paragraphs"/>
               </div>
             </div>
           </div>
-          <PagingBlock :page="page" @click="pagingClick($event)" />
+          <PagingBlock :page="page" @click="pagingClick($event)" class="main-content" />
         </div>
       </div>
     </div>`,
-  components: {PagingBlock},
+  components: {ArticleSection, PagingBlock},
   computed: {
   },
   methods: {
