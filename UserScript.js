@@ -155,7 +155,7 @@ class AnonymousDiary {
     return 'https://anond.hatelabo.jp/' + id + '?mode=json'
   }
 
-  async getItem(entryId) {
+  async getRefer(entryId) {
     const url = this.getUrlFromEntryId(entryId);
     const response = await fetch(url);
     const entry = await response.json();
@@ -171,44 +171,45 @@ class AnonymousDiary {
 
     return {id: entryId, title, paragraphs};
   }
-  
+
   async getItems({page}) {
     const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + page);
     const html = await response.text();
     const dom = new DOMParser()
       .parseFromString(html, "text/html");
 
-    const nodes = new DomNode(dom.body)
-      .findByPath('//div[@class="body"]/div[@class="section"]');
+    return new DomNode(dom.body)
+      .findByPath('//div[@class="body"]/div[@class="section"]')
+      .map(node => this.getItemFromSectionNode(node));
+  }
 
-    return nodes.map(node => {
-      const headers = node.findByPath('h3');
-      const title = headers.length > 0 ? headers[0].text.replace('■', '') : '(no title)';
+  getItemFromSectionNode(node) {
+    const headers = node.findByPath('h3');
+    const title = headers.length > 0 ? headers[0].text.replace('■', '') : '(no title)';
 
-      const anchors = node.findByPath('h3/a');
-      const url = anchors.length >= 1 ? anchors[0].native.href : null;
-      const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
+    const anchors = node.findByPath('h3/a');
+    const url = anchors.length >= 1 ? anchors[0].native.href : null;
+    const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
 
-      const paragraphs = this.parseEntryBody(node);
+    const paragraphs = this.parseEntryBody(node);
 
-      const idMatch = url == null ? null : url.match('[0-9]+$');
-      const id = idMatch == null ? -1 : idMatch[0];
+    const idMatch = url == null ? null : url.match('[0-9]+$');
+    const id = idMatch == null ? -1 : idMatch[0];
 
-      const referMatch = reference == null ? null : reference.match('[0-9]+$');
-      let refer = null;
-      if (referMatch != null) {
-        refer = {
-          id: referMatch[0],
-          visible: false,
-          title: null,
-          url: reference,
-          paragraphs: null,
-          loading: false,
-        }
+    const referMatch = reference == null ? null : reference.match('[0-9]+$');
+    let refer = null;
+    if (referMatch != null) {
+      refer = {
+        id: referMatch[0],
+        visible: false,
+        title: null,
+        url: reference,
+        paragraphs: null,
+        loading: false,
       }
+    }
 
-      return {id, title, url, paragraphs, refer};
-    });
+    return {id, title, url, paragraphs, refer};
   }
 
   parseEntryBody(node) {
@@ -332,7 +333,7 @@ new Vue({
         return;
       }
       entry.refer.loading = true;
-      const item = await site.getItem(entry.refer.id);
+      const item = await site.getRefer(entry.refer.id);
       entry.refer.loading = false;
 
       const {id, title, paragraphs} = item;
