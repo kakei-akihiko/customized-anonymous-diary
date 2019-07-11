@@ -49,6 +49,11 @@ class DomNode {
     this.native = node;
   }
 
+  get children() {
+    const nodes = this.native.childNodes;
+    return Array.apply(null, nodes).map(node => new DomNode(node));
+  }
+
   get document() {
     return this.native.ownerDocument;
   }
@@ -128,6 +133,7 @@ class AnonymousDiary {
       ':root {--font-family-sans-serif: sans-serif}',
       'body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}',
       '.main-content {max-width: 550pt}',
+      '.text-inconspicuous {color: rgb(100,100,100); font-size: small}',
     ]);
 
     ['original', 'app'].forEach(id => {
@@ -155,7 +161,7 @@ class AnonymousDiary {
     return 'https://anond.hatelabo.jp/' + id + '?mode=json'
   }
 
-  async getItem(entryId) {
+  async getRefer(entryId) {
     const url = this.getUrlFromEntryId(entryId);
     const response = await fetch(url);
     const entry = await response.json();
@@ -171,44 +177,65 @@ class AnonymousDiary {
 
     return {id: entryId, title, paragraphs};
   }
-  
+
   async getItems({page}) {
     const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + page);
     const html = await response.text();
     const dom = new DOMParser()
       .parseFromString(html, "text/html");
 
-    const nodes = new DomNode(dom.body)
-      .findByPath('//div[@class="body"]/div[@class="section"]');
+    return new DomNode(dom.body)
+      .findByPath('//div[@class="body"]/div[@class="section"]')
+      .map(node => this.getItemFromSectionNode(node));
+  }
 
-    return nodes.map(node => {
-      const headers = node.findByPath('h3');
-      const title = headers.length > 0 ? headers[0].text.replace('■', '') : '(no title)';
+  getItemFromSectionNode(node) {
+    const headers = node.findByPath('h3');
+    const title = headers.length > 0 ? headers[0].text.replace('■', '') : '(no title)';
 
-      const anchors = node.findByPath('h3/a');
-      const url = anchors.length >= 1 ? anchors[0].native.href : null;
-      const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
+    const anchors = node.findByPath('h3/a');
+    const url = anchors.length >= 1 ? anchors[0].native.href : null;
+    const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
 
-      const paragraphs = this.parseEntryBody(node);
+    const footerSectionNode = node.findByQuery('.sectionfooter')[0];
+    const footerSection = footerSectionNode == null ? {} :  this.parseFooterSection(footerSectionNode);
 
-      const idMatch = url == null ? null : url.match('[0-9]+$');
-      const id = idMatch == null ? -1 : idMatch[0];
+    const paragraphs = this.parseEntryBody(node);
 
-      const referMatch = reference == null ? null : reference.match('[0-9]+$');
-      let refer = null;
-      if (referMatch != null) {
-        refer = {
-          id: referMatch[0],
-          visible: false,
-          title: null,
-          url: reference,
-          paragraphs: null,
-          loading: false,
-        }
+    const idMatch = url == null ? null : url.match('[0-9]+$');
+    const id = idMatch == null ? -1 : idMatch[0];
+
+    const referMatch = reference == null ? null : reference.match('[0-9]+$');
+    let refer = null;
+    if (referMatch != null) {
+      refer = {
+        id: referMatch[0],
+        visible: false,
+        title: null,
+        url: reference,
+        paragraphs: null,
+        loading: false,
       }
+    }
 
-      return {id, title, url, paragraphs, refer};
-    });
+    return {id, title, url, paragraphs, refer, ...footerSection};
+  }
+
+  parseFooterSection(node) {
+    return node.children
+      .map(child => child.native)
+      .map(native => native.nodeType == '#text' ? native.nodeValue : native.textContent)
+      .map(text => {
+        const timeMatch = text.match('\\d\\d:\\d\\d');
+        const time = timeMatch == null ? null : timeMatch[0];
+
+        const refersMatch = text.match('\\(\(d+)\\)');
+        const refers = refersMatch == null ? null : refersMatch[1];
+        return {time, refers};
+      })
+      .reduce((builder, item) => {
+        return {...builder, ...item};
+      }, {});
   }
 
   parseEntryBody(node) {
@@ -231,12 +258,17 @@ site.setup();
 
 const PagingBlock = {
   template: `
-    <div class="d-flex v-interval">
-      <button class="btn btn-link p-0" @click="$emit('click', page)">再読み込み</button>
-      <button class="btn btn-link p-0" @click="$emit('click', 1)" v-if="page > 1">最新を取得</button>
-      <button class="btn btn-link p-0" @click="$emit('click', page - 1)" v-if="page > 1">← 前の25件</button>
-      <button class="btn btn-link p-0" @click="$emit('click', page + 1)">→ 次の25件</button>
-      <button class="btn btn-link p-0" @click="$emit('click', page + 5)">古い方へ+5p</button>
+    <div class="d-flex justify-content-between v-interval">
+      <div class="v-interval">
+        <button class="btn btn-link p-0" @click="$emit('click', page)">再読み込み</button>
+        <button class="btn btn-link p-0" @click="$emit('click', 1)" v-if="page > 1">最新を取得</button>
+        <button class="btn btn-link p-0" @click="$emit('click', page - 1)" v-if="page > 1">← 前の25件</button>
+        <button class="btn btn-link p-0" @click="$emit('click', page + 1)">→ 次の25件</button>
+        <button class="btn btn-link p-0" @click="$emit('click', page + 5)">古い方へ+5p</button>
+      </div>
+      <div class="v-interval text-right text-inconspicuous">
+        p.{{page}}
+      </div>
     </div>
   `,
   name: 'paging-block',
@@ -286,7 +318,7 @@ new Vue({
                     class="btn btn-default btn-sm"
                     @click="referButtonClick(entry)">
                   言及先を開く
-                </button>
+                </button> <span class="text-inconspicuous">{{ entry.time }}</span>
               </div>
               <div class="card-text">
                 <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
@@ -327,7 +359,7 @@ new Vue({
         return;
       }
       entry.refer.loading = true;
-      const item = await site.getItem(entry.refer.id);
+      const item = await site.getRefer(entry.refer.id);
       entry.refer.loading = false;
 
       const {id, title, paragraphs} = item;
