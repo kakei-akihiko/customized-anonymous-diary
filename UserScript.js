@@ -49,6 +49,11 @@ class DomNode {
     this.native = node;
   }
 
+  get children() {
+    const nodes = this.native.childNodes;
+    return Array.apply(null, nodes).map(node => new DomNode(node));
+  }
+
   get document() {
     return this.native.ownerDocument;
   }
@@ -128,6 +133,7 @@ class AnonymousDiary {
       ':root {--font-family-sans-serif: sans-serif}',
       'body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}',
       '.main-content {max-width: 550pt}',
+      '.text-inconspicuous {color: rgb(100,100,100); font-size: small}',
     ]);
 
     ['original', 'app'].forEach(id => {
@@ -191,6 +197,9 @@ class AnonymousDiary {
     const url = anchors.length >= 1 ? anchors[0].native.href : null;
     const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
 
+    const footerSectionNode = node.findByQuery('.sectionfooter')[0];
+    const footerSection = footerSectionNode == null ? {} :  this.parseFooterSection(footerSectionNode);
+
     const paragraphs = this.parseEntryBody(node);
 
     const idMatch = url == null ? null : url.match('[0-9]+$');
@@ -209,7 +218,24 @@ class AnonymousDiary {
       }
     }
 
-    return {id, title, url, paragraphs, refer};
+    return {id, title, url, paragraphs, refer, ...footerSection};
+  }
+
+  parseFooterSection(node) {
+    return node.children
+      .map(child => child.native)
+      .map(native => native.nodeType == '#text' ? native.nodeValue : native.textContent)
+      .map(text => {
+        const timeMatch = text.match('\\d\\d:\\d\\d');
+        const time = timeMatch == null ? null : timeMatch[0];
+
+        const refersMatch = text.match('\\(\(d+)\\)');
+        const refers = refersMatch == null ? null : refersMatch[1];
+        return {time, refers};
+      })
+      .reduce((builder, item) => {
+        return {...builder, ...item};
+      }, {});
   }
 
   parseEntryBody(node) {
@@ -240,7 +266,7 @@ const PagingBlock = {
         <button class="btn btn-link p-0" @click="$emit('click', page + 1)">→ 次の25件</button>
         <button class="btn btn-link p-0" @click="$emit('click', page + 5)">古い方へ+5p</button>
       </div>
-      <div class="v-interval text-right" style="color: rgb(100,100,100); font-size: small">
+      <div class="v-interval text-right text-inconspicuous">
         p.{{page}}
       </div>
     </div>
@@ -292,7 +318,7 @@ new Vue({
                     class="btn btn-default btn-sm"
                     @click="referButtonClick(entry)">
                   言及先を開く
-                </button>
+                </button> <span class="text-inconspicuous">{{ entry.time }}</span>
               </div>
               <div class="card-text">
                 <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
