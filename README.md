@@ -7,4 +7,6 @@
 1. https://anond.hatelabo.jp/customized にアクセスします。
 1. 独自の画面が表示されます。
 
-※ 2019/05/30現在、はα版にも達していない段階で、投稿できません。
+## スクリーンショット
+
+![](readme/Sample.png)
