@@ -239,10 +239,13 @@ class AnonymousDiary {
   }
 
   parseEntryBody(node) {
-    return node.findByPath('p[not(@class)]|blockquote|h4|ul').map(node => {
+    return node.findByPath('p[not(@class)]|blockquote|h4|ul|ol').map(node => {
       const nodeName = node.native.nodeName;
 
       if (node.native.nodeName == 'UL') {
+        const texts = node.findByQuery('li').map(li => li.text);
+        return {texts, nodeName};
+      } else if (node.native.nodeName == 'OL') {
         const texts = node.findByQuery('li').map(li => li.text);
         return {texts, nodeName};
       } else {
@@ -286,6 +289,11 @@ const ArticleSection = {
           <ul>
             <li v-for="text in item.texts">{{ text }}</li>
           </ul>
+        </p>
+        <p v-if="item.nodeName == 'OL'">
+          <ol>
+            <li v-for="text in item.texts">{{ text }}</li>
+          </ol>
         </p>
         <blockquote v-if="item.nodeName == 'BLOCKQUOTE'" class="rounded p-1"
           style="background-color: rgb(220, 240, 255)">
