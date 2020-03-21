@@ -10,254 +10,193 @@
 // @grant        none
 // ==/UserScript==
 
-class DomNode {
-  static createElement(elementName, {id, appendTo, ownerDocument, className, attributes} = {}) {
-    const element = (ownerDocument || document).createElement(elementName);
-
-    if (id !== undefined) {
-      element.id = id;
-    }
-
-    if (className !== undefined) {
-      element.className = className;
-    }
-
-    if (attributes !== undefined) {
-      Object.keys(attributes).forEach(name => {
-        element.setAttribute(name, attributes[name]);
-      });
-    }
-
-    if (appendTo !== undefined) {
-      appendTo.appendChild(element);
-    }
-
-    return element;
+class PageWrapper {
+  addCustomStyle() {
+    const element = document.createElement('style');
+    element.innerHTML = `
+      html, body {margin: 0; padding: 0; height: 100%}
+      .h-100 {height: 100%}
+      .h-0 {height: 0}
+      .scroll {overflow-y: auto}
+      .v-interval > *:nth-child(n+2) {margin-left: 0.5rem}
+      :root {--font-family-sans-serif: sans-serif}
+      body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}
+      .main-content {max-width: 550pt}
+      .text-inconspicuous {color: rgb(100,100,100); font-size: small}
+      #hatena-anond, #original > p, #original > h1 {display: none}
+    `;
+    document.head.appendChild(element);
+    return this;
   }
 
-  static fromId(id, targetDocument) {
-    const _document = targetDocument || document;
-    const node = _document.getElementById(id);
-    if (node == null) {
-      console.error('Id is not found. id:', id);
-      throw new Error('Id is not found. id: ' + id);
-    }
-    return new DomNode(node);
+  addBootstrap() {
+    const head = document.querySelector('head');
+    const element = document.createElement('link');
+    element.setAttribute('rel', 'stylesheet');
+    element.setAttribute('type', 'text/css');
+    element.setAttribute('href', 'https://bootswatch.com/4/litera/bootstrap.min.css');
+    head.appendChild(element);
+    return this;
   }
 
+  setupWrapperElements() {
+    const originalElement = document.createElement('div');
+    originalElement.setAttribute('id', 'original');
+    document.body.appendChild(originalElement);
+
+    Array.apply(null, document.body.childNodes)
+      .filter(child => child.id != 'original')
+      .forEach(child => {originalElement.appendChild(child);});
+
+    const appElement = document.createElement('div');
+    appElement.setAttribute('id', 'app');
+    document.body.appendChild(appElement);
+
+    return this;
+  }
+}
+
+class AnonimousDiaryServer {
+  async getReferJson(entryId) {
+    const url = 'https://anond.hatelabo.jp/' + entryId + '?mode=json';
+    const response = await fetch(url);
+    return await response.json();
+  }
+
+  async getArticlesHtml(pageIndex) {
+    const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + pageIndex);
+    return await response.text();
+  }
+}
+
+class ArticleSectionElement {
   constructor(node) {
-    this.native = node;
+    this._node = node;
   }
 
-  get children() {
-    const nodes = this.native.childNodes;
-    return Array.apply(null, nodes).map(node => new DomNode(node));
-  }
-
-  get document() {
-    return this.native.ownerDocument;
-  }
-
-  get parentNode() {
-    return this.native.parentNode;
-  }
-
-  get text() {
-    return this.native.textContent;
-  }
-
-  findByQuery(query) {
-    const nodes = this.native.querySelectorAll(query);
-    return Array.apply(null, nodes).map(node => new DomNode(node));
-  }
-
-  findByTagName(tagName) {
-    const nodes = this.native.getElementsByTagName(tagName);
-    return Array.apply(null, nodes).map(node => new DomNode(node));
-  }
-
-  findByPath(expression) {
-    const x = this.document.evaluate(
-      expression, this.native, null,
-      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-
-    const nodes = [];
-    for(let i = 0; i < x.snapshotLength; i++) {
-      nodes.push(x.snapshotItem(i));
+  getHeader() {
+    const header = this._node.querySelector('h3');
+    if (header == null) {
+      console.warn('articleNode has not h3', this._node);
+      return {};
     }
-    return nodes.map(node => new DomNode(node));
+
+    const title = header.textContent.replace('■', '');
+    const anchors = header.querySelectorAll(':scope a');
+    const url = anchors.length >= 1 ? anchors[0].href : null;
+    const reference = (anchors.length >= 2 && anchors[1].textContent.match('anond:[0-9]')) ? anchors[1].href : null;
+
+    const idMatch = url == null ? null : url.match('[0-9]+$');
+    const id = idMatch == null ? -1 : idMatch[0];
+
+    return {id, title, url, reference};
   }
 
-  removeChildren() {
-    const nodes = this.native.childNodes;
-    while(nodes.length > 0) {
-      this.native.removeChild(nodes[nodes.length - 1]);
+  getFooter() {
+    const footerNode = this._node.querySelector(':scope .sectionfooter');
+    if (footerNode == null) {
+      return {};
     }
+
+    const anchors = footerNode.getElementsByTagName('a');
+    const refersText = anchors.length >= 2 ? anchors[1].textContent : '';
+    const refersMatch = refersText.match(/\((\d+)\)/);
+    const refersCount = refersMatch == null ? null : refersMatch[1];
+
+    const children = footerNode.childNodes;
+    const timeNode = children.length > 0 ? children[children.length - 1] : null;
+    const timeText = timeNode == null ? '' : timeNode.textContent;
+    const timeMatch = timeText.match(/\d\d:\d\d/);
+    const time = timeMatch == null ? null : timeMatch[0];
+
+    return {refersCount, time};
   }
 
-  remove() {
-    this.native.parentNode.removeChild(this.native);
+  getArticleBody() {
+    return Array.from(this._node.childNodes)
+      .map(child => this.parseArticleBodyLine(child))
+      .filter(item => item != null);
   }
 
-  static addCssRules(cssRules) {
-    Array.apply(null, document.getElementsByTagName('head')).forEach(head => {
-      const styleElement = document.createElement('style');
-      styleElement.type = "text/css";
-      head.appendChild(styleElement);
-      cssRules.forEach(rule => {
-        styleElement.sheet.insertRule(rule, styleElement.sheet.cssRules.length);
-      });
-    });
+  parseArticleBodyLine(articleChildNode) {
+    const nodeName = articleChildNode.nodeName;
+    switch (nodeName) {
+      case 'P': 
+        if (articleChildNode.classList.length > 0) {
+          return null;
+        }
+        return {text: articleChildNode.textContent, nodeName};
+      case 'UL':
+      case 'OL':
+        const items = articleChildNode.querySelectorAll('li');
+        const texts = Array.from(items).map(node => node.textContent);
+        return {texts, nodeName};
+      case 'BLOCKQUOTE':
+      case 'H4':
+        return {text: articleChildNode.textContent, nodeName};
+      default:
+        return null;
+    }
   }
 }
 
 class AnonymousDiary {
   setup() {
-    const head = document.getElementsByTagName('head')[0];
+    new PageWrapper()
+      .addBootstrap()
+      .addCustomStyle()
+      .setupWrapperElements();
 
-    DomNode.createElement('link', {
-      attributes: {
-        rel: 'stylesheet',
-        type: 'text/css',
-        href: 'https://bootswatch.com/4/litera/bootstrap.min.css',
-      },
-      appendTo: head,
-    });
-
-    DomNode.addCssRules([
-      'html, body {margin: 0; padding: 0; height: 100%}',
-      '.h-100 {height: 100%}',
-      '.h-0 {height: 0}',
-      '.scroll {overflow-y: auto}',
-      '.v-interval > *:nth-child(n+2) {margin-left: 0.5rem}',
-      ':root {--font-family-sans-serif: sans-serif}',
-      'body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}',
-      '.main-content {max-width: 550pt}',
-      '.text-inconspicuous {color: rgb(100,100,100); font-size: small}',
-    ]);
-
-    ['original', 'app'].forEach(id => {
-      DomNode.createElement('div', {id, appendTo: document.body});
-    });
-    
     document.body.className = 'd-flex flex-column h-100';
-    
-    const original = DomNode.fromId('original');
-    
-    Array.apply(null, document.body.childNodes)
-      .filter(child => child.id != 'original' && child.id != 'app')
-      .forEach(child => {original.native.appendChild(child);});
-    
-    original.findByPath([
-      '//div[@id="hatena-anond"]',
-      '//div[@id="original"]/p',
-      '//div[@id="original"]/h1'
-    ].join('|')).forEach(node => {
-      node.native.style = 'display:none'
-    });
+
+    return this;
   }
 
-  getUrlFromEntryId(id) {
-    return 'https://anond.hatelabo.jp/' + id + '?mode=json'
-  }
-
-  async getRefer(entryId) {
-    const url = this.getUrlFromEntryId(entryId);
-    const response = await fetch(url);
-    const entry = await response.json();
-    
-    const titleDom = new DOMParser()
-      .parseFromString('<body>' + entry.title + '</body>', 'text/html');
+  parseRefer(entryId, entry) {
+    const titleDom = new DOMParser().parseFromString(
+      '<body>' + entry.title + '</body>', 'text/html'
+    );
     const title = titleDom.body.textContent;
 
-    const bodyDom = new DOMParser()
-      .parseFromString('<body>' + entry.body + '</body>', 'text/html');
+    const bodyDom = new DOMParser().parseFromString(
+      '<body>' + entry.body + '</body>', 'text/html'
+    );
 
-    const paragraphs = this.parseEntryBody(new DomNode(bodyDom.body));
+    const element = new ArticleSectionElement(bodyDom.body);
+    const paragraphs = element.getArticleBody();
 
     return {id: entryId, title, paragraphs};
   }
 
-  async getItems({page}) {
-    const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + page);
-    const html = await response.text();
-    const dom = new DOMParser()
-      .parseFromString(html, "text/html");
-
-    return new DomNode(dom.body)
-      .findByPath('//div[@class="body"]/div[@class="section"]')
+  parseItems(html) {
+    const dom = new DOMParser().parseFromString(html, "text/html");
+    const bodyDiv = dom.body.querySelector('.body');
+    return Array.from(bodyDiv.childNodes)
+      .filter(node => node.className == 'section')
       .map(node => this.getItemFromSectionNode(node));
   }
 
   getItemFromSectionNode(node) {
-    const headers = node.findByPath('h3');
-    const title = headers.length > 0 ? headers[0].text.replace('■', '') : '(no title)';
-
-    const anchors = node.findByPath('h3/a');
-    const url = anchors.length >= 1 ? anchors[0].native.href : null;
-    const reference = (anchors.length >= 2 && anchors[1].native.textContent.match('anond:[0-9]')) ? anchors[1].native.href : null;
-
-    const footerSectionNode = node.findByQuery('.sectionfooter')[0];
-    const footerSection = footerSectionNode == null ? {} :  this.parseFooterSection(footerSectionNode);
-
-    const paragraphs = this.parseEntryBody(node);
-
-    const idMatch = url == null ? null : url.match('[0-9]+$');
-    const id = idMatch == null ? -1 : idMatch[0];
+    const element = new ArticleSectionElement(node);
+    const {id, title, url, reference} = element.getHeader();
+    const {refersCount, time} = element.getFooter();
+    const paragraphs = element.getArticleBody();
 
     const referMatch = reference == null ? null : reference.match('[0-9]+$');
-    let refer = null;
-    if (referMatch != null) {
-      refer = {
-        id: referMatch[0],
-        visible: false,
-        title: null,
-        url: reference,
-        paragraphs: null,
-        loading: false,
-      }
-    }
-
-    return {id, title, url, paragraphs, refer, ...footerSection};
-  }
-
-  parseFooterSection(node) {
-    return node.children
-      .map(child => child.native)
-      .map(native => native.nodeType == '#text' ? native.nodeValue : native.textContent)
-      .map(text => {
-        const timeMatch = text.match('\\d\\d:\\d\\d');
-        const time = timeMatch == null ? null : timeMatch[0];
-
-        const refersMatch = text.match('\\(\(d+)\\)');
-        const refers = refersMatch == null ? null : refersMatch[1];
-        return {time, refers};
-      })
-      .reduce((builder, item) => {
-        return {...builder, ...item};
-      }, {});
-  }
-
-  parseEntryBody(node) {
-    return node.findByPath('p[not(@class)]|blockquote|h4|ul|ol').map(node => {
-      const nodeName = node.native.nodeName;
-
-      if (node.native.nodeName == 'UL') {
-        const texts = node.findByQuery('li').map(li => li.text);
-        return {texts, nodeName};
-      } else if (node.native.nodeName == 'OL') {
-        const texts = node.findByQuery('li').map(li => li.text);
-        return {texts, nodeName};
-      } else {
-        const text = node.text;  
-        return {text, nodeName};
-      }
-    });
+    const refer = referMatch == null ? null : {
+      id: referMatch[0],
+      visible: false,
+      title: null,
+      url: reference,
+      paragraphs: null,
+      loading: false,
+    };
+    return {id, title, url, paragraphs, refer, refersCount, time};
   }
 }
 
-const site = new AnonymousDiary();
-site.setup();
+const site = new AnonymousDiary().setup();
+const server = new AnonimousDiaryServer();
 
 const PagingBlock = {
   template: `
@@ -278,10 +217,10 @@ const PagingBlock = {
   props: {page: Number},
 };
 
-const ArticleSection = {
+const ArticleBodySection = {
   template: `
     <div>
-      <div v-for="item in items">
+      <div v-for="item in filteredItems">
         <p v-if="item.nodeName == 'P'">
           {{ item.text }}
         </p>
@@ -308,6 +247,62 @@ const ArticleSection = {
   props: {
     items: {required: true},
   },
+  computed: {
+    filteredItems() {
+      return this.items.filter(item => {
+        return item.nodeName != 'P' || item.text != 'link';
+      });
+    }
+  },
+};
+
+const ArticleReferenceCard = {
+  template: `
+    <div class="card pt-2 pl-2 pr-2 mb-2" style="background-color: honeydew">
+      <div class="card-title">
+        <a :href="url">■</a>
+        <strong>{{ title }}</strong>
+      </div>
+      <div class="card-text">
+        <ArticleBodySection :items="paragraphs"/>
+      </div>
+    </div>`,
+  props: {title: String, url: String, paragraphs: Array},
+  components: {ArticleBodySection},
+};
+
+const ArticleCard = {
+  template: `
+    <div class="card main-content">
+      <div class="card-body">
+        <div class="card-title">
+          <a :href="entry.url">■</a>
+          <strong>{{ entry.title }}</strong>
+          <button v-if="entry.refer != null" class="btn btn-default btn-sm" @click="$emit('refer')">
+            言及先を開く
+          </button>
+          <span class="text-inconspicuous">{{ entry.time }}</span>
+        </div>
+
+        <div class="card-text">
+          <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
+            ...
+          </div>
+          <ArticleReferenceCard
+            v-if="entry.refer != null && entry.refer.visible"
+            :url="entry.refer.url"
+            :title="entry.refer.title"
+            :paragraphs="entry.refer.paragraphs"
+            />
+          <ArticleBodySection :items="entry.paragraphs"/>
+        </div>
+      </div>
+    </div>
+  `,
+  components: {ArticleBodySection, ArticleReferenceCard},
+  props: {
+    entry: Object,
+  },
 };
 
 new Vue({
@@ -317,40 +312,13 @@ new Vue({
       <div class="h-100 scroll" ref="scroll">
         <div class="container">
           <PagingBlock :page="page" @click="pagingClick($event)" class="main-content" />
-          <div class="card main-content" v-for="entry in entries" :key="entry.url">
-            <div class="card-body">
-              <div class="card-title">
-                <a :href="entry.url">■</a>
-                <strong>{{ entry.title }}</strong>
-                <button v-if="entry.refer != null"
-                    class="btn btn-default btn-sm"
-                    @click="referButtonClick(entry)">
-                  言及先を開く
-                </button> <span class="text-inconspicuous">{{ entry.time }}</span>
-              </div>
-              <div class="card-text">
-                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
-                  ...
-                </div>
-                <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.visible"
-                    style="background-color: honeydew">
-                  <div class="card-title">
-                    <a :href="entry.refer.url">■</a>
-                    <strong>{{ entry.refer.title }}</strong>
-                  </div>
-                  <div class="card-text">
-                    <ArticleSection :items="entry.refer.paragraphs"/>
-                  </div>
-                </div>
-                <ArticleSection :items="entry.paragraphs"/>
-              </div>
-            </div>
-          </div>
+          <ArticleCard v-for="entry in entries" :key="entry.url" :entry="entry"
+            @refer="referButtonClick(entry)" />
           <PagingBlock :page="page" @click="pagingClick($event)" class="main-content" />
         </div>
       </div>
     </div>`,
-  components: {ArticleSection, PagingBlock},
+  components: {ArticleCard, PagingBlock},
   computed: {
   },
   methods: {
@@ -367,17 +335,16 @@ new Vue({
         return;
       }
       entry.refer.loading = true;
-      const item = await site.getRefer(entry.refer.id);
+      const json = await server.getReferJson(entry.refer.id);
+      const item = site.parseRefer(entry.refer.id, json);
       entry.refer.loading = false;
 
       const {id, title, paragraphs} = item;
-      entry.refer = {
-        id, title, paragraphs, visible: true,
-      };
+      entry.refer = {id, title, paragraphs, visible: true};
     },
     async refresh() {
-      const {page} = this;
-      const entries = await site.getItems({page});
+      const html = await server.getArticlesHtml(this.page);
+      const entries = site.parseItems(html);
       if (this.reverse) {
         entries.sort((a, b) => b - a);
       }
