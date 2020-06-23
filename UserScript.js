@@ -5,7 +5,7 @@
 // @description  try to take over the world!
 // @author       You
 // @require      https://cdn.jsdelivr.net/npm/vue
-// @require      http://localhost/files/js/dayjs.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.24/dayjs.min.js
 // @match        https://anond.hatelabo.jp/customized
 // @grant        none
 // ==/UserScript==
@@ -24,6 +24,9 @@ class PageWrapper {
       .main-content {max-width: 550pt}
       .text-inconspicuous {color: rgb(100,100,100); font-size: small}
       #hatena-anond, #original > p, #original > h1 {display: none}
+      p {font-size: 1.5rem !important; font-family: 'Meiryo'}
+      .card-title {font-size: 1.7rem}
+      .text-refered { font-size: 80%; margin-left: .5rem }
     `;
     document.head.appendChild(element);
     return this;
@@ -121,16 +124,17 @@ class ArticleSectionElement {
   parseArticleBodyLine(articleChildNode) {
     const nodeName = articleChildNode.nodeName;
     switch (nodeName) {
-      case 'P': 
+      case 'P':
         if (articleChildNode.classList.length > 0) {
           return null;
         }
         return {text: articleChildNode.textContent, nodeName};
       case 'UL':
-      case 'OL':
+      case 'OL': {
         const items = articleChildNode.querySelectorAll('li');
         const texts = Array.from(items).map(node => node.textContent);
         return {texts, nodeName};
+      }
       case 'BLOCKQUOTE':
       case 'H4':
         return {text: articleChildNode.textContent, nodeName};
@@ -192,6 +196,24 @@ class AnonymousDiary {
       loading: false,
     };
     return {id, title, url, paragraphs, refer, refersCount, time};
+  }
+
+  getNGWords(entry) {
+    if (entry == null) {
+      return [];
+    }
+    const words = [
+      '加藤純一',
+      'zendesk.com/hc/',
+      'xn--qckwaqj6a5l2ab.xyz',
+      '江畑諒真',
+    ];
+    const ngWords = words.filter(word => {
+      return entry.paragraphs.filter(p => {
+        return p.text != null && p.text.indexOf(word) >= 0
+      }).length > 0;
+    });
+    return ngWords;
   }
 }
 
@@ -273,15 +295,17 @@ const ArticleReferenceCard = {
 
 const ArticleCard = {
   template: `
-    <div class="card main-content">
+    <div class="card main-content py-2">
       <div class="card-body">
         <div class="card-title">
           <a :href="entry.url">■</a>
-          <strong>{{ entry.title }}</strong>
+          <strong v-if="ngWords.length <= 0">{{ entry.title }}</strong>
+          <strong v-else>NG</strong>
           <button v-if="entry.refer != null" class="btn btn-default btn-sm" @click="$emit('refer')">
             言及先を開く
           </button>
           <span class="text-inconspicuous">{{ entry.time }}</span>
+          <span v-if="entry.refersCount > 0" class="text-refered">被言及：{{ entry.refersCount }}</span>
         </div>
 
         <div class="card-text">
@@ -294,7 +318,12 @@ const ArticleCard = {
             :title="entry.refer.title"
             :paragraphs="entry.refer.paragraphs"
             />
-          <ArticleBodySection :items="entry.paragraphs"/>
+          <div v-if="ngWords.length <= 0">
+            <ArticleBodySection :items="entry.paragraphs"/>
+          </div>
+          <div v-else>
+            <strong>NG</strong>: <span v-for="word in ngWords" :key="word">{{word}} </span>
+          </div>
         </div>
       </div>
     </div>
@@ -302,6 +331,11 @@ const ArticleCard = {
   components: {ArticleBodySection, ArticleReferenceCard},
   props: {
     entry: Object,
+  },
+  computed: {
+    ngWords() {
+      return site.getNGWords(this.entry);
+    }
   },
 };
 
@@ -345,9 +379,7 @@ new Vue({
     async refresh() {
       const html = await server.getArticlesHtml(this.page);
       const entries = site.parseItems(html);
-      if (this.reverse) {
-        entries.sort((a, b) => b - a);
-      }
+      entries.sort((a, b) => a.time > b.time ? 1 : -1);
       this.entries = entries;
       this.$refs.scroll.scrollTop = 0;
     },
