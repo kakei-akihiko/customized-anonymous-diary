@@ -12,13 +12,15 @@
 
 import AnonymousDiary from './AnonymousDiary.js';
 import AnonimousDiaryServer from './AnonimousDiaryServer.js';
-import PageWrapper from './PageWrapper.js';
+import SetupWebPage from './infrastructure/anond/SetupWebPage.js';
 
 import ArticleCard from './components/ArticleCard.js';
 import PagingBlock from './components/PagingBlock.js';
 
-const site = new AnonymousDiary(new PageWrapper()).setup();
+const site = new AnonymousDiary();
 const server = new AnonimousDiaryServer();
+
+SetupWebPage.instance.run();
 
 new Vue({
   el: '#app',

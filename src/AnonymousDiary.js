@@ -1,20 +1,6 @@
 import ArticleSectionElement from './ArticleSectionElement.js';
 
 export default class AnonymousDiary {
-  constructor(pageWrapper) {
-    this.pageWrapper = pageWrapper;
-  }
-
-  setup() {
-    this.pageWrapper
-      .addBootstrap()
-      .addCustomStyle()
-      .setupWrapperElements();
-
-    document.body.className = 'd-flex flex-column h-100';
-
-    return this;
-  }
 
   parseRefer(entryId, entry) {
     const titleDom = new DOMParser().parseFromString(
