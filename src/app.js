@@ -10,15 +10,16 @@
 // @grant        none
 // ==/UserScript==
 
-import AnonymousDiary from './AnonymousDiary.js';
-import AnonimousDiaryServer from './AnonimousDiaryServer.js';
 import SetupWebPage from './infrastructure/anond/SetupWebPage.js';
 
 import ArticleCard from './components/ArticleCard.js';
 import PagingBlock from './components/PagingBlock.js';
 
-const site = new AnonymousDiary();
-const server = new AnonimousDiaryServer();
+import LoadEntriesService from './usecases/LoadEntriesService.js';
+import UpdateReferenceService from './usecases/UpdateReferenceService.js';
+
+const loadEntriesService = LoadEntriesService.instance;
+const updateReferenceService = UpdateReferenceService.instance;
 
 SetupWebPage.instance.run();
 
@@ -43,27 +44,12 @@ new Vue({
       this.page = page;
       this.refresh();
     },
-    async referButtonClick(entry) {
-      if (entry.refer.visible || entry.refer.title != null) {
-        entry.refer.visible = !entry.refer.visible;
-        return;
-      }
-      if (entry.refer.loading) {
-        return;
-      }
-      entry.refer.loading = true;
-      const json = await server.getReferJson(entry.refer.id);
-      const item = site.parseRefer(entry.refer.id, json);
-      entry.refer.loading = false;
-
-      const {id, title, paragraphs} = item;
-      entry.refer = {id, title, paragraphs, visible: true};
+    referButtonClick(entry) {
+      updateReferenceService.run(entry);
     },
     async refresh() {
-      const html = await server.getArticlesHtml(this.page);
-      const entries = site.parseItems(html);
-      entries.sort((a, b) => a.time > b.time ? 1 : -1);
-      this.entries = entries;
+      const {page} = this;
+      this.entries = await loadEntriesService.run({page});
       this.$refs.scroll.scrollTop = 0;
     },
   },
