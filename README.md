@@ -12,3 +12,9 @@
 上がユーザースクリプト適用版、下が通常の表示です。
 
 ![](readme/Sample.png)
+
+## ビルド方法
+
+```
+yarn run webpack
+```
