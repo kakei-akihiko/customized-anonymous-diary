@@ -18,3 +18,5 @@
 ```
 yarn run webpack
 ```
+
+※ `Error: error:0308010C:digital envelope routines::unsupported`が発生する場合は環境変数`NODE_OPTIONS=--openssl-legacy-provider`を設定します。
