@@ -1,6 +1,6 @@
 export default {
   template: `
-    <div class="d-flex justify-content-between v-interval">
+    <div class="d-flex justify-content-between v-interval paging-block">
       <div class="v-interval">
         <button class="btn btn-link p-0" @click="$emit('click', page)">再読み込み</button>
         <button class="btn btn-link p-0" @click="$emit('click', 1)" v-if="page > 1">最新を取得</button>
