@@ -6,6 +6,7 @@ function getNGWords(entry) {
     return [];
   }
   const words = [
+    'サイト上の私のニックネーム',
     '加藤純一',
     'zendesk.com/hc/',
     'xn--qckwaqj6a5l2ab.xyz',
