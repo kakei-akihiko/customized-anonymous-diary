@@ -38,6 +38,7 @@ class SetupWebPage {
       .text-refered { font-size: 80%; margin-left: .5rem }
       #app .paging-block button { font-size: 1.5rem; }
       #app blockquote { font-size: medium; }
+      #app p {line-height: 2.8rem;}
     `);
 
     this.appElementMethods.setup();
