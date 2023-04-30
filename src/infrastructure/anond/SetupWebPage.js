@@ -1,5 +1,3 @@
-import AppElementMethods from '../html/AppElementMethods.js';
-
 class SetupWebPage {
   run() {
     document.head.insertAdjacentHTML('beforeend', `
@@ -28,12 +26,8 @@ class SetupWebPage {
     `;
     document.head.appendChild(element);
 
-    AppElementMethods.instance.setup();
-
     document.body.className = 'd-flex flex-column h-100';
   }  
 }
-
-SetupWebPage.instance = new SetupWebPage();
 
 export default SetupWebPage;

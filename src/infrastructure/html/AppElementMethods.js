@@ -28,6 +28,4 @@ class AppElementMethods {
   }
 }
 
-AppElementMethods.instance = new AppElementMethods();
-
 export default AppElementMethods;
