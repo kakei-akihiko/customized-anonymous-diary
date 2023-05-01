@@ -1,28 +1,11 @@
-import AppElementMethods from '../html/AppElementMethods.js';
-import StyleElementMethods from '../html/header/StyleElementMethods.js';
-
 class SetupWebPage {
-
-  constructor(appElementMethods, styleElementMethods, _document = document) {
-
-    this.appElementMethods = appElementMethods == null
-      ? AppElementMethods.instance
-      : appElementMethods;
-
-    this.styleElementMethods = styleElementMethods == null
-      ? StyleElementMethods.instance
-      : styleElementMethods;
-
-    this._document = _document;
-  }
-
   run() {
+    document.head.insertAdjacentHTML('beforeend', `
+      <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/litera/bootstrap.min.css">
+    `);
 
-    this.styleElementMethods.addLink(
-      'https://bootswatch.com/4/litera/bootstrap.min.css'
-    );
-    
-    this.styleElementMethods.addCustom(`
+    const element = document.createElement('style');
+    element.textContent = `
       html, body {margin: 0; padding: 0; height: 100%}
       .h-100 {height: 100%}
       .h-0 {height: 0}
@@ -40,14 +23,11 @@ class SetupWebPage {
       #app blockquote { font-size: medium; }
       #app p {line-height: 2.8rem;}
       #app h4 { font-size: large; }
-    `);
+    `;
+    document.head.appendChild(element);
 
-    this.appElementMethods.setup();
-
-    this._document.body.className = 'd-flex flex-column h-100';
+    document.body.className = 'd-flex flex-column h-100';
   }  
 }
-
-SetupWebPage.instance = new SetupWebPage();
 
 export default SetupWebPage;

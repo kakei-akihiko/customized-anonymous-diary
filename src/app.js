@@ -10,6 +10,7 @@
 // @grant        none
 // ==/UserScript==
 
+import AppElementMethods from './infrastructure/html/AppElementMethods.js';
 import SetupWebPage from './infrastructure/anond/SetupWebPage.js';
 
 import ArticleCard from './components/ArticleCard.js';
@@ -21,7 +22,8 @@ import UpdateReferenceService from './usecases/UpdateReferenceService.js';
 const loadEntriesService = LoadEntriesService.instance;
 const updateReferenceService = UpdateReferenceService.instance;
 
-SetupWebPage.instance.run();
+new AppElementMethods().setup();
+new SetupWebPage().run();
 
 new Vue({
   el: '#app',
