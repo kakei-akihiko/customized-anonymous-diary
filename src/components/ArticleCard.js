@@ -1,23 +1,34 @@
 import ArticleBodySection from './ArticleBodySection.js';
 import ArticleReferenceCard from './ArticleReferenceCard.js';
 
+let ngWordsLoaded = [
+  'サイト上の私のニックネーム',
+  '加藤純一',
+  'zendesk.com/hc/',
+  'xn--qckwaqj6a5l2ab.xyz',
+  '江畑諒真',
+];
+
+(
+  () => {
+    if (window.localStorage) {
+      localStorage.setItem('customized.ngWords', JSON.stringify(ngWordsLoaded));
+      console.log('localStorage saved.')
+    } else {
+      console.error('localStorage error!')
+    }
+  }
+)();
+
 function getNGWords(entry) {
   if (entry == null) {
     return [];
   }
-  const words = [
-    'サイト上の私のニックネーム',
-    '加藤純一',
-    'zendesk.com/hc/',
-    'xn--qckwaqj6a5l2ab.xyz',
-    '江畑諒真',
-  ];
-  const ngWords = words.filter(word => {
+  return ngWordsLoaded.filter(word => {
     return entry.paragraphs.filter(p => {
       return p.text != null && p.text.indexOf(word) >= 0
     }).length > 0;
   });
-  return ngWords;
 }
 
 export default {
