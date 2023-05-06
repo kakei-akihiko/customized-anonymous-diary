@@ -1,22 +1,12 @@
 import ArticleBodySection from './ArticleBodySection.js';
 import ArticleReferenceCard from './ArticleReferenceCard.js';
+import { NGWordRepository } from '../infrastructure/ngword/NGWrodRepository.js'
 
-let ngWordsLoaded = [
-  'サイト上の私のニックネーム',
-  '加藤純一',
-  'zendesk.com/hc/',
-  'xn--qckwaqj6a5l2ab.xyz',
-  '江畑諒真',
-];
+let ngWordsLoaded = [];
 
 (
   () => {
-    if (window.localStorage) {
-      localStorage.setItem('customized.ngWords', JSON.stringify(ngWordsLoaded));
-      console.log('localStorage saved.')
-    } else {
-      console.error('localStorage error!')
-    }
+    ngWordsLoaded = new NGWordRepository().get();
   }
 )();
 
