@@ -1,23 +1,24 @@
 import ArticleBodySection from './ArticleBodySection.js';
 import ArticleReferenceCard from './ArticleReferenceCard.js';
+import { NGWordRepository } from '../infrastructure/ngword/NGWrodRepository.js'
+
+let ngWordsLoaded = [];
+
+(
+  () => {
+    ngWordsLoaded = new NGWordRepository().get();
+  }
+)();
 
 function getNGWords(entry) {
   if (entry == null) {
     return [];
   }
-  const words = [
-    'サイト上の私のニックネーム',
-    '加藤純一',
-    'zendesk.com/hc/',
-    'xn--qckwaqj6a5l2ab.xyz',
-    '江畑諒真',
-  ];
-  const ngWords = words.filter(word => {
+  return ngWordsLoaded.filter(word => {
     return entry.paragraphs.filter(p => {
       return p.text != null && p.text.indexOf(word) >= 0
     }).length > 0;
   });
-  return ngWords;
 }
 
 export default {
