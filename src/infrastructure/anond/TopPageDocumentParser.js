@@ -70,6 +70,7 @@ class TopPageDocumentParser {
         const texts = Array.from(items).map(node => node.textContent);
         return {texts, nodeName};
       }
+      case 'PRE':
       case 'BLOCKQUOTE':
       case 'H4':
         return {text: articleChildNode.textContent, nodeName};

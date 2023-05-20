@@ -23,6 +23,7 @@ class SetupWebPage {
       #app blockquote { font-size: medium; }
       #app p {line-height: 2.8rem;}
       #app h4 { font-size: large; }
+      #app pre { font-size: 12pt; font-family: "源ノ角ゴシック Code JP"; }
     `;
     document.head.appendChild(element);
 
