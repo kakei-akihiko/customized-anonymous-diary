@@ -73,7 +73,10 @@ class TopPageDocumentParser {
       case 'PRE':
       case 'BLOCKQUOTE':
       case 'H4':
-        return {text: articleChildNode.textContent, nodeName};
+      case 'H5':
+      case 'H6':
+      case 'H7':
+          return {text: articleChildNode.textContent, nodeName};
       default:
         return null;
     }

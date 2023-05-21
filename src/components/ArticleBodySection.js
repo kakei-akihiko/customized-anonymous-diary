@@ -26,6 +26,15 @@ export default {
         <h4 v-if="item.nodeName == 'H4'" class="h5 ml-0">
           {{ item.text }}
         </h4>
+        <h5 v-if="item.nodeName == 'H5'" class="h6 ml-0">
+          {{ item.text }}
+        </h5>
+        <h6 v-if="item.nodeName == 'H6'" class="h6 ml-0">
+          {{ item.text }}
+        </h6>
+        <h7 v-if="item.nodeName == 'H7'" class="h6 ml-0">
+          {{ item.text }}
+        </h7>
       </div>
     </div>`,
   name: 'article-section',
