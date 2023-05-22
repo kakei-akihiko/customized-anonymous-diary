@@ -70,8 +70,12 @@ class TopPageDocumentParser {
         const texts = Array.from(items).map(node => node.textContent);
         return {texts, nodeName};
       }
-      case 'PRE':
       case 'BLOCKQUOTE':
+        return {
+          children: this.getArticleBody(articleChildNode),
+          nodeName
+        };
+      case 'PRE':
       case 'H4':
       case 'H5':
       case 'H6':
