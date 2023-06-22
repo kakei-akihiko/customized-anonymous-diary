@@ -10,23 +10,49 @@
 // @grant        none
 // ==/UserScript==
 
-import AppElementMethods from './infrastructure/html/AppElementMethods.js';
-import SetupWebPage from './infrastructure/anond/SetupWebPage.js';
+import AppElementMethods from './infrastructure/html/AppElementMethods.js'
+import SetupWebPage from './infrastructure/anond/SetupWebPage.js'
 
-import ArticleCard from './components/ArticleCard.js';
-import PagingBlock from './components/PagingBlock.js';
+import ArticleCard from './components/ArticleCard.js'
+import PagingBlock from './components/PagingBlock.js'
 
-import LoadEntriesService from './usecases/LoadEntriesService.js';
-import UpdateReferenceService from './usecases/UpdateReferenceService.js';
+import LoadEntriesService from './usecases/LoadEntriesService.js'
+import UpdateReferenceService from './usecases/UpdateReferenceService.js'
 
-const loadEntriesService = LoadEntriesService.instance;
-const updateReferenceService = UpdateReferenceService.instance;
+const loadEntriesService = LoadEntriesService.instance
+const updateReferenceService = UpdateReferenceService.instance
 
-new AppElementMethods().setup();
-new SetupWebPage().run();
+new AppElementMethods().setup()
+new SetupWebPage().run()
 
+/* eslint-disable no-new, no-undef */
 new Vue({
   el: '#app',
+  components: { ArticleCard, PagingBlock },
+  data () {
+    return {
+      entries: [],
+      page: 1,
+      reverse: true
+    }
+  },
+  mounted () {
+    this.refresh()
+  },
+  methods: {
+    pagingClick (page) {
+      this.page = page
+      this.refresh()
+    },
+    referButtonClick (entry) {
+      updateReferenceService.run(entry)
+    },
+    async refresh () {
+      const { page } = this
+      this.entries = await loadEntriesService.run({ page })
+      this.$refs.scroll.scrollTop = 0
+    }
+  },
   template: `
     <div id="app" class="h-0 flex-grow-1">
       <div class="h-100 scroll" ref="scroll">
@@ -37,32 +63,5 @@ new Vue({
           <PagingBlock :page="page" @click="pagingClick($event)" class="main-content" />
         </div>
       </div>
-    </div>`,
-  components: {ArticleCard, PagingBlock},
-  computed: {
-  },
-  methods: {
-    pagingClick(page) {
-      this.page = page;
-      this.refresh();
-    },
-    referButtonClick(entry) {
-      updateReferenceService.run(entry);
-    },
-    async refresh() {
-      const {page} = this;
-      this.entries = await loadEntriesService.run({page});
-      this.$refs.scroll.scrollTop = 0;
-    },
-  },
-  data() {
-    return {
-      entries: [],
-      page: 1,
-      reverse: true,
-    };
-  },
-  mounted() {
-    this.refresh();
-  }
-});
+    </div>`
+})

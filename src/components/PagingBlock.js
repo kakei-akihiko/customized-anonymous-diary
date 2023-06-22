@@ -1,4 +1,8 @@
 export default {
+  name: 'paging-block',
+  props: {
+    page: Number
+  },
   template: `
     <div class="d-flex justify-content-between v-interval paging-block">
       <div class="v-interval">
@@ -12,9 +16,5 @@ export default {
         p.{{page}}
       </div>
     </div>
-  `,
-  name: 'paging-block',
-  props: {
-    page: Number,
-  },
-};
+  `
+}

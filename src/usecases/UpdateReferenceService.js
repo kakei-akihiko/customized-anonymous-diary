@@ -1,39 +1,36 @@
-import DocumentRepository from '../infrastructure/anond/DocumentRepository.js';
-import TopPageDocumentParser from '../infrastructure/anond/TopPageDocumentParser.js';
+import DocumentRepository from '../infrastructure/anond/DocumentRepository.js'
+import TopPageDocumentParser from '../infrastructure/anond/TopPageDocumentParser.js'
 
-const documentRepository = DocumentRepository.instance;
-const topPageDocumentParser = TopPageDocumentParser.instance;
-
+const documentRepository = DocumentRepository.instance
+const topPageDocumentParser = TopPageDocumentParser.instance
 
 class UpdateReferenceService {
-
-  async run(entry) {
-
+  async run (entry) {
     if (entry.refer.visible || entry.refer.title != null) {
-      entry.refer.visible = !entry.refer.visible;
-      return;
+      entry.refer.visible = !entry.refer.visible
+      return
     }
 
     if (entry.refer.loading) {
-      return;
+      return
     }
 
-    entry.refer.loading = true;
+    entry.refer.loading = true
 
-    const id = entry.refer.id;
+    const id = entry.refer.id
 
-    const document = await documentRepository.getReferDocument(id);
-    
-    const title = document.querySelector('h2').textContent;
+    const document = await documentRepository.getReferDocument(id)
 
-    const bodyDiv = document.getElementById('body');
+    const title = document.querySelector('h2').textContent
 
-    const paragraphs = topPageDocumentParser.getArticleBody(bodyDiv);
+    const bodyDiv = document.getElementById('body')
 
-    entry.refer = {id, title, paragraphs, visible: true, loading: false};
+    const paragraphs = topPageDocumentParser.getArticleBody(bodyDiv)
+
+    entry.refer = { id, title, paragraphs, visible: true, loading: false }
   }
 }
 
-UpdateReferenceService.instance = new UpdateReferenceService();
+UpdateReferenceService.instance = new UpdateReferenceService()
 
-export default UpdateReferenceService;
+export default UpdateReferenceService

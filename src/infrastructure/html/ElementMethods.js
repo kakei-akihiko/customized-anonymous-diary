@@ -1,26 +1,25 @@
 class ElementMethods {
-
-  constructor(_document = document) {
-    this._document = _document;
+  constructor (_document = document) {
+    this._document = _document
   }
 
-  create(name, options = {}) {
-    const element = this._document.createElement(name);
+  create (name, options = {}) {
+    const element = this._document.createElement(name)
 
     if (options.html != null) {
-      element.innerHTML = options.html;
+      element.innerHTML = options.html
     }
 
     if (options.attributes != null) {
       Object.keys(options.attributes).forEach(name => {
-        element.setAttribute(name, options.attributes[name]);
-      });
+        element.setAttribute(name, options.attributes[name])
+      })
     }
 
-    return element;
+    return element
   }
 }
 
-ElementMethods.instance = new ElementMethods();
+ElementMethods.instance = new ElementMethods()
 
-export default ElementMethods;
+export default ElementMethods

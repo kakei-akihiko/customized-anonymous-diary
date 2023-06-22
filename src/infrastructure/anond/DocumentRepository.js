@@ -1,12 +1,10 @@
 class DocumentRepository {
+  async getReferDocument (id) {
+    const url = 'https://anond.hatelabo.jp/' + id + '?mode=json'
 
-  async getReferDocument(id) {
+    const response = await fetch(url)
 
-    const url = 'https://anond.hatelabo.jp/' + id + '?mode=json';
-
-    const response = await fetch(url);
-
-    const json = await response.json();
+    const json = await response.json()
 
     return new DOMParser().parseFromString(
       `<body>
@@ -14,19 +12,18 @@ class DocumentRepository {
         <div id="body">` + json.body + `</div>
       </body>`,
       'text/html'
-    );
+    )
   }
-  
-  async getTopPageDocument(pageIndex) {
 
-    const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + pageIndex);
+  async getTopPageDocument (pageIndex) {
+    const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + pageIndex)
 
-    const html = await response.text();
+    const html = await response.text()
 
-    return new DOMParser().parseFromString(html, "text/html");
+    return new DOMParser().parseFromString(html, 'text/html')
   }
 }
 
-DocumentRepository.instance = new DocumentRepository();
+DocumentRepository.instance = new DocumentRepository()
 
-export default DocumentRepository;
+export default DocumentRepository
