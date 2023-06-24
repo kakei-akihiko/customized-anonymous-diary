@@ -1,23 +1,21 @@
-import DocumentRepository from '../infrastructure/anond/DocumentRepository.js';
-import TopPageDocumentParser from '../infrastructure/anond/TopPageDocumentParser.js';
+import DocumentRepository from '../infrastructure/anond/DocumentRepository.js'
+import TopPageDocumentParser from '../infrastructure/anond/TopPageDocumentParser.js'
 
-const documentRepository = DocumentRepository.instance;
-const topPageDocumentParser = TopPageDocumentParser.instance;
-
+const documentRepository = DocumentRepository.instance
+const topPageDocumentParser = TopPageDocumentParser.instance
 
 class LoadEntriesService {
-  async run({page}) {
+  async run ({ page }) {
+    const document = await documentRepository.getTopPageDocument(page)
 
-    const document = await documentRepository.getTopPageDocument(page);
+    const entries = topPageDocumentParser.parse(document)
 
-    const entries = topPageDocumentParser.parse(document);
+    entries.sort((a, b) => a.time > b.time ? 1 : -1)
 
-    entries.sort((a, b) => a.time > b.time ? 1 : -1);
-
-    return entries;
+    return entries
   }
 }
 
-LoadEntriesService.instance = new LoadEntriesService();
+LoadEntriesService.instance = new LoadEntriesService()
 
-export default LoadEntriesService;
+export default LoadEntriesService

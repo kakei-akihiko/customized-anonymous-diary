@@ -1,27 +1,36 @@
-import ArticleBodySection from './ArticleBodySection.js';
-import ArticleReferenceCard from './ArticleReferenceCard.js';
+import ArticleBodySection from './ArticleBodySection.js'
+import ArticleReferenceCard from './ArticleReferenceCard.js'
 import { NGWordRepository } from '../infrastructure/ngword/NGWrodRepository.js'
 
 let ngWordsLoaded = [];
 
 (
   () => {
-    ngWordsLoaded = new NGWordRepository().get();
+    ngWordsLoaded = new NGWordRepository().get()
   }
-)();
+)()
 
-function getNGWords(entry) {
+function getNGWords (entry) {
   if (entry == null) {
-    return [];
+    return []
   }
   return ngWordsLoaded.filter(word => {
     return entry.paragraphs.filter(p => {
       return p.text != null && p.text.indexOf(word) >= 0
-    }).length > 0;
-  });
+    }).length > 0
+  })
 }
 
 export default {
+  components: { ArticleBodySection, ArticleReferenceCard },
+  props: {
+    entry: Object
+  },
+  computed: {
+    ngWords () {
+      return getNGWords(this.entry)
+    }
+  },
   template: `
     <div class="card main-content py-2">
       <div class="card-body">
@@ -55,14 +64,5 @@ export default {
         </div>
       </div>
     </div>
-  `,
-  components: {ArticleBodySection, ArticleReferenceCard},
-  props: {
-    entry: Object,
-  },
-  computed: {
-    ngWords() {
-      return getNGWords(this.entry);
-    }
-  },
-};
+  `
+}

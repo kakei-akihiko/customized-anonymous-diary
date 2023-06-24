@@ -1,31 +1,31 @@
-import ElementMethods from './ElementMethods.js';
+import ElementMethods from './ElementMethods.js'
 
 class AppElementMethods {
-  constructor() {
-    this.elementMethods = ElementMethods.instance;
+  constructor () {
+    this.elementMethods = ElementMethods.instance
   }
 
-  setup() {
+  setup () {
     const originalElement = this.elementMethods.create('div', {
       attributes: {
-        id: 'original',
-      },
-    });
+        id: 'original'
+      }
+    })
 
-    document.body.appendChild(originalElement);
+    document.body.appendChild(originalElement)
 
     Array.apply(null, document.body.childNodes)
-      .filter(child => child.id != 'original')
-      .forEach(child => {originalElement.appendChild(child);});
+      .filter(child => child.id !== 'original')
+      .forEach(child => { originalElement.appendChild(child) })
 
     const appElement = this.elementMethods.create('div', {
       attributes: {
-        id: 'app',
-      },
-    });
-    
-    document.body.appendChild(appElement);
+        id: 'app'
+      }
+    })
+
+    document.body.appendChild(appElement)
   }
 }
 
-export default AppElementMethods;
+export default AppElementMethods

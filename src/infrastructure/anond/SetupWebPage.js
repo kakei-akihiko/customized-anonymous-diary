@@ -1,10 +1,10 @@
 class SetupWebPage {
-  run() {
+  run () {
     document.head.insertAdjacentHTML('beforeend', `
       <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/litera/bootstrap.min.css">
-    `);
+    `)
 
-    const element = document.createElement('style');
+    const element = document.createElement('style')
     element.textContent = `
       html, body {margin: 0; padding: 0; height: 100%}
       .h-100 {height: 100%}
@@ -24,11 +24,11 @@ class SetupWebPage {
       #app p {line-height: 2.8rem;}
       #app h4 { font-size: large; }
       #app pre { font-size: 12pt; font-family: "源ノ角ゴシック Code JP"; }
-    `;
-    document.head.appendChild(element);
+    `
+    document.head.appendChild(element)
 
-    document.body.className = 'd-flex flex-column h-100';
-  }  
+    document.body.className = 'd-flex flex-column h-100'
+  }
 }
 
-export default SetupWebPage;
+export default SetupWebPage

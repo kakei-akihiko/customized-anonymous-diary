@@ -1,4 +1,15 @@
 export default {
+  name: 'article-section',
+  props: {
+    items: { required: true }
+  },
+  computed: {
+    filteredItems () {
+      return this.items.filter(item => {
+        return item.nodeName !== 'P' || item.text !== 'link'
+      })
+    }
+  },
   template: `
     <div>
       <div v-for="item in filteredItems">
@@ -68,16 +79,5 @@ export default {
           {{ item.text }}
         </h7>
       </div>
-    </div>`,
-  name: 'article-section',
-  props: {
-    items: {required: true},
-  },
-  computed: {
-    filteredItems() {
-      return this.items.filter(item => {
-        return item.nodeName != 'P' || item.text != 'link';
-      });
-    }
-  },
-};
+    </div>`
+}
