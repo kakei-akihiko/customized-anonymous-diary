@@ -1,30 +1,14 @@
-import ElementMethods from './ElementMethods.js'
-
 class AppElementMethods {
-  constructor () {
-    this.elementMethods = ElementMethods.instance
-  }
-
   setup () {
-    const originalElement = this.elementMethods.create('div', {
-      attributes: {
-        id: 'original'
-      }
-    })
-
-    document.body.appendChild(originalElement)
+    document.body.insertAdjacentHTML('beforeend', `
+      <div id="original"></div>
+      <div id="app" class="h-0 flex-grow-1"></div>
+    `)
+    const originalElement = document.getElementById('original')
 
     Array.apply(null, document.body.childNodes)
-      .filter(child => child.id !== 'original')
+      .filter(child => child.id !== 'original' && child.id !== 'app')
       .forEach(child => { originalElement.appendChild(child) })
-
-    const appElement = this.elementMethods.create('div', {
-      attributes: {
-        id: 'app'
-      }
-    })
-
-    document.body.appendChild(appElement)
   }
 }
 
