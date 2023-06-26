@@ -15,7 +15,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="article-body">
     <div v-for="item in filteredItems">
       <p v-if="item.nodeName == 'P'">
         {{ item.text }}
@@ -86,3 +86,22 @@ export default {
   </div>
 </template>
 
+<style scoped>
+.article-body p {
+  line-height: 2.8rem;
+  font-size: 1.8rem;
+}
+
+.article-body blockquote {
+  font-size: medium;
+}
+
+.article-body h4 {
+  font-size: large;
+}
+
+.article-body pre {
+  font-size: 1rem;
+  font-family: "源ノ角ゴシック Code JP";
+}
+</style>

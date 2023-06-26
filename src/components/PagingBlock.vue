@@ -21,3 +21,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.paging-block button {
+  font-size: 1.5rem;
+}
+</style>

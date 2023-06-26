@@ -30,7 +30,7 @@ export default {
 <template>
   <div class="card main-content py-2">
     <div class="card-body">
-      <div class="card-title">
+      <div class="card-title main-content-title">
         <a :href="entry.url">■</a>
         <strong v-if="ngWords.length <= 0">{{ entry.title }}</strong>
         <strong v-else>NG</strong>
@@ -61,3 +61,15 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.main-content {
+  max-width: 550pt
+}
+.main-content-title {
+  font-size: 1.7rem
+}
+.main-content .text-refered {
+  font-size: 80%; margin-left: .5rem
+}
+</style>
