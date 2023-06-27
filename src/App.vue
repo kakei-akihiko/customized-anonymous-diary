@@ -34,17 +34,32 @@ export default {
       this.entries = await loadEntriesService.run({ page })
       this.$refs.scroll.scrollTop = 0
     }
-  },
+  }
 }
 </script>
 
 <template>
-  <div class="h-100 scroll" ref="scroll">
+  <div
+    ref="scroll"
+    class="h-100 scroll"
+  >
     <div class="container">
-      <PagingBlock :page="page" @change="pagingClick($event)" class="main-content" />
-      <ArticleCard v-for="entry in entries" :key="entry.url" :entry="entry"
-        @refer="referButtonClick(entry)" />
-      <PagingBlock :page="page" @change="pagingClick($event)" class="main-content" />
+      <PagingBlock
+        :page="page"
+        class="main-content"
+        @change="pagingClick($event)"
+      />
+      <ArticleCard
+        v-for="entry in entries"
+        :key="entry.url"
+        :entry="entry"
+        @refer="referButtonClick(entry)"
+      />
+      <PagingBlock
+        :page="page"
+        class="main-content"
+        @change="pagingClick($event)"
+      />
     </div>
   </div>
 </template>

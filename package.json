@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn run webpack",
-    "lint": "yarn eslint --fix --ext .js ./src"
+    "lint": "yarn eslint --fix --ext .js,.vue ./src"
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.3.4",

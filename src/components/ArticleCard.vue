@@ -34,15 +34,25 @@ export default {
         <a :href="entry.url">■</a>
         <strong v-if="ngWords.length <= 0">{{ entry.title }}</strong>
         <strong v-else>NG</strong>
-        <button v-if="entry.refer != null" class="btn btn-default btn-sm" @click="$emit('refer')">
+        <button
+          v-if="entry.refer != null"
+          class="btn btn-default btn-sm"
+          @click="$emit('refer')"
+        >
           言及先を開く
         </button>
         <span class="text-inconspicuous">{{ entry.time }}</span>
-        <span v-if="entry.refersCount > 0" class="text-refered">被言及：{{ entry.refersCount }}</span>
+        <span
+          v-if="entry.refersCount > 0"
+          class="text-refered"
+        >被言及：{{ entry.refersCount }}</span>
       </div>
 
       <div class="card-text">
-        <div class="card pt-2 pl-2 pr-2 mb-2" v-if="entry.refer != null && entry.refer.loading">
+        <div
+          v-if="entry.refer != null && entry.refer.loading"
+          class="card pt-2 pl-2 pr-2 mb-2"
+        >
           ...
         </div>
         <ArticleReferenceCard
@@ -50,12 +60,15 @@ export default {
           :url="entry.refer.url"
           :title="entry.refer.title"
           :paragraphs="entry.refer.paragraphs"
-          />
+        />
         <div v-if="ngWords.length <= 0">
-          <ArticleBodySection :items="entry.paragraphs"/>
+          <ArticleBodySection :items="entry.paragraphs" />
         </div>
         <div v-else>
-          <strong>NG</strong>: <span v-for="word in ngWords" :key="word">{{word}} </span>
+          <strong>NG</strong>: <span
+            v-for="word in ngWords"
+            :key="word"
+          >{{ word }} </span>
         </div>
       </div>
     </div>
