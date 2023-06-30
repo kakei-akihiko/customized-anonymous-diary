@@ -4,9 +4,9 @@ import ArticleBodySection from './ArticleBodySection.vue'
 export default {
   components: { ArticleBodySection },
   props: {
-    title: String,
-    url: String,
-    paragraphs: Array
+    title: { type: String, required: true },
+    url: { type: String, required: true },
+    paragraphs: { type: Array, required: true }
   }
 }
 </script>

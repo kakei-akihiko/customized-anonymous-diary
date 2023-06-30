@@ -2,8 +2,9 @@
 export default {
   name: 'PagingBlock',
   props: {
-    page: Number
-  }
+    page: { type: Number, required: true }
+  },
+  emits: ['change']
 }
 </script>
 

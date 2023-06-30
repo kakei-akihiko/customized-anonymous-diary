@@ -17,8 +17,12 @@ function getNGWords (entry) {
 export default {
   components: { ArticleBodySection, ArticleReferenceCard },
   props: {
-    entry: Object
+    entry: {
+      type: Object,
+      default: null
+    }
   },
+  emits: ['refer'],
   computed: {
     ngWords () {
       return getNGWords(this.entry)
