@@ -43,10 +43,9 @@ export default {
     ref="scroll"
     class="h-100 scroll"
   >
-    <div class="container">
+    <div class="container container-main">
       <PagingBlock
         :page="page"
-        class="main-content"
         @change="pagingClick($event)"
       />
       <ArticleCard
@@ -57,7 +56,6 @@ export default {
       />
       <PagingBlock
         :page="page"
-        class="main-content"
         @change="pagingClick($event)"
       />
     </div>
@@ -74,4 +72,7 @@ html, body {margin: 0; padding: 0; height: 100%}
 body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}
 .text-inconspicuous {color: rgb(100,100,100); font-size: small}
 #hatena-anond, #original > p, #original > h1 {display: none}
+#app .container-main {
+  max-width: 550pt;
+}
 </style>
