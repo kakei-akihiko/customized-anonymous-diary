@@ -1,38 +1,31 @@
 <script>
 import ArticleCard from './components/ArticleCard.vue'
 import PagingBlock from './components/PagingBlock.vue'
-
-import LoadEntriesService from './usecases/LoadEntriesService.js'
 import UpdateReferenceService from './usecases/UpdateReferenceService.js'
+import { entriesRef, fetchEntries } from './usecases/data'
 
-const loadEntriesService = LoadEntriesService.instance
 const updateReferenceService = UpdateReferenceService.instance
 
 export default {
   components: { ArticleCard, PagingBlock },
-  data () {
-    return {
-      entries: [],
-      page: 1,
-      reverse: true
+  computed: {
+    entries () {
+      return entriesRef.value
     }
   },
-  mounted () {
-    this.refresh()
+  async mounted () {
+    await fetchEntries()
+
+    this.$refs.scroll.scrollTop = 0
   },
   methods: {
-    pagingClick (page) {
-      this.page = page
+    async pagingClick (page) {
       console.log('paging change page:', page)
-      this.refresh()
+
+      this.$refs.scroll.scrollTop = 0
     },
     referButtonClick (entry) {
       updateReferenceService.run(entry)
-    },
-    async refresh () {
-      const { page } = this
-      this.entries = await loadEntriesService.run({ page })
-      this.$refs.scroll.scrollTop = 0
     }
   }
 }
@@ -44,20 +37,14 @@ export default {
     class="h-100 scroll"
   >
     <div class="container container-main">
-      <PagingBlock
-        :page="page"
-        @change="pagingClick($event)"
-      />
+      <PagingBlock @change="pagingClick($event)" />
       <ArticleCard
         v-for="entry in entries"
         :key="entry.url"
         :entry="entry"
         @refer="referButtonClick(entry)"
       />
-      <PagingBlock
-        :page="page"
-        @change="pagingClick($event)"
-      />
+      <PagingBlock @change="pagingClick($event)" />
     </div>
   </div>
 </template>

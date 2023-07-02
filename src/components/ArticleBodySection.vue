@@ -108,12 +108,6 @@ export default {
             >
               {{ child.text }}
             </h6>
-            <h7
-              v-if="child.nodeName == 'H7'"
-              class="h6 ml-0"
-            >
-              {{ child.text }}
-            </h7>
           </div>
         </div>
       </blockquote>
@@ -135,12 +129,6 @@ export default {
       >
         {{ item.text }}
       </h6>
-      <h7
-        v-if="item.nodeName == 'H7'"
-        class="h6 ml-0"
-      >
-        {{ item.text }}
-      </h7>
     </div>
   </div>
 </template>
