@@ -1,33 +1,24 @@
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
 import ArticleCard from './components/ArticleCard.vue'
 import PagingBlock from './components/PagingBlock.vue'
-import UpdateReferenceService from './usecases/UpdateReferenceService.js'
+import { updateReference } from './usecases/reference.js'
 import { entriesRef, fetchEntries } from './usecases/data'
 
-const updateReferenceService = UpdateReferenceService.instance
+const scroll = ref(null)
 
-export default {
-  components: { ArticleCard, PagingBlock },
-  computed: {
-    entries () {
-      return entriesRef.value
-    }
-  },
-  async mounted () {
-    await fetchEntries()
+onMounted(async () => {
+  await fetchEntries()
+  scroll.scrollTop = 0
+})
 
-    this.$refs.scroll.scrollTop = 0
-  },
-  methods: {
-    async pagingClick (page) {
-      console.log('paging change page:', page)
+const pagingClick = page => {
+  console.log('paging change page:', page)
+  scroll.scrollTop = 0
+}
 
-      this.$refs.scroll.scrollTop = 0
-    },
-    referButtonClick (entry) {
-      updateReferenceService.run(entry)
-    }
-  }
+const referButtonClick = entry => {
+  updateReference(entry)
 }
 </script>
 
@@ -39,7 +30,7 @@ export default {
     <div class="container container-main">
       <PagingBlock @change="pagingClick($event)" />
       <ArticleCard
-        v-for="entry in entries"
+        v-for="entry in entriesRef"
         :key="entry.url"
         :entry="entry"
         @refer="referButtonClick(entry)"
