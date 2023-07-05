@@ -1,7 +1,6 @@
-import DocumentRepository from '../infrastructure/anond/DocumentRepository.js'
+import { getReferDocument } from '../infrastructure/anond/DocumentRepository.js'
 import TopPageDocumentParser from '../infrastructure/anond/TopPageDocumentParser.js'
 
-const documentRepository = DocumentRepository.instance
 const topPageDocumentParser = TopPageDocumentParser.instance
 
 export const updateReference = async entry => {
@@ -18,7 +17,7 @@ export const updateReference = async entry => {
 
   const id = entry.refer.id
 
-  const document = await documentRepository.getReferDocument(id)
+  const document = await getReferDocument(id)
 
   const title = document.querySelector('h2').textContent
 
