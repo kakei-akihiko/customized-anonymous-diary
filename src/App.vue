@@ -9,12 +9,12 @@ const scroll = ref(null)
 
 onMounted(async () => {
   await fetchEntries()
-  scroll.scrollTop = 0
+  scroll.value.scrollTop = 0
 })
 
 const pagingClick = page => {
   console.log('paging change page:', page)
-  scroll.scrollTop = 0
+  scroll.value.scrollTop = 0
 }
 
 const referButtonClick = entry => {
