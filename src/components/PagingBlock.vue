@@ -1,6 +1,6 @@
 <script setup>
 import PagingButtons from './PagingButtons.vue'
-import { pageIndexRef } from '../usecases/data';
+import { pageIndexRef } from '../usecases/data'
 
 const emits = defineEmits(['change'])
 

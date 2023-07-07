@@ -1,7 +1,12 @@
 <script setup>
-import { fetchEntries, pageIndexRef } from '../usecases/data';
+import { computed } from 'vue'
+import { connectingRef, fetchEntries, pageIndexRef } from '../usecases/data'
 
 const emits = defineEmits(['change'])
+
+const buttonDisabled = computed(() => {
+  return connectingRef.value
+})
 
 const buttonClick = async newPage => {
   console.log('buttonClick', newPage)
@@ -11,7 +16,10 @@ const buttonClick = async newPage => {
 </script>
 
 <template>
-  <div class="v-interval buttons">
+  <fieldset
+    class="v-interval buttons"
+    :disabled="buttonDisabled"
+  >
     <button
       class="btn btn-link p-0"
       @click="buttonClick(pageIndexRef)"
@@ -44,7 +52,7 @@ const buttonClick = async newPage => {
     >
       古い方へ+5p
     </button>
-  </div>
+  </fieldset>
 </template>
 
 <style scoped>

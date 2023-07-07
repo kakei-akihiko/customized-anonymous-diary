@@ -11,7 +11,7 @@ export const entriesRef = ref([])
 
 export const connectingRef = ref(false)
 
-export const loadEntries = async ({page}) => {
+export const loadEntries = async ({ page }) => {
   const document = await getTopPageDocument(page)
 
   const entries = topPageDocumentParser.parse(document)
