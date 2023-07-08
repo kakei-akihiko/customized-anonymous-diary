@@ -52,26 +52,30 @@ class TopPageDocumentParser {
 
   getArticleBody (node) {
     return Array.from(node.childNodes)
-      .map(child => this.parseArticleBodyLine(child))
+      .map((child, index) => this.parseArticleBodyLine(index, child))
       .filter(item => item != null)
   }
 
-  parseArticleBodyLine (articleChildNode) {
+  parseArticleBodyLine (nodeIndex, articleChildNode) {
     const nodeName = articleChildNode.nodeName
     switch (nodeName) {
       case 'P':
         if (articleChildNode.classList.length > 0) {
           return null
         }
-        return { text: articleChildNode.textContent, nodeName }
+        return { nodeIndex, text: articleChildNode.textContent, nodeName }
       case 'UL':
       case 'OL': {
         const items = articleChildNode.querySelectorAll('li')
-        const texts = Array.from(items).map(node => node.textContent)
-        return { texts, nodeName }
+        const texts = Array.from(items).map((node, index) => {
+          const text = node.textContent
+          return { index, text }
+        })
+        return { nodeIndex, texts, nodeName }
       }
       case 'BLOCKQUOTE':
         return {
+          nodeIndex,
           children: this.getArticleBody(articleChildNode),
           nodeName
         }
@@ -79,8 +83,7 @@ class TopPageDocumentParser {
       case 'H4':
       case 'H5':
       case 'H6':
-      case 'H7':
-        return { text: articleChildNode.textContent, nodeName }
+        return { nodeIndex, text: articleChildNode.textContent, nodeName }
       default:
         return null
     }

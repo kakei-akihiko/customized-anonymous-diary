@@ -1,50 +1,41 @@
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
 import ArticleCard from './components/ArticleCard.vue'
 import PagingBlock from './components/PagingBlock.vue'
+import { updateReference } from './usecases/reference.js'
+import { entriesRef, fetchEntries } from './usecases/data'
 
-import LoadEntriesService from './usecases/LoadEntriesService.js'
-import UpdateReferenceService from './usecases/UpdateReferenceService.js'
+const scroll = ref(null)
 
-const loadEntriesService = LoadEntriesService.instance
-const updateReferenceService = UpdateReferenceService.instance
+onMounted(async () => {
+  await fetchEntries()
+  scroll.value.scrollTop = 0
+})
 
-export default {
-  components: { ArticleCard, PagingBlock },
-  data () {
-    return {
-      entries: [],
-      page: 1,
-      reverse: true
-    }
-  },
-  mounted () {
-    this.refresh()
-  },
-  methods: {
-    pagingClick (page) {
-      this.page = page
-      console.log('paging change page:', page)
-      this.refresh()
-    },
-    referButtonClick (entry) {
-      updateReferenceService.run(entry)
-    },
-    async refresh () {
-      const { page } = this
-      this.entries = await loadEntriesService.run({ page })
-      this.$refs.scroll.scrollTop = 0
-    }
-  },
+const pagingClick = page => {
+  console.log('paging change page:', page)
+  scroll.value.scrollTop = 0
+}
+
+const referButtonClick = entry => {
+  updateReference(entry)
 }
 </script>
 
 <template>
-  <div class="h-100 scroll" ref="scroll">
-    <div class="container">
-      <PagingBlock :page="page" @change="pagingClick($event)" class="main-content" />
-      <ArticleCard v-for="entry in entries" :key="entry.url" :entry="entry"
-        @refer="referButtonClick(entry)" />
-      <PagingBlock :page="page" @change="pagingClick($event)" class="main-content" />
+  <div
+    ref="scroll"
+    class="h-100 scroll"
+  >
+    <div class="container container-main">
+      <PagingBlock @change="pagingClick($event)" />
+      <ArticleCard
+        v-for="entry in entriesRef"
+        :key="entry.url"
+        :entry="entry"
+        @refer="referButtonClick(entry)"
+      />
+      <PagingBlock @change="pagingClick($event)" />
     </div>
   </div>
 </template>
@@ -57,15 +48,9 @@ html, body {margin: 0; padding: 0; height: 100%}
 .v-interval > *:nth-child(n+2) {margin-left: 0.5rem}
 :root {--font-family-sans-serif: sans-serif}
 body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}
-.main-content {max-width: 550pt}
 .text-inconspicuous {color: rgb(100,100,100); font-size: small}
 #hatena-anond, #original > p, #original > h1 {display: none}
-p {font-size: 1.6rem !important; font-family: 'BIZ UDPゴシック'}
-.card-title {font-size: 1.7rem}
-.text-refered { font-size: 80%; margin-left: .5rem }
-#app .paging-block button { font-size: 1.5rem; }
-#app blockquote { font-size: medium; }
-#app p {line-height: 2.8rem;}
-#app h4 { font-size: large; }
-#app pre { font-size: 12pt; font-family: "源ノ角ゴシック Code JP"; }
+#app .container-main {
+  max-width: 550pt;
+}
 </style>

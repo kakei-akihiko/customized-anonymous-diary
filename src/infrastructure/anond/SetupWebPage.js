@@ -1,11 +1,13 @@
-class SetupWebPage {
-  run () {
-    document.head.insertAdjacentHTML('beforeend', `
-      <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/litera/bootstrap.min.css">
-    `)
+export const setupWebPage = () => {
+  document.body.insertAdjacentHTML('beforeend', `
+    <div id="original"></div>
+    <div id="app" class="h-0 flex-grow-1"></div>
+  `)
+  const originalElement = document.getElementById('original')
 
-    document.body.className = 'd-flex flex-column h-100'
-  }
+  Array.apply(null, document.body.childNodes)
+    .filter(child => child.id !== 'original' && child.id !== 'app')
+    .forEach(child => { originalElement.appendChild(child) })
+
+  document.body.className = 'd-flex flex-column h-100'
 }
-
-export default SetupWebPage

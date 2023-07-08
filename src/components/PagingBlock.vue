@@ -1,23 +1,19 @@
-<script>
-export default {
-  name: 'paging-block',
-  props: {
-    page: Number
-  }
+<script setup>
+import PagingButtons from './PagingButtons.vue'
+import { pageIndexRef } from '../usecases/data'
+
+const emits = defineEmits(['change'])
+
+const pageChange = newPage => {
+  emits('change', newPage)
 }
 </script>
 
 <template>
-  <div class="d-flex justify-content-between v-interval paging-block">
-    <div class="v-interval">
-      <button class="btn btn-link p-0" @click="$emit('change', page)">再読み込み</button>
-      <button class="btn btn-link p-0" @click="$emit('change', 1)" v-if="page > 1">最新を取得</button>
-      <button class="btn btn-link p-0" @click="$emit('change', page - 1)" v-if="page > 1">← 前の25件</button>
-      <button class="btn btn-link p-0" @click="$emit('change', page + 1)">→ 次の25件</button>
-      <button class="btn btn-link p-0" @click="$emit('change', page + 5)">古い方へ+5p</button>
-    </div>
+  <div class="d-flex justify-content-between v-interval">
+    <PagingButtons @change="pageChange($event)" />
     <div class="v-interval text-right text-inconspicuous">
-      p.{{page}}
+      p.{{ pageIndexRef }}
     </div>
   </div>
 </template>

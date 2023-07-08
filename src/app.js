@@ -1,12 +1,12 @@
 import { createApp } from 'vue'
 
-import AppElementMethods from './infrastructure/html/AppElementMethods.js'
-import SetupWebPage from './infrastructure/anond/SetupWebPage.js'
+import { setupWebPage } from './infrastructure/anond/SetupWebPage.js'
 
 import App from './App.vue'
 
-new AppElementMethods().setup()
-new SetupWebPage().run()
+import './assets/css/bootstrap.css'
+
+setupWebPage()
 
 createApp(App)
   .mount('#app')
