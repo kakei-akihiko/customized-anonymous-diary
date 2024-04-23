@@ -29,7 +29,7 @@ export default {
             v-for="text in item.texts"
             :key="text.index"
           >
-            {{ text }}
+            {{ text.text }}
           </li>
         </ul>
       </p>
