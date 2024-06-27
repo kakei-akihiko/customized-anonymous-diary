@@ -24,6 +24,19 @@ export default {
   },
   emits: ['refer'],
   computed: {
+    filteredItems () {
+      return this.entry.paragraphs.filter(item => {
+        return item.nodeName !== 'P' || item.text !== 'link'
+      })
+    },
+    headlines () {
+      const length = Math.min(this.filteredItems.length, 10)
+      return this.filteredItems.slice(0, length)
+    },
+    taillines () {
+      return this.filteredItems.length < 10
+        ? [] : this.filteredItems.slice(10)
+    },
     ngWords () {
       return getNGWords(this.entry)
     }
@@ -66,7 +79,11 @@ export default {
           :paragraphs="entry.refer.paragraphs"
         />
         <div v-if="ngWords.length <= 0">
-          <ArticleBodySection :items="entry.paragraphs" />
+          <ArticleBodySection :items="headlines" />
+          <details v-if="taillines.length > 0">
+            <summary>続きを読む</summary>
+            <ArticleBodySection :items="taillines" />
+          </details>
         </div>
         <div v-else>
           <strong>NG</strong>: <span

@@ -3,13 +3,6 @@ export default {
   name: 'ArticleSection',
   props: {
     items: { type: Array, required: true }
-  },
-  computed: {
-    filteredItems () {
-      return this.items.filter(item => {
-        return item.nodeName !== 'P' || item.text !== 'link'
-      })
-    }
   }
 }
 </script>
@@ -17,7 +10,7 @@ export default {
 <template>
   <div class="article-body">
     <div
-      v-for="item in filteredItems"
+      v-for="item in items"
       :key="item.nodeIndex"
     >
       <p v-if="item.nodeName == 'P'">
