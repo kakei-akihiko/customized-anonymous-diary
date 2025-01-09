@@ -35,7 +35,8 @@ export default {
     },
     taillines () {
       return this.filteredItems.length < 10
-        ? [] : this.filteredItems.slice(10)
+        ? []
+        : this.filteredItems.slice(10)
     },
     ngWords () {
       return getNGWords(this.entry)

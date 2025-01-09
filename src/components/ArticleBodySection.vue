@@ -56,26 +56,22 @@ export default {
             <p v-if="child.nodeName == 'P'">
               {{ child.text }}
             </p>
-            <p v-if="child.nodeName == 'UL'">
-              <ul>
-                <li
-                  v-for="text in child.texts"
-                  :key="text.index"
-                >
-                  {{ text.text }}
-                </li>
-              </ul>
-            </p>
-            <p v-if="child.nodeName == 'OL'">
-              <ol>
-                <li
-                  v-for="text in child.texts"
-                  :key="text.index"
-                >
-                  {{ text.text }}
-                </li>
-              </ol>
-            </p>
+            <ul v-if="child.nodeName == 'UL'">
+              <li
+                v-for="text in child.texts"
+                :key="text.index"
+              >
+                {{ text.text }}
+              </li>
+            </ul>
+            <ol v-if="child.nodeName == 'OL'">
+              <li
+                v-for="text in child.texts"
+                :key="text.index"
+              >
+                {{ text.text }}
+              </li>
+            </ol>
             <pre
               v-if="child.nodeName == 'PRE'"
               class="rounded p-1"
