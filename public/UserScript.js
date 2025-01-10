@@ -22,7 +22,7 @@ i.push([n.id,"\nhtml, body {margin: 0; padding: 0; height: 100%}\n.h-100 {height
 // Exports
 /* harmony default export */const l=i;
 /***/},
-/***/394:
+/***/171:
 /***/(n,t,e)=>{"use strict";e.r(t),
 /* harmony export */e.d(t,{
 /* harmony export */default:()=>l
@@ -30,7 +30,7 @@ i.push([n.id,"\nhtml, body {margin: 0; padding: 0; height: 100%}\n.h-100 {height
 /* harmony import */var o=e(601),r=e.n(o),a=e(314),i=e.n(a)()(r());
 /* harmony import */
 // Module
-i.push([n.id,'\n.article-body p[data-v-f7c01858] {\n  line-height: 2.8rem;\n  font-size: 1.8rem;\n}\n.article-body blockquote[data-v-f7c01858] {\n  font-size: medium;\n}\n.article-body h4[data-v-f7c01858] {\n  font-size: large;\n}\n.article-body pre[data-v-f7c01858] {\n  font-size: 1rem;\n  font-family: "源ノ角ゴシック Code JP";\n}\n',""])
+i.push([n.id,'\n.article-body p[data-v-0f484768] {\n  line-height: 2.8rem;\n  font-size: 1.8rem;\n}\n.article-body blockquote[data-v-0f484768] {\n  font-size: medium;\n}\n.article-body h4[data-v-0f484768] {\n  font-size: large;\n}\n.article-body pre[data-v-0f484768] {\n  font-size: 1rem;\n  font-family: "源ノ角ゴシック Code JP";\n}\n',""])
 ;
 // Exports
 /* harmony default export */const l=i;
@@ -129,13 +129,13 @@ var o=e(902);o.__esModule&&(o=o.default),"string"==typeof o&&(o=[[n.id,o,""]]),o
 // add the styles to the DOM
 (0,e(534)/* ["default"] */.A)("3090a77c",o,!1,{})}
 /***/,
-/***/513:
+/***/468:
 /***/(n,t,e)=>{
 // style-loader: Adds some css to the DOM by adding a <style> tag
 // load the styles
-var o=e(394);o.__esModule&&(o=o.default),"string"==typeof o&&(o=[[n.id,o,""]]),o.locals&&(n.exports=o.locals);
+var o=e(171);o.__esModule&&(o=o.default),"string"==typeof o&&(o=[[n.id,o,""]]),o.locals&&(n.exports=o.locals);
 // add the styles to the DOM
-(0,e(534)/* ["default"] */.A)("1bbdab96",o,!1,{})}
+(0,e(534)/* ["default"] */.A)("069aeede",o,!1,{})}
 /***/,
 /***/28:
 /***/(n,t,e)=>{
@@ -2011,7 +2011,7 @@ class:"card-title main-content-title"},Aa=["href"],Na={key:0},La={key:1},Ta={cla
 class:"text-refered"},Ua={class:"card-text"},Pa={key:0,class:"card pt-2 pl-2 pr-2 mb-2"},Ia={key:2},Ra={key:0
 },Fa=Ca((()=>cr("summary",null,"続きを読む",-1/* HOISTED */))),Ba={key:3
 },Va=Ca((()=>cr("strong",null,"NG",-1/* HOISTED */))),$a=br(": ")
-;// CONCATENATED MODULE: ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/components/ArticleBodySection.vue?vue&type=template&id=f7c01858&scoped=true
+;// CONCATENATED MODULE: ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/components/ArticleBodySection.vue?vue&type=template&id=0f484768&scoped=true
 const Da={class:"article-body"},Ha={key:0},Wa={key:1},qa={key:2},Ka={key:3,class:"rounded p-1",style:{
 "background-color":"#e7ebff"}},Ga={key:4,class:"rounded p-1",style:{"background-color":"rgb(220, 240, 255)"}},Xa={key:0
 },Ja={key:1},Qa={key:2},Ya={key:3,class:"rounded p-1",style:{"background-color":"#e7ebff"}},Za={key:4,class:"h5 ml-0"
@@ -2020,14 +2020,14 @@ class:"h6 ml-0"}
 ;// CONCATENATED MODULE: ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/components/ArticleBodySection.vue?vue&type=script&lang=js
 /* harmony default export */const ai={name:"ArticleSection",props:{items:{type:Array,required:!0}}}
 ;// CONCATENATED MODULE: ./src/components/ArticleBodySection.vue?vue&type=script&lang=js
-// EXTERNAL MODULE: ./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/components/ArticleBodySection.vue?vue&type=style&index=0&id=f7c01858&scoped=true&lang=css
-e(513);var ii=e(262);const li=(0,ii/* default */.A)(ai,[["render",function(n,t,e,o,r,a){return Zo(),
+// EXTERNAL MODULE: ./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/components/ArticleBodySection.vue?vue&type=style&index=0&id=0f484768&scoped=true&lang=css
+e(468);var ii=e(262);const li=(0,ii/* default */.A)(ai,[["render",function(n,t,e,o,r,a){return Zo(),
 rr("div",Da,[(Zo(!0),rr(Ko,null,so(e.items,(n=>(Zo(),rr("div",{key:n.nodeIndex},["P"==n.nodeName?(Zo(),
-rr("p",Ha,m(n.text),1/* TEXT */)):ur("v-if",!0),"UL"==n.nodeName?(Zo(),rr("p",Wa,[cr("ul",null,[(Zo(!0),
+rr("p",Ha,m(n.text),1/* TEXT */)):ur("v-if",!0),"UL"==n.nodeName?(Zo(),rr("ul",Wa,[(Zo(!0),
 rr(Ko,null,so(n.texts,(n=>(Zo(),rr("li",{key:n.index
-},m(n.text),1/* TEXT */)))),128/* KEYED_FRAGMENT */))])])):ur("v-if",!0),"OL"==n.nodeName?(Zo(),
-rr("p",qa,[cr("ol",null,[(Zo(!0),rr(Ko,null,so(n.texts,(n=>(Zo(),rr("li",{key:n.index
-},m(n.text),1/* TEXT */)))),128/* KEYED_FRAGMENT */))])])):ur("v-if",!0),"PRE"==n.nodeName?(Zo(),
+},m(n.text),1/* TEXT */)))),128/* KEYED_FRAGMENT */))])):ur("v-if",!0),"OL"==n.nodeName?(Zo(),rr("ol",qa,[(Zo(!0),
+rr(Ko,null,so(n.texts,(n=>(Zo(),rr("li",{key:n.index
+},m(n.text),1/* TEXT */)))),128/* KEYED_FRAGMENT */))])):ur("v-if",!0),"PRE"==n.nodeName?(Zo(),
 rr("pre",Ka,"        "+m(n.text)+"\r\n      ",1/* TEXT */)):ur("v-if",!0),"BLOCKQUOTE"==n.nodeName?(Zo(),
 rr("blockquote",Ga,[cr("div",null,[(Zo(!0),rr(Ko,null,so(n.children,(n=>(Zo(),rr("div",{key:n.nodeIndex
 },["P"==n.nodeName?(Zo(),rr("p",Xa,m(n.text),1/* TEXT */)):ur("v-if",!0),"UL"==n.nodeName?(Zo(),rr("ul",Ja,[(Zo(!0),
@@ -2041,9 +2041,9 @@ rr("h5",ni,m(n.text),1/* TEXT */)):ur("v-if",!0),"H6"==n.nodeName?(Zo(),
 rr("h6",ti,m(n.text),1/* TEXT */)):ur("v-if",!0)])))),128/* KEYED_FRAGMENT */))])])):ur("v-if",!0),"H4"==n.nodeName?(Zo(),
 rr("h4",ei,m(n.text),1/* TEXT */)):ur("v-if",!0),"H5"==n.nodeName?(Zo(),
 rr("h5",oi,m(n.text),1/* TEXT */)):ur("v-if",!0),"H6"==n.nodeName?(Zo(),
-rr("h6",ri,m(n.text),1/* TEXT */)):ur("v-if",!0)])))),128/* KEYED_FRAGMENT */))]);// CONCATENATED MODULE: ./src/components/ArticleBodySection.vue?vue&type=template&id=f7c01858&scoped=true
+rr("h6",ri,m(n.text),1/* TEXT */)):ur("v-if",!0)])))),128/* KEYED_FRAGMENT */))]);// CONCATENATED MODULE: ./src/components/ArticleBodySection.vue?vue&type=template&id=0f484768&scoped=true
 
-}],["__scopeId","data-v-f7c01858"]])
+}],["__scopeId","data-v-0f484768"]])
 /* harmony default export */,si={class:"card pt-2 pl-2 pr-2 mb-2 refer-entire"},di={class:"card-title refer-title"
 },mi=["href"],ci={class:"card-text"}
 ;// CONCATENATED MODULE: ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/components/ArticleReferenceCard.vue?vue&type=script&lang=js
