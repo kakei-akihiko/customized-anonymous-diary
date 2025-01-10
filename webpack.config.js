@@ -1,10 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require("vue-loader")
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
 
-  mode: 'development',
+  mode: 'production',
 
   entry: './src/app.js',
 
@@ -44,4 +45,18 @@ module.exports = {
     }),
     new VueLoaderPlugin()
   ],
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          output: {
+            comments: 'all',
+            beautify: false,
+            max_line_len: 120, // 1行の最大長を120文字に設定
+          },
+        },
+      })
+    ]
+  }
 };
