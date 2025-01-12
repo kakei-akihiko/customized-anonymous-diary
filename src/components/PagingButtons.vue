@@ -17,7 +17,7 @@ const buttonClick = async newPage => {
 
 <template>
   <fieldset
-    class="v-interval buttons"
+    class="v-interval paging-buttons"
     :disabled="buttonDisabled"
   >
     <button
@@ -54,9 +54,3 @@ const buttonClick = async newPage => {
     </button>
   </fieldset>
 </template>
-
-<style scoped>
-.buttons button {
-  font-size: 1.5rem;
-}
-</style>

@@ -117,23 +117,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style scoped>
-.article-body p {
-  line-height: 2.8rem;
-  font-size: 1.8rem;
-}
-
-.article-body blockquote {
-  font-size: medium;
-}
-
-.article-body h4 {
-  font-size: large;
-}
-
-.article-body pre {
-  font-size: 1rem;
-  font-family: "源ノ角ゴシック Code JP";
-}
-</style>

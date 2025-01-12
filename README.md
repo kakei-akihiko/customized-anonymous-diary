@@ -3,20 +3,40 @@
 ## 使い方
 
 1. Webブラウザーに[Tampermonkey](https://www.tampermonkey.net/)をインストールします。
-1. `public/UserScript.js`の中身をTampermonkeyのユーザースクリプトとして追加します。
-1. https://anond.hatelabo.jp/customized にアクセスします。
-1. 独自の画面が表示されます。
+2. `dis/assets`のJavaScriptファイルの先頭に以下の文字列を追加します。
+
+```
+// ==UserScript==
+// @name         カスタマイズ版匿名日記
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://anond.hatelabo.jp/customized
+// @grant        none
+// ==/UserScript==
+
+```
+
+3. JavaScriptファイルの内容をTampermonkeyに貼りつけて保存します。
+4. https://anond.hatelabo.jp/customized にアクセスします。
+5. 独自の画面が表示されます。
 
 ## スクリーンショット
 
 上がユーザースクリプト適用版、下が通常の表示です。
 
-![](readme/Sample.png)
+![](./documents/Sample.png)
 
-## ビルド方法
+## 初期設定・ビルド方法
 
+```powershell
+# package.jsonと同じフォルダに移動
+Set-Location Path\To\Project\masuda
+
+# 依存関係のインストール
+yarn
+
+# distに出力
+yarn build
 ```
-yarn run webpack
-```
-
-※ `Error: error:0308010C:digital envelope routines::unsupported`が発生する場合は環境変数`NODE_OPTIONS=--openssl-legacy-provider`を設定します。

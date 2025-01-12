@@ -1,21 +1,32 @@
 export const getReferDocument = async id => {
-  const url = 'https://anond.hatelabo.jp/' + id + '?mode=json'
+  let refer
 
-  const response = await fetch(url)
-
-  const json = await response.json()
+  if (import.meta.env.MODE === 'development') {
+    refer = {
+      title: 'テストタイトル',
+      body: 'テスト本文'
+    }
+  } else {
+    const response = await fetch('/' + id + '?mode=json')
+  
+    refer = await response.json()
+  }
 
   return new DOMParser().parseFromString(
     `<body>
-      <h2>` + json.title + `</h2>
-      <div id="body">` + json.body + `</div>
+      <h2>` + refer.title + `</h2>
+      <div id="body">` + refer.body + `</div>
     </body>`,
     'text/html'
   )
 }
 
 export const getTopPageDocument = async pageIndex => {
-  const response = await fetch('https://anond.hatelabo.jp/?mode=top&page=' + pageIndex)
+  const url = import.meta.env.MODE === 'development'
+    ? '/' + pageIndex
+    : '/?mode=top&page='
+
+  const response = await fetch(url)
 
   const html = await response.text()
 

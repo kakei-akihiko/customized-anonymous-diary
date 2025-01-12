@@ -96,12 +96,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style scoped>
-.main-content-title {
-  font-size: 1.7rem
-}
-.text-refered {
-  font-size: 80%; margin-left: .5rem
-}
-</style>

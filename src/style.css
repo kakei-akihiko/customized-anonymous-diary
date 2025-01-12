@@ -1,0 +1,14 @@
+html {
+  font-size: 62.5%
+}
+
+body {
+  font-size: 1.45rem;
+  margin: 0px;
+  padding: 0px
+}
+
+#globalheader {
+  background: cornflowerblue;
+  padding: .5rem;
+}
