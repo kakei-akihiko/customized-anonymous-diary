@@ -39,18 +39,3 @@ const referButtonClick = entry => {
     </div>
   </div>
 </template>
-
-<style>
-html, body {margin: 0; padding: 0; height: 100%}
-.h-100 {height: 100%}
-.h-0 {height: 0}
-.scroll {overflow-y: auto}
-.v-interval > *:nth-child(n+2) {margin-left: 0.5rem}
-:root {--font-family-sans-serif: sans-serif}
-body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}
-.text-inconspicuous {color: rgb(100,100,100); font-size: small}
-#hatena-anond, #original > p, #original > h1 {display: none}
-#app .container-main {
-  max-width: 550pt;
-}
-</style>

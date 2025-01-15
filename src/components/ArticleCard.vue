@@ -49,7 +49,7 @@ export default {
   <div class="card py-2">
     <div class="card-body">
       <div class="card-title main-content-title">
-        <a :href="entry.url">■</a>
+        <a :href="entry.url" target="_blank">■</a>
         <strong v-if="ngWords.length <= 0">{{ entry.title }}</strong>
         <strong v-else>NG</strong>
         <button
@@ -96,12 +96,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style scoped>
-.main-content-title {
-  font-size: 1.7rem
-}
-.text-refered {
-  font-size: 80%; margin-left: .5rem
-}
-</style>

@@ -22,12 +22,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style scoped>
-.refer-entire {
-  background-color: honeydew
-}
-.refer-title {
-  font-size: 1.7rem
-}
-</style>
