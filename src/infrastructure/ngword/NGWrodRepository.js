@@ -1,31 +1,30 @@
 export class NGWordRepository {
+
+  static instance = new NGWordRepository()
+
   constructor () {
-    this.ngWords = [
-      'サイト上の私のニックネーム',
-      '加藤純一',
-      'zendesk.com/hc/',
-      'xn--qckwaqj6a5l2ab.xyz',
-      '江畑諒真'
-    ]
+    this.ngWords = null
   }
 
   get () {
-    if (!window.localStorage) {
+    if (this.ngWords != null) {
       return this.ngWords
+    }
+    if (!window.localStorage) {
+      console.warn('localStorageが無効であるためNGワードが適用されません。')
+      this.ngWords = []
     }
     const json = localStorage.getItem('customized.ngWords')
     if (json == null) {
-      return this.ngWords
+      console.warn('customized.ngWordsが保存されてないためNGワードが適用されません。')
+      this.ngWords = []
     }
-    return JSON.parse(json)
-  }
-
-  save () {
-    if (window.localStorage) {
-      localStorage.setItem('customized.ngWords', JSON.stringify(this.ngWords))
-      console.log('localStorage saved.')
-    } else {
-      console.error('localStorage error!')
+    try {
+      this.ngWords = JSON.parse(json)
+    } catch ($ex) {
+      console.error('JSONの解析に失敗したためNGワードが適用されません。')
+      this.ngWords = []
     }
+    return this.ngWords
   }
 }
