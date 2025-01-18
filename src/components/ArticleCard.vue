@@ -7,7 +7,7 @@ function getNGWords (entry) {
   if (entry == null) {
     return []
   }
-  return new NGWordRepository().get().filter(word => {
+  return NGWordRepository.instance.get().filter(word => {
     return entry.paragraphs.filter(p => {
       return p.text != null && p.text.indexOf(word) >= 0
     }).length > 0
