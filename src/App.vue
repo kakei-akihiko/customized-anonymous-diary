@@ -2,12 +2,25 @@
 import { computed, ref, onMounted } from 'vue'
 import ArticleCard from './components/ArticleCard.vue'
 import PagingBlock from './components/PagingBlock.vue'
+import { NGWordRepository } from './infrastructure/ngword/NGWrodRepository.js'
 import { updateReference } from './usecases/reference.js'
 import { entriesRef, fetchEntries } from './usecases/data'
 
 const scroll = ref(null)
 
 const rightSidePanelCollapsedRef = ref(false)
+
+const ngWordsRef = ref(NGWordRepository.instance.get())
+
+const rightSidePanel = computed(() => {
+  return {
+    className: {
+      'panel-right-side': true,
+      'collapsed': rightSidePanelCollapsedRef.value
+    },
+    ngWords: ngWordsRef.value ?? []
+  }
+})
 
 onMounted(async () => {
   await fetchEntries()
@@ -22,15 +35,6 @@ const pagingClick = page => {
 const referButtonClick = entry => {
   updateReference(entry)
 }
-
-const rightSidePanel = computed(() => {
-  return {
-    className: {
-      'panel-right-side': true,
-      'collapsed': rightSidePanelCollapsedRef.value
-    }
-  }
-})
 
 const rightSidePanelToggleButtonClick = () => {
   rightSidePanelCollapsedRef.value = !rightSidePanelCollapsedRef.value
@@ -69,7 +73,14 @@ const rightSidePanelToggleButtonClick = () => {
         >
           ≡
         </button>
-        NGワード
+        <div v-if="rightSidePanel.ngWords.length > 0">
+          <div v-for="ngWord in rightSidePanel.ngWords" :key="ngWord">
+            {{ ngWord }}
+          </div>
+        </div>
+        <div v-else>
+          NGワードはありません。
+        </div>
       </div>
     </div>
   </div>
