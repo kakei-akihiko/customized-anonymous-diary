@@ -27,4 +27,13 @@ export class NGWordRepository {
     }
     return this.ngWords
   }
+
+  save () {
+    if (!window.localStorage) {
+      console.error('localStorageが無効であるためNGワードが保存されませんでした。')
+      return
+    }
+    const json = JSON.stringify(this.ngWords)
+    localStorage.setItem('customized.ngWords', json)
+  }
 }

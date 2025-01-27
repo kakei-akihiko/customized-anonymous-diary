@@ -12,6 +12,12 @@ const rightSidePanelCollapsedRef = ref(false)
 
 const ngWordsRef = ref(NGWordRepository.instance.get())
 
+const newNGWordRef = ref('')
+
+const addNGWordButtonDisabled = computed(() => {
+  return newNGWordRef.value.length <= 0
+})
+
 const rightSidePanel = computed(() => {
   return {
     className: {
@@ -38,6 +44,12 @@ const referButtonClick = entry => {
 
 const rightSidePanelToggleButtonClick = () => {
   rightSidePanelCollapsedRef.value = !rightSidePanelCollapsedRef.value
+}
+
+const addNGWordButtonClick = () => {
+  ngWordsRef.value.push(newNGWordRef.value)
+  newNGWordRef.value = ''
+  NGWordRepository.instance.save()
 }
 </script>
 
@@ -81,6 +93,14 @@ const rightSidePanelToggleButtonClick = () => {
         <div v-else>
           NGワードはありません。
         </div>
+        <form>
+          <fieldset>
+            <input v-model="newNGWordRef"/>
+            <button @click="addNGWordButtonClick" :disabled="addNGWordButtonDisabled" type="button">
+              追加
+            </button>
+          </fieldset>
+        </form>
       </div>
     </div>
   </div>
