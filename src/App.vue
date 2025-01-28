@@ -51,6 +51,12 @@ const addNGWordButtonClick = () => {
   newNGWordRef.value = ''
   NGWordRepository.instance.save()
 }
+
+const deleteNGWordButtonClick = ngWord => {
+  ngWordsRef.value = ngWordsRef.value.filter(w => w !== ngWord)
+  NGWordRepository.instance.ngWords = ngWordsRef.value
+  NGWordRepository.instance.save()
+}
 </script>
 
 <template>
@@ -86,8 +92,21 @@ const addNGWordButtonClick = () => {
           ≡
         </button>
         <div v-if="rightSidePanel.ngWords.length > 0">
-          <div v-for="ngWord in rightSidePanel.ngWords" :key="ngWord">
-            {{ ngWord }}
+          <div
+            v-for="ngWord in rightSidePanel.ngWords"
+            :key="ngWord"
+            class="ng-word-item"
+          >
+            <span>
+              {{ ngWord }}
+            </span>
+            <button
+              type="button"
+              class="btn btn-link"
+              @click="deleteNGWordButtonClick(ngWord)"
+            >
+              &times;
+            </button>
           </div>
         </div>
         <div v-else>
