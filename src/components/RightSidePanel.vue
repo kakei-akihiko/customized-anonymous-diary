@@ -1,10 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue'
-import { NGWordRepository } from '../infrastructure/ngword/NGWrodRepository.js'
+import { ngWordsRef, addNGWord, removeNGWord } from '../usecases/NGWord.js'
 
 const rightSidePanelCollapsedRef = ref(false)
-
-const ngWordsRef = ref(NGWordRepository.instance.get())
 
 const newNGWordRef = ref('')
 
@@ -27,15 +25,12 @@ const rightSidePanelToggleButtonClick = () => {
 }
 
 const addNGWordButtonClick = () => {
-  ngWordsRef.value.push(newNGWordRef.value)
+  addNGWord(newNGWordRef.value)
   newNGWordRef.value = ''
-  NGWordRepository.instance.save()
 }
 
 const deleteNGWordButtonClick = ngWord => {
-  ngWordsRef.value = ngWordsRef.value.filter(w => w !== ngWord)
-  NGWordRepository.instance.ngWords = ngWordsRef.value
-  NGWordRepository.instance.save()
+  removeNGWord(ngWord)
 }
 </script>
 
