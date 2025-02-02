@@ -44,10 +44,3 @@ const referButtonClick = entry => {
     <RightSidePanel/>
   </div>
 </template>
-
-<style scoped>
-.entire {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-}
-</style>
