@@ -6,16 +6,14 @@ import RightSidePanel from './components/RightSidePanel.vue'
 import { updateReference } from './usecases/reference.js'
 import { entriesRef, fetchEntries } from './usecases/data'
 
-const scroll = ref(null)
-
 onMounted(async () => {
   await fetchEntries()
-  scroll.value.scrollTop = 0
+  document.getElementById('app').scrollTop = 0
 })
 
 const pagingClick = page => {
   console.log('paging change page:', page)
-  scroll.value.scrollTop = 0
+  document.getElementById('app').scrollTop = 0
 }
 
 const referButtonClick = entry => {
