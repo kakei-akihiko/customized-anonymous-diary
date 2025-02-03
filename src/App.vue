@@ -11,8 +11,9 @@ onMounted(async () => {
   document.getElementById('app').scrollTop = 0
 })
 
-const pagingClick = page => {
+const pagingClick = async page => {
   console.log('paging change page:', page)
+  await fetchEntries(page)
   document.getElementById('app').scrollTop = 0
 }
 
