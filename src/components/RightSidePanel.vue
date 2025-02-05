@@ -37,18 +37,12 @@ const deleteNGWordButtonClick = ngWord => {
 <template>
   <div :class="rightSidePanel.className">
     <button
-      class="btn btn-link btn-open"
+      class="btn btn-link btn-toggle"
       @click="rightSidePanelToggleButtonClick"
     >
       ≡
     </button>
     <div class="panel-collapsed">
-      <button
-        class="btn btn-link btn-collapse"
-        @click="rightSidePanelToggleButtonClick"
-      >
-        ≡
-      </button>
       <div v-if="rightSidePanel.ngWords.length > 0">
         <div
           v-for="ngWord in rightSidePanel.ngWords"

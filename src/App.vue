@@ -6,15 +6,17 @@ import RightSidePanel from './components/RightSidePanel.vue'
 import { updateReference } from './usecases/reference.js'
 import { entriesRef, fetchEntries } from './usecases/data'
 
+const scroll = ref(null)
+
 onMounted(async () => {
   await fetchEntries()
-  document.getElementById('app').scrollTop = 0
+  scroll.value.scrollTop = 0
 })
 
 const pagingClick = async page => {
   console.log('paging change page:', page)
   await fetchEntries(page)
-  document.getElementById('app').scrollTop = 0
+  scroll.value.scrollTop = 0
 }
 
 const referButtonClick = entry => {
@@ -23,14 +25,10 @@ const referButtonClick = entry => {
 </script>
 
 <template>
-  <div
-    ref="scroll"
-    class="h-100 entire"
-  >
+  <div class="h-100 entire">
     <div>
-
     </div>
-    <div class="container container-main">
+    <div class="container container-main panel-main" ref="scroll">
       <PagingBlock @change="pagingClick($event)" />
       <ArticleCard
         v-for="entry in entriesRef"

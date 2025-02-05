@@ -12,13 +12,10 @@ document.getElementsByTagName('head')[0]?.insertAdjacentHTML(`beforeend`, `
 }
 body {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
   margin: 0;
   padding: 0;
   height: 100%;
-}
-#app {
-  overflow-y: auto;
 }
 html {margin: 0; padding: 0; height: 100%}
 .h-100 {height: 100%}
@@ -56,26 +53,25 @@ body,pre,code,kbd,samp,.btn,p {font-family: sans-seif}
   font-family: "源ノ角ゴシック Code JP";
 }
 .refer-entire {
-background-color: honeydew
+  background-color: honeydew
 }
 .refer-title {
-font-size: 1.7rem
+  font-size: 1.7rem
 }
 .entire {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
 }
-/* ≡ボタン 右サイドバー非表示状態ではウインドウに対して固定表示される */
-.panel-right-side .btn-open {
-  position: absolute;
+.panel-main {
+  overflow-y: scroll;
+}
+.panel-right-side {
+  overflow-y: scroll;
+}
+/* ≡ボタン */
+.panel-right-side .btn-toggle {
   font-size: 1.8rem;
 }
-
-/* ≡ボタン 右サイドバー表示状態では表示されない */
-.panel-right-side.collapsed .btn-open {
-  display: none;
-}
-
 /* 右サイドバーの内容（非表示） */
 .panel-right-side .panel-collapsed {
   display: none;
