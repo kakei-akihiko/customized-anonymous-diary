@@ -23,8 +23,8 @@ export const getReferDocument = async id => {
 
 export const getTopPageDocument = async pageIndex => {
   const url = import.meta.env.MODE === 'development'
-    ? '/' + pageIndex
-    : '/?mode=top&page='
+    ? '/'
+    : '/?mode=top&page=' + pageIndex
 
   const response = await fetch(url)
 

@@ -3,7 +3,7 @@
 ## 使い方
 
 1. Webブラウザーに[Tampermonkey](https://www.tampermonkey.net/)をインストールします。
-2. `dis/assets`のJavaScriptファイルの先頭に以下の文字列を追加します。
+2. `dist/index.js`の先頭に以下の文字列を追加します。
 
 ```
 // ==UserScript==

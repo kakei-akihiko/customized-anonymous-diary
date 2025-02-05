@@ -1,16 +1,25 @@
 <script>
 import ArticleBodySection from './ArticleBodySection.vue'
 import ArticleReferenceCard from './ArticleReferenceCard.vue'
-import { NGWordRepository } from '../infrastructure/ngword/NGWrodRepository.js'
+import { ngWordsRef } from '../usecases/NGWord'
+
+
+function wordExistsIn(word, p) {
+  if (p.text != null && p.text.indexOf(word) >= 0) {
+    return true
+  }
+  if (p.children != null) {
+    return p.children.filter(c => c.text != null && c.text.indexOf(word) >= 0).length > 0
+  }
+  return false
+}
 
 function getNGWords (entry) {
   if (entry == null) {
     return []
   }
-  return NGWordRepository.instance.get().filter(word => {
-    return entry.paragraphs.filter(p => {
-      return p.text != null && p.text.indexOf(word) >= 0
-    }).length > 0
+  return ngWordsRef.value.filter(word => {
+    return entry.paragraphs.filter(p => wordExistsIn(word, p)).length > 0
   })
 }
 
