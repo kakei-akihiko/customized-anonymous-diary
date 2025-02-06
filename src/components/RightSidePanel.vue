@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { ngWordsRef, addNGWord, removeNGWord } from '../usecases/NGWord.js'
 
-const rightSidePanelCollapsedRef = ref(false)
+const collapsedRef = ref(false)
 
 const newNGWordRef = ref('')
 
@@ -10,18 +10,17 @@ const addNGWordButtonDisabled = computed(() => {
   return newNGWordRef.value.length <= 0
 })
 
-const rightSidePanel = computed(() => {
+const panelClassName = computed(() => {
   return {
-    className: {
-      'panel-right-side': true,
-      'collapsed': rightSidePanelCollapsedRef.value
-    },
-    ngWords: ngWordsRef.value ?? []
+    'panel-right-side': true,
+    'collapsed': collapsedRef.value
   }
 })
 
-const rightSidePanelToggleButtonClick = () => {
-  rightSidePanelCollapsedRef.value = !rightSidePanelCollapsedRef.value
+const ngWords = computed(() => ngWordsRef.value ?? [])
+
+const toggleButtonClick = () => {
+  collapsedRef.value = !collapsedRef.value
 }
 
 const addNGWordButtonClick = () => {
@@ -35,17 +34,17 @@ const deleteNGWordButtonClick = ngWord => {
 </script>
 
 <template>
-  <div :class="rightSidePanel.className">
+  <div :class="panelClassName">
     <button
       class="btn btn-link btn-toggle"
-      @click="rightSidePanelToggleButtonClick"
+      @click="toggleButtonClick"
     >
       ≡
     </button>
     <div class="panel-collapsed">
-      <div v-if="rightSidePanel.ngWords.length > 0">
+      <div v-if="ngWords.length > 0">
         <div
-          v-for="ngWord in rightSidePanel.ngWords"
+          v-for="ngWord in ngWords"
           :key="ngWord"
           class="ng-word-item"
         >
