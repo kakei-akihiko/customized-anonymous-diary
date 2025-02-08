@@ -114,6 +114,10 @@ export default {
       >
         {{ item.text }}
       </h6>
+      <details v-if="item.unknownType">
+        <summary>{{ item.text }}</summary>
+        {{ item.html }}
+      </details>
     </div>
   </div>
 </template>

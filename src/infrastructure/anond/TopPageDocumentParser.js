@@ -84,8 +84,20 @@ class TopPageDocumentParser {
       case 'H5':
       case 'H6':
         return { nodeIndex, text: articleChildNode.textContent, nodeName }
-      default:
+      case 'H3':
+      case '#text':
         return null
+      default:
+        if (nodeName === 'DIV' && articleChildNode.id === 'rectangle-middle') {
+          return null
+        }
+        return {
+          nodeIndex,
+          text: '解析エラー',
+          nodeName,
+          unknownType: true,
+          html: articleChildNode.outerHTML
+        }
     }
   }
 }
