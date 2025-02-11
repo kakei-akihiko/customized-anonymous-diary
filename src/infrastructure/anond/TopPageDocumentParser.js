@@ -59,6 +59,7 @@ class TopPageDocumentParser {
   parseArticleBodyLine (nodeIndex, articleChildNode) {
     const nodeName = articleChildNode.nodeName
     switch (nodeName) {
+      case 'BR': return null
       case 'P':
         if (articleChildNode.classList.length > 0) {
           return null
