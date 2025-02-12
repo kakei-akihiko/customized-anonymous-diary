@@ -1,7 +1,7 @@
 import { getReferDocument } from '../infrastructure/anond/DocumentRepository.js'
-import TopPageDocumentParser from '../infrastructure/anond/TopPageDocumentParser.js'
+import DocumentParser from '../infrastructure/anond/DocumentParser.js'
 
-const topPageDocumentParser = TopPageDocumentParser.instance
+const documentParser = DocumentParser.instance
 
 export const updateReference = async entry => {
   if (entry.refer.visible || entry.refer.title != null) {
@@ -23,7 +23,7 @@ export const updateReference = async entry => {
 
   const bodyDiv = document.getElementById('body')
 
-  const paragraphs = topPageDocumentParser.getArticleBody(bodyDiv)
+  const paragraphs = documentParser.getArticleBody(bodyDiv)
 
   entry.refer = { id, title, paragraphs, visible: true, loading: false }
 }

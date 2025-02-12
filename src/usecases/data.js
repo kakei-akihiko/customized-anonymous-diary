@@ -1,9 +1,9 @@
 import { ref } from 'vue'
 
 import { getTopPageDocument } from '../infrastructure/anond/DocumentRepository.js'
-import TopPageDocumentParser from '../infrastructure/anond/TopPageDocumentParser.js'
+import DocumentParser from '../infrastructure/anond/DocumentParser.js'
 
-const topPageDocumentParser = TopPageDocumentParser.instance
+const documentParser = DocumentParser.instance
 
 export const pageIndexRef = ref(1)
 
@@ -14,7 +14,7 @@ export const connectingRef = ref(false)
 export const loadEntries = async ({ page }) => {
   const document = await getTopPageDocument(page)
 
-  const entries = topPageDocumentParser.parse(document)
+  const entries = documentParser.parse(document)
 
   entries.sort((a, b) => a.time > b.time ? 1 : -1)
 
