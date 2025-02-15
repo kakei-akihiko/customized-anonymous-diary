@@ -13,7 +13,7 @@ const addNGWordButtonDisabled = computed(() => {
 const panelClassName = computed(() => {
   return {
     'panel-right-side': true,
-    'collapsed': collapsedRef.value
+    collapsed: collapsedRef.value
   }
 })
 
@@ -65,8 +65,12 @@ const deleteNGWordButtonClick = ngWord => {
       </div>
       <form>
         <fieldset>
-          <input v-model="newNGWordRef"/>
-          <button @click="addNGWordButtonClick" :disabled="addNGWordButtonDisabled" type="button">
+          <input v-model="newNGWordRef">
+          <button
+            :disabled="addNGWordButtonDisabled"
+            type="button"
+            @click="addNGWordButtonClick"
+          >
             追加
           </button>
         </fieldset>

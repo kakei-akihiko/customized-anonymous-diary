@@ -26,9 +26,11 @@ const referButtonClick = entry => {
 
 <template>
   <div class="h-100 entire">
-    <div>
-    </div>
-    <div class="container container-main panel-main" ref="scroll">
+    <div />
+    <div
+      ref="scroll"
+      class="container container-main panel-main"
+    >
       <PagingBlock @change="pagingClick($event)" />
       <ArticleCard
         v-for="entry in entriesRef"
@@ -38,6 +40,6 @@ const referButtonClick = entry => {
       />
       <PagingBlock @change="pagingClick($event)" />
     </div>
-    <RightSidePanel/>
+    <RightSidePanel />
   </div>
 </template>
