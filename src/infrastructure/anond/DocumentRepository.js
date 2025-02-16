@@ -8,7 +8,7 @@ export const getReferDocument = async id => {
     }
   } else {
     const response = await fetch('/' + id + '?mode=json')
-  
+
     refer = await response.json()
   }
 

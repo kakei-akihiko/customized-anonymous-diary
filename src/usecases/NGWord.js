@@ -30,7 +30,7 @@ const loadNGWords = () => {
     ngWordsRef.value = []
   }
 }
-loadNGWords() //即実行する
+loadNGWords() // 即実行する
 
 const saveNGWords = () => {
   if (!window.localStorage) {

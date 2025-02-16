@@ -3,8 +3,7 @@ import ArticleBodySection from './ArticleBodySection.vue'
 import ArticleReferenceCard from './ArticleReferenceCard.vue'
 import { ngWordsRef } from '../usecases/NGWord'
 
-
-function wordExistsIn(word, p) {
+function wordExistsIn (word, p) {
   if (p.text != null && p.text.indexOf(word) >= 0) {
     return true
   }
@@ -58,7 +57,10 @@ export default {
   <div class="card py-2">
     <div class="card-body">
       <div class="card-title main-content-title">
-        <a :href="entry.url" target="_blank">■</a>
+        <a
+          :href="entry.url"
+          target="_blank"
+        >■</a>
         <strong v-if="ngWords.length <= 0">{{ entry.title }}</strong>
         <strong v-else>NG</strong>
         <button
