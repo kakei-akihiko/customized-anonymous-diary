@@ -3,10 +3,7 @@ import ArticleSectionFooter from './ArticleSectionFooter.js'
 
 class DocumentParser {
   parse (document) {
-    const bodyDiv = document.body.querySelector('.body')
-
-    return Array.from(bodyDiv.childNodes)
-      .filter(node => node.className === 'section')
+    return Array.from(document.body.querySelectorAll('.body > .section'))
       .map(node => this.getItemFromSectionNode(node))
   }
 
