@@ -46,6 +46,18 @@ export default {
         ? []
         : this.filteredItems.slice(10)
     },
+    items () {
+      if (this.taillines.length <= 0) {
+        return this.headlines
+      }
+      return [
+        ...this.headlines,
+        {
+          nodeName: '#readmore',
+          children: this.taillines
+        }
+      ]
+    },
     ngWords () {
       return getNGWords(this.entry)
     }
@@ -90,13 +102,11 @@ export default {
           :title="entry.refer.title"
           :paragraphs="entry.refer.paragraphs"
         />
+        <!-- 本文（正常） -->
         <div v-if="ngWords.length <= 0">
-          <ArticleBodySection :items="headlines" />
-          <details v-if="taillines.length > 0">
-            <summary>続きを読む</summary>
-            <ArticleBodySection :items="taillines" />
-          </details>
+          <ArticleBodySection :items="items" />
         </div>
+        <!-- 本文（NGワード） -->
         <div v-else>
           <strong>NG</strong>: <span
             v-for="word in ngWords"

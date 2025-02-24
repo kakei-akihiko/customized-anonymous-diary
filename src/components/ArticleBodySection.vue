@@ -31,6 +31,15 @@ export default {
           </div>
         </div>
       </blockquote>
+      <details v-if="item.nodeName === '#readmore'">
+        <summary>続きを読む</summary>
+        <div
+          v-for="child in item.children"
+          :key="child.nodeIndex"
+        >
+          <ArticleBodySectionItem :item="child" />
+        </div>
+      </details>
     </div>
   </div>
 </template>
