@@ -25,11 +25,10 @@ const referButtonClick = entry => {
 </script>
 
 <template>
-  <div class="h-100 entire">
-    <div />
+  <div class="panel-left">
     <div
       ref="scroll"
-      class="container container-main panel-main"
+      class="container panel-main"
     >
       <PagingBlock @change="pagingClick($event)" />
       <ArticleCard
@@ -40,6 +39,8 @@ const referButtonClick = entry => {
       />
       <PagingBlock @change="pagingClick($event)" />
     </div>
+  </div>
+  <div class="panel-right">
     <RightSidePanel />
   </div>
 </template>
