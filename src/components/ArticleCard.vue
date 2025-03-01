@@ -37,27 +37,6 @@ export default {
         return item.nodeName !== 'P' || item.text !== 'link'
       })
     },
-    headlines () {
-      const length = Math.min(this.filteredItems.length, 10)
-      return this.filteredItems.slice(0, length)
-    },
-    taillines () {
-      return this.filteredItems.length < 10
-        ? []
-        : this.filteredItems.slice(10)
-    },
-    items () {
-      if (this.taillines.length <= 0) {
-        return this.headlines
-      }
-      return [
-        ...this.headlines,
-        {
-          nodeName: '#readmore',
-          children: this.taillines
-        }
-      ]
-    },
     ngWords () {
       return getNGWords(this.entry)
     }
@@ -104,7 +83,7 @@ export default {
         />
         <!-- 本文（正常） -->
         <div v-if="ngWords.length <= 0">
-          <ArticleBodySection :items="items" />
+          <ArticleBodySection :items="filteredItems" />
         </div>
         <!-- 本文（NGワード） -->
         <div v-else>
