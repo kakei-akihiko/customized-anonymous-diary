@@ -35,6 +35,7 @@ body, pre, code, kbd, samp, .btn, p {
 
 .paging-buttons button {
   font-size: 1.5rem;
+  margin-right: 1rem;
 }
 
 .main-content-title {

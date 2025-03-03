@@ -17,11 +17,12 @@ const buttonClick = async newPage => {
 
 <template>
   <fieldset
-    class="v-interval paging-buttons"
+    class="paging-buttons"
     :disabled="buttonDisabled"
   >
     <button
       class="btn btn-link p-0"
+      type="button"
       @click="buttonClick(pageIndexRef)"
     >
       再読み込み
@@ -29,6 +30,7 @@ const buttonClick = async newPage => {
     <button
       v-if="pageIndexRef > 1"
       class="btn btn-link p-0"
+      type="button"
       @click="buttonClick(1)"
     >
       最新を取得
@@ -36,18 +38,21 @@ const buttonClick = async newPage => {
     <button
       v-if="pageIndexRef > 1"
       class="btn btn-link p-0"
+      type="button"
       @click="buttonClick(pageIndexRef - 1)"
     >
       ← 前の25件
     </button>
     <button
       class="btn btn-link p-0"
+      type="button"
       @click="buttonClick(pageIndexRef + 1)"
     >
       → 次の25件
     </button>
     <button
       class="btn btn-link p-0"
+      type="button"
       @click="buttonClick(pageIndexRef + 5)"
     >
       古い方へ+5p
