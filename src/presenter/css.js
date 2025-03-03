@@ -76,12 +76,16 @@ body {
   height: 100%;
 }
 
+:root {
+  --main-panel-width: 733px;
+}
+
 @media (width >= 1000px) {
   #app {
     margin: 0 auto;
     width: 100%;
     display: grid;
-    grid-template-columns: calc(600px + (100% - 600px) / 2)  1fr;
+    grid-template-columns: calc(var(--main-panel-width) + (100% - var(--main-panel-width)) / 2)  1fr;
   }
 
   .panel-left {
@@ -93,7 +97,7 @@ body {
   .panel-main {
     margin-left: auto;
     margin-right: 0;
-    width: 600px;
+    width: var(--main-panel-width);
   }
 }
 
