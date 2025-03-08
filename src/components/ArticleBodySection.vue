@@ -9,36 +9,28 @@ const props = defineProps({
 const items = computed(() => {
   let lineIndex = 0
   let results = []
-  let topLevelReadMore = null
-  let innerReadMore = null
+  let readmoreItem = null
 
   for (const item of props.items) {
-    if (lineIndex >= 10 && topLevelReadMore == null) {
-      const readmoreItem = { nodeName: '#readmore', children: [] }
+    if (lineIndex >= 10 && readmoreItem == null) {
+      readmoreItem = { nodeName: '#readmore', children: [] }
       results.push(readmoreItem)
-      topLevelReadMore = readmoreItem
     }
 
     let currentItem = {...item, lineIndex}
-    if (topLevelReadMore == null) {
+    if (readmoreItem == null) {
       results.push(currentItem)
     } else {
-      topLevelReadMore.children.push(currentItem)
+      readmoreItem.children.push(currentItem)
     }
 
     lineIndex++
     if (item.children != null) {
       currentItem.children = []
       for (const child of item.children) {
-        if (lineIndex == 10 && topLevelReadMore == null) {
-          innerReadMore = { nodeName: '#readmore', children: [] }
-          currentItem.children.push(innerReadMore)
-          currentItem = innerReadMore
-        }
         currentItem.children.push({...child, lineIndex })
         lineIndex++
       }
-      innerReadMore = null
     }
   }
   return results
