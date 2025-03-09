@@ -76,6 +76,11 @@ body, pre, code, kbd, samp, .btn, p {
   font-size: 80%; margin-left: .5rem
 }
 
+/* 記事タイトルの日時 */
+.text-inconspicuous {
+  color: rgb(100,100,100); font-size: small
+}
+
 #hatena-anond, #original > p, #original > h1 {
   display: none;
 }
@@ -132,22 +137,28 @@ body {
 }
 
 /* ≡ボタン */
+
 .panel-right-side .btn-toggle {
   font-size: 1.8rem;
 }
+
 /* 右サイドバーの内容（非表示） */
+
 .panel-right-side .panel-collapsed {
   display: none;
 }
 
 /* 右サイドバーの内容（表示） */
+
 .panel-right-side.collapsed .panel-collapsed {
   display: block;
   font-size: 1.8rem;
 }
+
 .btn-collapse {
   display: block;
   font-size: 1.8rem;
 }
+
 </style>
 `)};Hc();const Dc=Array.from(document.body.childNodes);document.body.insertAdjacentHTML("beforeend",'<div id="original"></div><div id="app"></div>');Dc.forEach(e=>{document.getElementById("original").appendChild(e)});vl($c).mount("#app");
