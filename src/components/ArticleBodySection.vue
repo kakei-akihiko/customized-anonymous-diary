@@ -1,10 +1,40 @@
-<script>
-export default {
-  name: 'ArticleSection',
-  props: {
-    items: { type: Array, required: true }
+<script setup>
+import { computed } from 'vue';
+import ArticleBodySectionItem from './ArticleBodySectionItem.vue';
+
+const props = defineProps({
+  items: { type: Array, required: true }
+})
+
+const items = computed(() => {
+  let lineIndex = 0
+  let results = []
+  let readmoreItem = null
+
+  for (const item of props.items) {
+    if (lineIndex >= 10 && readmoreItem == null) {
+      readmoreItem = { nodeName: '#readmore', children: [] }
+      results.push(readmoreItem)
+    }
+
+    let currentItem = {...item, lineIndex}
+    if (readmoreItem == null) {
+      results.push(currentItem)
+    } else {
+      readmoreItem.children.push(currentItem)
+    }
+
+    lineIndex++
+    if (item.children != null) {
+      currentItem.children = []
+      for (const child of item.children) {
+        currentItem.children.push({...child, lineIndex })
+        lineIndex++
+      }
+    }
   }
-}
+  return results
+})
 </script>
 
 <template>
@@ -13,110 +43,36 @@ export default {
       v-for="item in items"
       :key="item.nodeIndex"
     >
-      <p v-if="item.nodeName == 'P'">
-        {{ item.text }}
-      </p>
-      <ul v-if="item.nodeName == 'UL'">
-        <li
-          v-for="text in item.texts"
-          :key="text.index"
-        >
-          {{ text.text }}
-        </li>
-      </ul>
-      <ol v-if="item.nodeName == 'OL'">
-        <li
-          v-for="text in item.texts"
-          :key="text.index"
-        >
-          {{ text.text }}
-        </li>
-      </ol>
-      <pre
-        v-if="item.nodeName == 'PRE'"
-        class="rounded p-1"
-        style="background-color: #e7ebff"
-      >
-        {{ item.text }}
-      </pre>
+      <ArticleBodySectionItem :item="item" />
       <blockquote
         v-if="item.nodeName == 'BLOCKQUOTE'"
         class="rounded p-1"
         style="background-color: rgb(220, 240, 255)"
       >
-        <div>
-          <div
-            v-for="child in item.children"
-            :key="child.nodeIndex"
-          >
-            <p v-if="child.nodeName == 'P'">
-              {{ child.text }}
-            </p>
-            <ul v-if="child.nodeName == 'UL'">
-              <li
-                v-for="text in child.texts"
-                :key="text.index"
-              >
-                {{ text.text }}
-              </li>
-            </ul>
-            <ol v-if="child.nodeName == 'OL'">
-              <li
-                v-for="text in child.texts"
-                :key="text.index"
-              >
-                {{ text.text }}
-              </li>
-            </ol>
-            <pre
-              v-if="child.nodeName == 'PRE'"
-              class="rounded p-1"
-              style="background-color: #e7ebff"
+        <div
+          v-for="child in item.children"
+          :key="child.nodeIndex"
+        >
+          <details v-if="child.nodeName === '#readmore'">
+            <summary>続きを読む</summary>
+            <div
+              v-for="grandchild in child.children"
+              :key="grandchild.nodeIndex"
             >
-              {{ child.text }}
-            </pre>
-            <h4
-              v-if="child.nodeName == 'H4'"
-              class="h5 ml-0"
-            >
-              {{ child.text }}
-            </h4>
-            <h5
-              v-if="child.nodeName == 'H5'"
-              class="h6 ml-0"
-            >
-              {{ child.text }}
-            </h5>
-            <h6
-              v-if="child.nodeName == 'H6'"
-              class="h6 ml-0"
-            >
-              {{ child.text }}
-            </h6>
-          </div>
+              <ArticleBodySectionItem :item="grandchild" />
+            </div>
+          </details>
+          <ArticleBodySectionItem v-else :item="child" />
         </div>
       </blockquote>
-      <h4
-        v-if="item.nodeName == 'H4'"
-        class="h5 ml-0"
-      >
-        {{ item.text }}
-      </h4>
-      <h5
-        v-if="item.nodeName == 'H5'"
-        class="h6 ml-0"
-      >
-        {{ item.text }}
-      </h5>
-      <h6
-        v-if="item.nodeName == 'H6'"
-        class="h6 ml-0"
-      >
-        {{ item.text }}
-      </h6>
-      <details v-if="item.unknownType">
-        <summary>{{ item.text }}</summary>
-        {{ item.html }}
+      <details v-if="item.nodeName === '#readmore'">
+        <summary>続きを読む</summary>
+        <div
+          v-for="child in item.children"
+          :key="child.nodeIndex"
+        >
+          <ArticleBodySectionItem :item="child" />
+        </div>
       </details>
     </div>
   </div>
