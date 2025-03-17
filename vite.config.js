@@ -9,13 +9,13 @@ export default defineConfig({
       content: `// ==UserScript==
 // @name         カスタマイズ版匿名日記
 // @namespace    http://tampermonkey.net/
-// @version      3.0.1
+// @version      {{version}}
 // @description  try to take over the world!
 // @author       You
 // @match        https://anond.hatelabo.jp/customized
 // @grant        none
 // ==/UserScript==
-`,
+`.replaceAll('{{version}}', process.env.npm_package_version),
       verify: false
     }),
     vue()
