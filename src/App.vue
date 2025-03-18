@@ -29,7 +29,7 @@ const referButtonClick = entry => {
     class="panel-left"
     ref="scroll"
   >
-    <div class="container panel-main">
+    <div class="container panel-main pr-0">
       <PagingBlock @change="pagingClick($event)" />
       <ArticleCard
         v-for="entry in entriesRef"
