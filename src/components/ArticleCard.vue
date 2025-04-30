@@ -18,7 +18,9 @@ function getNGWords (entry) {
     return []
   }
   return ngWordsRef.value.filter(word => {
-    return entry.paragraphs.filter(p => wordExistsIn(word, p)).length > 0
+    const titleNg = entry.title != null && entry.title.indexOf(word) >= 0
+    const bodyNg = entry.paragraphs.filter(p => wordExistsIn(word, p)).length > 0
+    return titleNg || bodyNg
   })
 }
 
