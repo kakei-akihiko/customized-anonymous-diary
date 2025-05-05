@@ -22,6 +22,7 @@ const loadNGWords = () => {
   if (json == null) {
     console.warn('customized.ngWordsが保存されてないためNGワードが適用されません。')
     ngWordsRef.value = []
+    return
   }
   try {
     ngWordsRef.value = JSON.parse(json)
