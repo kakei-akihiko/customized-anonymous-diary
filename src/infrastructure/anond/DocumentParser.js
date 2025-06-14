@@ -51,6 +51,16 @@ class DocumentParser {
     return Array.from(node.childNodes)
       .map((child, index) => this.parseArticleBodyLine(index, child))
       .filter(item => item != null)
+      .reduce((results, item) => {
+        const lastItem = results.length > 0 ? results[results.length - 1] : null
+        const unknownTypeProcessing = lastItem?.unknownType ?? false
+        if (item.unknownType && unknownTypeProcessing) {
+          lastItem.html += item.html
+        } else {
+          results.push(item)
+        }
+        return results
+      }, [])
   }
 
   parseArticleBodyLine (nodeIndex, articleChildNode) {
