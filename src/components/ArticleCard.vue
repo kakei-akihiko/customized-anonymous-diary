@@ -33,6 +33,9 @@ export default {
     }
   },
   emits: ['refer'],
+  data() {
+    return {showHtml: false}
+  },
   computed: {
     filteredItems () {
       return this.entry.paragraphs.filter(item => {
@@ -49,25 +52,30 @@ export default {
 <template>
   <div class="card py-2">
     <div class="card-body">
-      <div class="card-title main-content-title">
-        <a
-          :href="entry.url"
-          target="_blank"
-        >■</a>
-        <strong v-if="ngWords.length <= 0">{{ entry.title }}</strong>
-        <strong v-else>NG</strong>
-        <button
-          v-if="entry.refer != null"
-          class="btn btn-default btn-sm"
-          @click="$emit('refer')"
-        >
-          言及先を開く
-        </button>
-        <span class="text-inconspicuous">{{ entry.time }}</span>
-        <span
-          v-if="entry.refersCount > 0"
-          class="text-refered"
-        >被言及：{{ entry.refersCount }}</span>
+      <div class="card-title main-content-title-bar">
+        <div class="main-content-title">
+          <a
+            :href="entry.url"
+            target="_blank"
+          >■</a>
+          <strong v-if="ngWords.length <= 0">{{ entry.title }}</strong>
+          <strong v-else>NG</strong>
+          <button
+            v-if="entry.refer != null"
+            class="btn btn-default btn-sm"
+            @click="$emit('refer')"
+          >
+            言及先を開く
+          </button>
+          <span class="text-inconspicuous">{{ entry.time }}</span>
+          <span
+            v-if="entry.refersCount > 0"
+            class="text-refered"
+          >被言及：{{ entry.refersCount }}</span>
+        </div>
+        <div class="main-content-option">
+          <input type="checkbox" v-model="showHtml"/>
+        </div>
       </div>
 
       <div class="card-text">
@@ -85,7 +93,14 @@ export default {
         />
         <!-- 本文（正常） -->
         <div v-if="ngWords.length <= 0">
-          <ArticleBodySection :items="filteredItems" />
+          <div
+            v-if="showHtml"
+            v-html="entry.html"
+            class="original-html"></div>
+          <ArticleBodySection
+            v-else
+            :items="filteredItems"
+          />
         </div>
         <!-- 本文（NGワード） -->
         <div v-else>

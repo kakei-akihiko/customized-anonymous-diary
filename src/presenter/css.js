@@ -25,6 +25,25 @@ body, pre, code, kbd, samp, .btn, p {
   font-family: "源ノ角ゴシック Code JP";
 }
 
+.main-content-title-bar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+.original-html {
+  line-height: 2.8rem;
+}
+
+.original-html p {
+  font-size: 1.8rem;
+}
+
+.original-html .keyword,
+.original-html a.keyword {
+  color: black;
+  border-bottom: none;
+}
+
 .refer-entire {
   background-color: honeydew
 }
@@ -129,7 +148,6 @@ body {
   display: block;
   font-size: 1.8rem;
 }
-
 </style>
 `)
 }

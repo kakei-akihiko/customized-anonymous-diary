@@ -14,6 +14,13 @@ class DocumentParser {
 
     const paragraphs = this.getArticleBody(node)
 
+    const html = Array.from(node.childNodes)
+      .filter(n => n.nodeType === Node.ELEMENT_NODE)
+      .filter(n => n.className !== 'sectionfooter' && n.className !== 'share-button')
+      .slice(1)
+      .map(n => n.outerHTML)
+      .join('')
+
     const referMatch = reference == null ? null : reference.match('[0-9]+$')
     const refer = referMatch == null
       ? null
@@ -25,7 +32,7 @@ class DocumentParser {
           paragraphs: null,
           loading: false
         }
-    return { id, title, url, paragraphs, refer, refersCount, time }
+    return { id, title, url, html, paragraphs, refer, refersCount, time }
   }
 
   getHeader (node) {
