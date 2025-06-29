@@ -32,7 +32,10 @@ class DocumentParser {
           paragraphs: null,
           loading: false
         }
-    return { id, title, url, html, paragraphs, refer, refersCount, time }
+
+    const japanese = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u.test(node.textContent)
+
+    return { id, title, url, html, japanese, paragraphs, refer, refersCount, time }
   }
 
   getHeader (node) {
@@ -59,6 +62,7 @@ class DocumentParser {
       .map((child, index) => this.parseArticleBodyLine(index, child))
       .filter(item => item != null)
       .reduce((results, item) => {
+        // 連続する解析エラーを1つにまとめる
         const lastItem = results.length > 0 ? results[results.length - 1] : null
         const unknownTypeProcessing = lastItem?.unknownType ?? false
         if (item.unknownType && unknownTypeProcessing) {
