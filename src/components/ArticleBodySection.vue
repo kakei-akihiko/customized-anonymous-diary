@@ -3,7 +3,8 @@ import { computed } from 'vue';
 import ArticleBodySectionItem from './ArticleBodySectionItem.vue';
 
 const props = defineProps({
-  items: { type: Array, required: true }
+  items: { type: Array, required: true },
+  readmoreCount: { type: Number, required: true }
 })
 
 const items = computed(() => {
@@ -12,7 +13,7 @@ const items = computed(() => {
   let readmoreItem = null
 
   for (const item of props.items) {
-    if (lineIndex >= 10 && readmoreItem == null) {
+    if (lineIndex >= props.readmoreCount && readmoreItem == null) {
       readmoreItem = { nodeName: '#readmore', children: [] }
       results.push(readmoreItem)
     }

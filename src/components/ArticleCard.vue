@@ -49,6 +49,16 @@ export default {
 }
 </script>
 
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps(['entry'])
+
+const readmoreCount = computed(() => {
+  return props.entry.japanese ? 10 : 1
+})
+</script>
+
 <template>
   <div class="card py-2">
     <div class="card-body">
@@ -100,6 +110,7 @@ export default {
           <ArticleBodySection
             v-else
             :items="filteredItems"
+            :readmoreCount="readmoreCount"
           />
         </div>
         <!-- 本文（NGワード） -->
