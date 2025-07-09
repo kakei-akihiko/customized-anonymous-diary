@@ -33,9 +33,26 @@ class DocumentParser {
           loading: false
         }
 
-    const japanese = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u.test(node.textContent)
+    const japanese = this.isJapaneseEntry(node)
 
     return { id, title, url, html, japanese, paragraphs, refer, refersCount, time }
+  }
+
+  isJapaneseEntry (node) {
+    const footer = node.querySelector('.sectionfooter');
+
+    const pattern = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u
+
+    for (const child of node.children) {
+      if (child.nodeName === 'H3') {
+        continue
+      }
+      if (child === footer) return false;
+      if (pattern.test(child.textContent)) {
+        return true
+      }
+    }
+    return false
   }
 
   getHeader (node) {

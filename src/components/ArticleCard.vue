@@ -55,7 +55,7 @@ import { computed } from 'vue'
 const props = defineProps(['entry'])
 
 const readmoreCount = computed(() => {
-  return props.entry.japanese ? 10 : 1
+  return props.entry.japanese ? 10 : 0
 })
 </script>
 
