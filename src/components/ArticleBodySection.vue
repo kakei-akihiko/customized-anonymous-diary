@@ -47,8 +47,7 @@ const items = computed(() => {
       <ArticleBodySectionItem :item="item" />
       <blockquote
         v-if="item.nodeName == 'BLOCKQUOTE'"
-        class="rounded p-1"
-        style="background-color: rgb(220, 240, 255)"
+        class="rounded p-1 masuda-pre"
       >
         <div
           v-for="child in item.children"

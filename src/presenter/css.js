@@ -137,6 +137,11 @@ body {
   display: none;
 }
 
+/* preタグ */
+.masuda-pre {
+  background-color: #e7ebff
+}
+
 /* 右サイドバーの内容（表示） */
 
 .panel-right-side.collapsed .panel-collapsed {
@@ -147,6 +152,19 @@ body {
 .btn-collapse {
   display: block;
   font-size: 1.8rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  #app {
+    background: black;
+    color: rgb(150, 150, 150);
+  }
+  .card {
+    background: rgb(50, 50, 50);
+  }
+  .masuda-pre {
+    background-color: rgb(75, 75, 75);
+  }
 }
 </style>
 `)

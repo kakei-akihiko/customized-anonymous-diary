@@ -26,8 +26,7 @@ const props = defineProps({
   </ol>
   <pre
     v-if="props.item.nodeName == 'PRE'"
-    class="rounded p-1"
-    style="background-color: #e7ebff"
+    class="rounded p-1 masuda-pre"
   >
     {{ props.item.text }}
   </pre>
