@@ -1,5 +1,6 @@
 <script>
 import ArticleBodySection from './ArticleBodySection.vue'
+import ArticleCardTitle from './ArticleCardTitle.vue'
 import ArticleReferenceCard from './ArticleReferenceCard.vue'
 import { ngWordsRef } from '../usecases/NGWord'
 
@@ -62,31 +63,11 @@ const readmoreCount = computed(() => {
 <template>
   <div class="card py-2">
     <div class="card-body">
-      <div class="card-title main-content-title-bar">
-        <div class="main-content-title">
-          <a
-            :href="entry.url"
-            target="_blank"
-          >■</a>
-          <strong v-if="ngWords.length <= 0">{{ entry.title }}</strong>
-          <strong v-else>NG</strong>
-          <button
-            v-if="entry.refer != null"
-            class="btn btn-default btn-sm"
-            @click="$emit('refer')"
-          >
-            言及先を開く
-          </button>
-          <span class="text-inconspicuous">{{ entry.time }}</span>
-          <span
-            v-if="entry.refersCount > 0"
-            class="text-refered"
-          >被言及：{{ entry.refersCount }}</span>
-        </div>
-        <div class="main-content-option">
-          <input type="checkbox" v-model="showHtml"/>
-        </div>
-      </div>
+      <ArticleCardTitle
+        :entry="props.entry"
+        :ng-words="ngWords"
+        v-model:showHtml="showHtml"
+      />
 
       <div class="card-text">
         <div
