@@ -67,6 +67,7 @@ const readmoreCount = computed(() => {
         :entry="props.entry"
         :ng-words="ngWords"
         v-model:showHtml="showHtml"
+        @refer="emits('refer')"
       />
 
       <div class="card-text">
