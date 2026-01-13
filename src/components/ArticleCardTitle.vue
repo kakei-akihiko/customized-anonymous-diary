@@ -1,6 +1,10 @@
 <script setup>
-const props = defineProps(['entry', 'ngWords'])
-const showHtml = defineModel('showHtml', {default: false})
+const props = defineProps({
+  entry: { type: Object, required: true },
+  ngWords: { type: Array, required: true }
+})
+const showHtml = defineModel('showHtml', { default: false, type: Boolean })
+const emits = defineEmits(['refer'])
 </script>
 
 <template>
@@ -15,7 +19,7 @@ const showHtml = defineModel('showHtml', {default: false})
       <button
         v-if="props.entry.refer != null"
         class="btn btn-default btn-sm"
-        @click="$emit('refer')"
+        @click="emits('refer')"
       >
         言及先を開く
       </button>
@@ -27,9 +31,9 @@ const showHtml = defineModel('showHtml', {default: false})
     </div>
     <div class="main-content-option">
       <input
-        type="checkbox"
         v-model="showHtml"
-      />
+        type="checkbox"
+      >
     </div>
   </div>
 </template>

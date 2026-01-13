@@ -26,8 +26,8 @@ const referButtonClick = entry => {
 
 <template>
   <div
-    class="panel-left"
     ref="scroll"
+    class="panel-left"
   >
     <div class="container panel-main pr-0">
       <PagingBlock @change="pagingClick($event)" />

@@ -1,8 +1,24 @@
-<script>
+<script setup>
+import { computed, ref } from 'vue'
+import { ngWordsRef } from '../usecases/NGWord'
 import ArticleBodySection from './ArticleBodySection.vue'
 import ArticleCardTitle from './ArticleCardTitle.vue'
 import ArticleReferenceCard from './ArticleReferenceCard.vue'
-import { ngWordsRef } from '../usecases/NGWord'
+
+const showHtmlRef = ref(false)
+
+const emits = defineEmits(['refer'])
+
+const props = defineProps({
+  entry: {
+    type: Object,
+    required: true
+  }
+})
+
+const readmoreCount = computed(() => {
+  return props.entry.japanese ? 10 : 0
+})
 
 function wordExistsIn (word, p) {
   if (p.text != null && p.text.indexOf(word) >= 0) {
@@ -14,59 +30,32 @@ function wordExistsIn (word, p) {
   return false
 }
 
-function getNGWords (entry) {
-  if (entry == null) {
+const ngWords = computed(() => {
+  if (props.entry == null) {
     return []
   }
   return ngWordsRef.value.filter(word => {
-    const titleNg = entry.title != null && entry.title.indexOf(word) >= 0
-    const bodyNg = entry.paragraphs.filter(p => wordExistsIn(word, p)).length > 0
+    const titleNg = props.entry.title != null && props.entry.title.indexOf(word) >= 0
+    const bodyNg = props.entry.paragraphs.filter(p => wordExistsIn(word, p)).length > 0
     return titleNg || bodyNg
   })
-}
+})
 
-export default {
-  components: { ArticleBodySection, ArticleReferenceCard },
-  props: {
-    entry: {
-      type: Object,
-      default: null
-    }
-  },
-  emits: ['refer'],
-  data() {
-    return {showHtml: false}
-  },
-  computed: {
-    filteredItems () {
-      return this.entry.paragraphs.filter(item => {
-        return item.nodeName !== 'P' || item.text !== 'link'
-      })
-    },
-    ngWords () {
-      return getNGWords(this.entry)
-    }
-  }
-}
-</script>
-
-<script setup>
-import { computed } from 'vue'
-
-const props = defineProps(['entry'])
-
-const readmoreCount = computed(() => {
-  return props.entry.japanese ? 10 : 0
+const filteredItems = computed(() => {
+  return props.entry.paragraphs.filter(item => {
+    return item.nodeName !== 'P' || item.text !== 'link'
+  })
 })
 </script>
 
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div class="card py-2">
     <div class="card-body">
       <ArticleCardTitle
+        v-model:show-html="showHtmlRef"
         :entry="props.entry"
         :ng-words="ngWords"
-        v-model:showHtml="showHtml"
         @refer="emits('refer')"
       />
 
@@ -86,13 +75,14 @@ const readmoreCount = computed(() => {
         <!-- 本文（正常） -->
         <div v-if="ngWords.length <= 0">
           <div
-            v-if="showHtml"
+            v-if="showHtmlRef"
+            class="original-html"
             v-html="entry.html"
-            class="original-html"></div>
+          />
           <ArticleBodySection
             v-else
             :items="filteredItems"
-            :readmoreCount="readmoreCount"
+            :readmore-count="readmoreCount"
           />
         </div>
         <!-- 本文（NGワード） -->

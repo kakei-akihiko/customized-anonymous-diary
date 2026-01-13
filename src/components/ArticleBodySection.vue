@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import ArticleBodySectionItem from './ArticleBodySectionItem.vue';
+import { computed } from 'vue'
+import ArticleBodySectionItem from './ArticleBodySectionItem.vue'
 
 const props = defineProps({
   items: { type: Array, required: true },
@@ -9,7 +9,7 @@ const props = defineProps({
 
 const items = computed(() => {
   let lineIndex = 0
-  let results = []
+  const results = []
   let readmoreItem = null
 
   for (const item of props.items) {
@@ -18,7 +18,7 @@ const items = computed(() => {
       results.push(readmoreItem)
     }
 
-    let currentItem = {...item, lineIndex}
+    const currentItem = { ...item, lineIndex }
     if (readmoreItem == null) {
       results.push(currentItem)
     } else {
@@ -29,7 +29,7 @@ const items = computed(() => {
     if (item.children != null) {
       currentItem.children = []
       for (const child of item.children) {
-        currentItem.children.push({...child, lineIndex })
+        currentItem.children.push({ ...child, lineIndex })
         lineIndex++
       }
     }
@@ -62,7 +62,10 @@ const items = computed(() => {
               <ArticleBodySectionItem :item="grandchild" />
             </div>
           </details>
-          <ArticleBodySectionItem v-else :item="child" />
+          <ArticleBodySectionItem
+            v-else
+            :item="child"
+          />
         </div>
       </blockquote>
       <details v-if="item.nodeName === '#readmore'">
