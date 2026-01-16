@@ -39,7 +39,7 @@ class DocumentParser {
   }
 
   isJapaneseEntry (node) {
-    const footer = node.querySelector('.sectionfooter');
+    const footer = node.querySelector('.sectionfooter')
 
     const pattern = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u
 
@@ -47,7 +47,7 @@ class DocumentParser {
       if (child.nodeName === 'H3') {
         continue
       }
-      if (child === footer) return false;
+      if (child === footer) return false
       if (pattern.test(child.textContent)) {
         return true
       }
