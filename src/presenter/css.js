@@ -167,6 +167,9 @@ body {
   .card {
     background: rgb(50, 50, 50);
   }
+  .card.refer-entire {
+    background-color: oklch(0.35 0 0);
+  }
   .masuda-pre {
     background-color: rgb(75, 75, 75);
   }
