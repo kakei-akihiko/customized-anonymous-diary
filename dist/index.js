@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         カスタマイズ版匿名日記
 // @namespace    http://tampermonkey.net/
-// @version      3.5.0
+// @version      3.5.1
 // @description  try to take over the world!
 // @author       You
 // @match        https://anond.hatelabo.jp/customized
@@ -92,6 +92,11 @@ body, pre, code, kbd, samp, .btn, p {
 
 .text-refered {
   font-size: 80%; margin-left: .5rem
+}
+
+/* 記事タイトルの内容同士の間隔 */
+.main-content-title > *:nth-child(n+2) {
+  margin-left: .5rem
 }
 
 /* 記事タイトルの日時 */
@@ -190,6 +195,9 @@ body {
   }
   .card {
     background: rgb(50, 50, 50);
+  }
+  .card.refer-entire {
+    background-color: oklch(0.35 0 0);
   }
   .masuda-pre {
     background-color: rgb(75, 75, 75);
