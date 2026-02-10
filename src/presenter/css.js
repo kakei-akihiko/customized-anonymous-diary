@@ -65,6 +65,11 @@ body, pre, code, kbd, samp, .btn, p {
   font-size: 80%; margin-left: .5rem
 }
 
+/* 記事タイトルの内容同士の間隔 */
+.main-content-title > *:nth-child(n+2) {
+  margin-left: .5rem
+}
+
 /* 記事タイトルの日時 */
 .text-inconspicuous {
   color: rgb(100,100,100); font-size: small
@@ -161,6 +166,9 @@ body {
   }
   .card {
     background: rgb(50, 50, 50);
+  }
+  .card.refer-entire {
+    background-color: oklch(0.35 0 0);
   }
   .masuda-pre {
     background-color: rgb(75, 75, 75);
