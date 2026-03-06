@@ -109,7 +109,7 @@ body {
   --main-panel-width: 733px;
 }
 
-@media (width >= 1000px) {
+@media (width >= 1100px) {
   #app {
     margin: 0 auto;
     width: 100%;
