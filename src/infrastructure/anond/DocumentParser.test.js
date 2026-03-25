@@ -67,6 +67,6 @@ test('getArticleBody: 未知のタグエラー', () => {
   expect(results).toStrictEqual([
     { nodeIndex: 1, nodeName: 'DUMMY', text: '解析エラー', html: '<dummy>エラー1件目</dummy>', unknownType: true },
     { nodeIndex: 2, nodeName: 'P', text: '最初の段落' },
-    { nodeIndex: 3, nodeName: 'DUMMY', text: '解析エラー', html: '<dummy>エラー2件目</dummy>', unknownType: true },
+    { nodeIndex: 3, nodeName: 'DUMMY', text: '解析エラー', html: '<dummy>エラー2件目</dummy>', unknownType: true }
   ])
 })
