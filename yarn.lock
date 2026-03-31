@@ -1560,6 +1560,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"entities@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "entities@npm:7.0.1"
+  checksum: 5ee49e52e64eafc63251585f74eae50f259ea2169dbbf5380843dcd97c79bfe430a58e7f34012ab67a8e258f6ef9f92d721d149ffc88c89039e155f1bcf48a53
+  languageName: node
+  linkType: hard
+
 "env-paths@npm:^2.2.0":
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
@@ -2520,17 +2527,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^20.5.0":
-  version: 20.5.0
-  resolution: "happy-dom@npm:20.5.0"
+"happy-dom@npm:^20.8.9":
+  version: 20.8.9
+  resolution: "happy-dom@npm:20.8.9"
   dependencies:
-    "@types/node": "npm:>=20.0.0"
-    "@types/whatwg-mimetype": "npm:^3.0.2"
-    "@types/ws": "npm:^8.18.1"
-    entities: "npm:^4.5.0"
-    whatwg-mimetype: "npm:^3.0.0"
-    ws: "npm:^8.18.3"
-  checksum: 0aebcd9ce84c692f97d782dbaf3617cd48ed1971e2b5b4204d2368a737bb1cc76fb5347045de1923c222f941f1c8af41a58e0b014cfe836ca5b5fe18b7373fcd
+    "@types/node": ">=20.0.0"
+    "@types/whatwg-mimetype": ^3.0.2
+    "@types/ws": ^8.18.1
+    entities: ^7.0.1
+    whatwg-mimetype: ^3.0.0
+    ws: ^8.18.3
+  checksum: 93a3eb3048189096e67e306e9372d1f604b4a97299fd8e4fda60ea89a62a6f10cfde2b4ef49f0164c3a2baf335e6b263839855a4509f6c525f14fdfe990d2d82
   languageName: node
   linkType: hard
 
@@ -3043,7 +3050,7 @@ __metadata:
     eslint-plugin-n: ^17.24.0
     eslint-plugin-promise: ^7.2.1
     eslint-plugin-vue: ^10.8.0
-    happy-dom: ^20.5.0
+    happy-dom: ^20.8.9
     vite: ^6.4.1
     vite-plugin-banner: ^0.8.0
     vitest: ^4.0.18
