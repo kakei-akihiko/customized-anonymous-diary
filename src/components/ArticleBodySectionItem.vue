@@ -29,7 +29,7 @@ const props = defineProps({
   </ol>
   <pre
     v-if="props.item.nodeName == 'PRE'"
-    class="rounded p-1 masuda-pre"
+    class="masuda-pre"
   >
     {{ props.item.text }}
   </pre>

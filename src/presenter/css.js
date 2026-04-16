@@ -144,7 +144,9 @@ body {
 
 /* preタグ */
 .masuda-pre {
-  background-color: #e7ebff
+  background-color: #e7ebff;
+  padding: .25rem;
+  border-radius: .25rem;
 }
 
 /* 右サイドバーの内容（表示） */
