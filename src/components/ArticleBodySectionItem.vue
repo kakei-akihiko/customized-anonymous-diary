@@ -35,19 +35,19 @@ const props = defineProps({
   </pre>
   <h4
     v-if="props.item.nodeName == 'H4'"
-    class="h5 ml-0"
+    class="masuda-h4"
   >
     {{ props.item.text }}
   </h4>
   <h5
     v-if="props.item.nodeName == 'H5'"
-    class="h6 ml-0"
+    class="masuda-h5"
   >
     {{ props.item.text }}
   </h5>
   <h6
     v-if="props.item.nodeName == 'H6'"
-    class="h6 ml-0"
+    class="masuda-h6"
   >
     {{ props.item.text }}
   </h6>

@@ -16,8 +16,19 @@ body, pre, code, kbd, samp, .btn, p {
   font-size: medium;
 }
 
-.article-body h4 {
-  font-size: large;
+.article-body .masuda-h4 {
+  font-size: 2rem;
+  text-decoration: underline;
+}
+
+.article-body .masuda-h5 {
+  font-size: 1.9rem;
+  text-decoration: underline;
+}
+
+.article-body .masuda-h6 {
+  font-size: 1.8rem;
+  text-decoration: underline;
 }
 
 .article-body pre {
