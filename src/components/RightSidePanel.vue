@@ -36,7 +36,7 @@ const deleteNGWordButtonClick = ngWord => {
 <template>
   <div :class="panelClassName">
     <button
-      class="btn btn-link btn-toggle"
+      class="btn button-link btn-toggle"
       @click="toggleButtonClick"
     >
       ≡
@@ -53,7 +53,7 @@ const deleteNGWordButtonClick = ngWord => {
           </span>
           <button
             type="button"
-            class="btn btn-link"
+            class="btn button-link"
             @click="deleteNGWordButtonClick(ngWord)"
           >
             &times;

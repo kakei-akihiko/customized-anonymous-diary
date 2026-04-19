@@ -21,7 +21,7 @@ const buttonClick = async newPage => {
     :disabled="buttonDisabled"
   >
     <button
-      class="btn btn-link p-0"
+      class="btn button-link p-0"
       type="button"
       @click="buttonClick(pageIndexRef)"
     >
@@ -29,7 +29,7 @@ const buttonClick = async newPage => {
     </button>
     <button
       v-if="pageIndexRef > 1"
-      class="btn btn-link p-0"
+      class="btn button-link p-0"
       type="button"
       @click="buttonClick(1)"
     >
@@ -37,21 +37,21 @@ const buttonClick = async newPage => {
     </button>
     <button
       v-if="pageIndexRef > 1"
-      class="btn btn-link p-0"
+      class="btn button-link p-0"
       type="button"
       @click="buttonClick(pageIndexRef - 1)"
     >
       ← 前の25件
     </button>
     <button
-      class="btn btn-link p-0"
+      class="btn button-link p-0"
       type="button"
       @click="buttonClick(pageIndexRef + 1)"
     >
       → 次の25件
     </button>
     <button
-      class="btn btn-link p-0"
+      class="btn button-link p-0"
       type="button"
       @click="buttonClick(pageIndexRef + 5)"
     >

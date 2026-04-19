@@ -6,7 +6,14 @@ export const addCss = () => {
 body, pre, code, kbd, samp, .btn, p {
   font-family: sans-seif;
 }
-
+.button-link {
+  border: 1px solid transparent;
+  color: hsl(211, 100%, 50%);
+  background-color: transparent;
+}
+.button-link:hover {
+  color: hsl(211, 100%, 30%);
+}
 .article-body p, .article-body li {
   line-height: 2.8rem;
   font-size: 1.8rem;
