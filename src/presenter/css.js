@@ -3,8 +3,22 @@ export const addCss = () => {
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style>
-body, pre, code, kbd, samp, .btn, p {
+body, pre, code, kbd, samp, .btn, .button, p {
   font-family: sans-seif;
+}
+.button {
+  font-family: sans-seif;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 .button-link {
   border: 1px solid transparent;
@@ -14,6 +28,13 @@ body, pre, code, kbd, samp, .btn, p {
 .button-link:hover {
   color: hsl(211, 100%, 30%);
 }
+/*
+fieldset {
+  border-width: 0px;
+  margin: 0;
+  padding: 0;
+}
+*/
 .article-body p, .article-body li {
   line-height: 2.8rem;
   font-size: 1.8rem;
