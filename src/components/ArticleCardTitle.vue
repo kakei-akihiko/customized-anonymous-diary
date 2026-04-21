@@ -18,7 +18,7 @@ const emits = defineEmits(['refer'])
       <strong v-else>NG</strong>
       <button
         v-if="props.entry.refer != null"
-        class="btn btn-default btn-sm"
+        class="button button-refer"
         @click="emits('refer')"
       >
         言及先を開く

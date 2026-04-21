@@ -20,6 +20,12 @@ body, pre, code, kbd, samp, .btn, .button, p {
   border-radius: .25rem;
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+.button-refer {
+  color: oklch(0.6 0 0);
+  background-color: oklch(0.4 0 0);
+  font-size: .9rem;
+  padding: 0.15rem;
+}
 .button-link {
   border: 1px solid transparent;
   color: hsl(211, 100%, 50%);
