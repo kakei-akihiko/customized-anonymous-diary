@@ -16,7 +16,7 @@ const buttonClick = async newPage => {
 </script>
 
 <template>
-  <fieldset
+  <div
     class="paging-buttons"
     :disabled="buttonDisabled"
   >
@@ -57,5 +57,5 @@ const buttonClick = async newPage => {
     >
       古い方へ+5p
     </button>
-  </fieldset>
+  </div>
 </template>

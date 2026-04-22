@@ -34,13 +34,6 @@ body, pre, code, kbd, samp, .btn, .button, p {
 .button-link:hover {
   color: hsl(211, 100%, 30%);
 }
-/*
-fieldset {
-  border-width: 0px;
-  margin: 0;
-  padding: 0;
-}
-*/
 .article-body p, .article-body li {
   line-height: 2.8rem;
   font-size: 1.8rem;
@@ -100,6 +93,16 @@ fieldset {
 .paging-block {
   display: flex;
   justify-content: space-between;
+}
+
+.paging-buttons {
+  display: block;
+  min-inline-size: min-content;
+  margin-inline: 2px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 
 .paging-buttons button {
