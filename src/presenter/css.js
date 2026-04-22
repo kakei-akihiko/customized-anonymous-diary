@@ -97,6 +97,11 @@ fieldset {
   font-size: 1.7rem
 }
 
+.paging-block {
+  display: flex;
+  justify-content: space-between;
+}
+
 .paging-buttons button {
   font-size: 1.5rem;
   margin-right: 1rem;
