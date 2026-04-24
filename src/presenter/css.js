@@ -83,7 +83,11 @@ body, pre, code, kbd, samp, .btn, .button, p {
 }
 
 .refer-entire {
-  background-color: honeydew
+  background-color: honeydew;
+  margin-bottom: .5rem;
+  padding-top: .5rem;
+  padding-left: .5rem;
+  padding-right: .5rem;
 }
 
 .refer-title {
@@ -222,7 +226,7 @@ body {
   .card {
     background: rgb(50, 50, 50);
   }
-  .card.refer-entire {
+  .refer-entire {
     background-color: oklch(0.35 0 0);
   }
   .masuda-pre {

@@ -12,12 +12,12 @@ export default {
 </script>
 
 <template>
-  <div class="card pt-2 pl-2 pr-2 mb-2 refer-entire">
-    <div class="card-title refer-title">
+  <div class="refer-entire">
+    <div class="refer-title">
       <a :href="url">■</a>
       <strong>{{ title }}</strong>
     </div>
-    <div class="card-text">
+    <div class="refer-text">
       <ArticleBodySection :items="paragraphs" />
     </div>
   </div>
