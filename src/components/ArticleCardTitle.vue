@@ -8,7 +8,7 @@ const emits = defineEmits(['refer'])
 </script>
 
 <template>
-  <div class="card-title main-content-title-bar">
+  <div class="main-content-title-bar">
     <div class="main-content-title">
       <a
         :href="props.entry.url"

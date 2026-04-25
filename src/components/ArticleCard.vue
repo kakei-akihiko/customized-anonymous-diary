@@ -50,7 +50,7 @@ const filteredItems = computed(() => {
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="card py-2">
+  <div class="card article-card">
     <div class="card-body">
       <ArticleCardTitle
         v-model:show-html="showHtmlRef"

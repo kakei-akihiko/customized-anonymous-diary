@@ -39,6 +39,11 @@ body, pre, code, kbd, samp, .btn, .button, p {
   font-size: 1.8rem;
 }
 
+.article-card {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
 .article-body blockquote {
   font-size: medium;
 }
@@ -64,8 +69,9 @@ body, pre, code, kbd, samp, .btn, .button, p {
 }
 
 .main-content-title-bar {
-    display: grid;
-    grid-template-columns: 1fr auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin-bottom: .75rem;
 }
 
 .original-html {
