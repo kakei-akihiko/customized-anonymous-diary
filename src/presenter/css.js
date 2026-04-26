@@ -135,6 +135,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
   margin-left: .5rem
 }
 
+.panel-right-side fieldset {
+  border-width: 0;
+}
+
 /* 記事タイトルの日時 */
 .text-inconspicuous {
   color: rgb(100,100,100); font-size: small
