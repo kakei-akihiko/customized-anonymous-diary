@@ -50,48 +50,46 @@ const filteredItems = computed(() => {
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="card article-card">
-    <div class="card-body">
-      <ArticleCardTitle
-        v-model:show-html="showHtmlRef"
-        :entry="props.entry"
-        :ng-words="ngWords"
-        @refer="emits('refer')"
-      />
+  <div class="article-card">
+    <ArticleCardTitle
+      v-model:show-html="showHtmlRef"
+      :entry="props.entry"
+      :ng-words="ngWords"
+      @refer="emits('refer')"
+    />
 
-      <div class="card-text">
+    <div class="card-text">
+      <div
+        v-if="entry.refer != null && entry.refer.loading"
+        class="card pt-2 pl-2 pr-2 mb-2"
+      >
+        ...
+      </div>
+      <ArticleReferenceCard
+        v-if="entry.refer != null && entry.refer.visible"
+        :url="entry.refer.url"
+        :title="entry.refer.title"
+        :paragraphs="entry.refer.paragraphs"
+      />
+      <!-- 本文（正常） -->
+      <div v-if="ngWords.length <= 0">
         <div
-          v-if="entry.refer != null && entry.refer.loading"
-          class="card pt-2 pl-2 pr-2 mb-2"
-        >
-          ...
-        </div>
-        <ArticleReferenceCard
-          v-if="entry.refer != null && entry.refer.visible"
-          :url="entry.refer.url"
-          :title="entry.refer.title"
-          :paragraphs="entry.refer.paragraphs"
+          v-if="showHtmlRef"
+          class="original-html"
+          v-html="entry.html"
         />
-        <!-- 本文（正常） -->
-        <div v-if="ngWords.length <= 0">
-          <div
-            v-if="showHtmlRef"
-            class="original-html"
-            v-html="entry.html"
-          />
-          <ArticleBodySection
-            v-else
-            :items="filteredItems"
-            :readmore-count="readmoreCount"
-          />
-        </div>
-        <!-- 本文（NGワード） -->
-        <div v-else>
-          <strong>NG</strong>: <span
-            v-for="word in ngWords"
-            :key="word"
-          >{{ word }} </span>
-        </div>
+        <ArticleBodySection
+          v-else
+          :items="filteredItems"
+          :readmore-count="readmoreCount"
+        />
+      </div>
+      <!-- 本文（NGワード） -->
+      <div v-else>
+        <strong>NG</strong>: <span
+          v-for="word in ngWords"
+          :key="word"
+        >{{ word }} </span>
       </div>
     </div>
   </div>

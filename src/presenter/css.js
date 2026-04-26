@@ -40,8 +40,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
 }
 
 .article-card {
-  padding-top: .5rem;
-  padding-bottom: .5rem;
+  padding: .5rem 1rem .5rem 1.5rem;
+  border: solid 1px oklch(0.15 0 0);
+  border-radius: .25rem;
+  background: oklch(0.3 0 0);
 }
 
 .article-body blockquote {
