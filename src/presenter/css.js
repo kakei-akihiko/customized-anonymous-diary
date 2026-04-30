@@ -176,6 +176,10 @@ body {
   --main-panel-width: 733px;
 }
 
+#app {
+  text-align: left;
+}
+
 @media (width >= 1100px) {
   #app {
     margin: 0 auto;
