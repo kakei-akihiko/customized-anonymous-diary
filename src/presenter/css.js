@@ -32,40 +32,46 @@ body, pre, code, kbd, samp, .btn, .button, p {
 .button-link:hover {
   color: hsl(211, 100%, 30%);
 }
-.article-body p, .article-body li {
-  line-height: 2.8rem;
-  font-size: 1.8rem;
-}
 
 .article-card {
+  margin-top: .3rem;
   padding: .5rem 1rem .5rem 1.5rem;
-  border: solid 1px oklch(0.15 0 0);
   border-radius: .25rem;
   background: oklch(0.3 0 0);
 }
 
-.article-body blockquote {
-  font-size: medium;
-}
+.article-body {
+  & p,
+  & li {
+    line-height: 2.8rem;
+    font-size: 1.8rem;
+  }
 
-.article-body .masuda-h4 {
-  font-size: 2rem;
-  text-decoration: underline;
-}
+  & blockquote {
+    font-size: medium;
+  }
 
-.article-body .masuda-h5 {
-  font-size: 1.9rem;
-  text-decoration: underline;
-}
+  & .masuda-h4 {
+    margin-left: 0;
+    font-size: 2rem;
+    text-decoration: underline;
+  }
 
-.article-body .masuda-h6 {
-  font-size: 1.8rem;
-  text-decoration: underline;
-}
+  & .masuda-h5 {
+    margin-left: 0;
+    font-size: 1.9rem;
+    text-decoration: underline;
+  }
 
-.article-body pre {
-  font-size: 1rem;
-  font-family: "源ノ角ゴシック Code JP";
+  & .masuda-h6 {
+    font-size: 1.8rem;
+    text-decoration: underline;
+  }
+
+  & pre {
+    font-size: 1rem;
+    font-family: "源ノ角ゴシック Code JP";
+  }
 }
 
 .main-content-title-bar {
@@ -76,16 +82,15 @@ body, pre, code, kbd, samp, .btn, .button, p {
 
 .original-html {
   line-height: 2.8rem;
-}
 
-.original-html p {
-  font-size: 1.8rem;
-}
-
-.original-html .keyword,
-.original-html a.keyword {
-  color: black;
-  border-bottom: none;
+  & p {
+    font-size: 1.8rem;
+  }
+  & .keyword,
+  & a.keyword {
+    color: black;
+    border-bottom: none;
+  }
 }
 
 .refer-entire {
