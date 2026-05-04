@@ -39,7 +39,7 @@ const items = computed(() => {
 </script>
 
 <template>
-  <div class="article-body">
+  <div class="article-body article-items">
     <div
       v-for="item in items"
       :key="item.nodeIndex"
@@ -70,11 +70,13 @@ const items = computed(() => {
       </blockquote>
       <details v-if="item.nodeName === '#readmore'">
         <summary>続きを読む</summary>
-        <div
-          v-for="child in item.children"
-          :key="child.nodeIndex"
-        >
-          <ArticleBodySectionItem :item="child" />
+        <div class="article-items">
+          <div
+            v-for="child in item.children"
+            :key="child.nodeIndex"
+          >
+            <ArticleBodySectionItem :item="child" />
+          </div>
         </div>
       </details>
     </div>

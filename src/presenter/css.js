@@ -1,55 +1,123 @@
 export const addCss = () => {
   document.getElementsByTagName('head')[0]?.insertAdjacentHTML('beforeend', `
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
- integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style>
-body, pre, code, kbd, samp, .btn, p {
+body, pre, code, kbd, samp, .btn, .button, p {
   font-family: sans-seif;
 }
-
-.article-body p, .article-body li {
-  line-height: 2.8rem;
-  font-size: 1.8rem;
-}
-
-.article-body blockquote {
-  font-size: medium;
-}
-
-.article-body h4 {
-  font-size: large;
-}
-
-.article-body pre {
+.button {
+  font-family: sans-seif;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
   font-size: 1rem;
-  font-family: "源ノ角ゴシック Code JP";
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.button-refer {
+  color: oklch(0.6 0 0);
+  background-color: oklch(0.4 0 0);
+  font-size: .9rem;
+  padding: 0.15rem;
+}
+.button-link {
+  border: 1px solid transparent;
+  color: hsl(211, 100%, 50%);
+  background-color: transparent;
+}
+.button-link:hover {
+  color: hsl(211, 100%, 30%);
+}
+
+.article-card {
+  margin-top: .3rem;
+  padding: .5rem 1rem .5rem 1.5rem;
+  border-radius: .25rem;
+  background: oklch(0.3 0 0);
+}
+
+.article-body {
+  & p,
+  & li {
+    line-height: 2.8rem;
+    font-size: 1.8rem;
+  }
+
+  & blockquote {
+    font-size: medium;
+  }
+
+  & .masuda-h4 {
+    margin-left: 0;
+    font-size: 2rem;
+    text-decoration: underline;
+  }
+
+  & .masuda-h5 {
+    margin-left: 0;
+    font-size: 1.9rem;
+    text-decoration: underline;
+  }
+
+  & .masuda-h6 {
+    font-size: 1.8rem;
+    text-decoration: underline;
+  }
+
+  & pre {
+    font-size: 1rem;
+    font-family: "源ノ角ゴシック Code JP";
+  }
 }
 
 .main-content-title-bar {
-    display: grid;
-    grid-template-columns: 1fr auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin-bottom: .75rem;
 }
 
 .original-html {
   line-height: 2.8rem;
-}
 
-.original-html p {
-  font-size: 1.8rem;
-}
-
-.original-html .keyword,
-.original-html a.keyword {
-  color: black;
-  border-bottom: none;
+  & p {
+    font-size: 1.8rem;
+  }
+  & .keyword,
+  & a.keyword {
+    color: black;
+    border-bottom: none;
+  }
 }
 
 .refer-entire {
-  background-color: honeydew
+  background-color: honeydew;
+  margin-bottom: .5rem;
+  padding-top: .5rem;
+  padding-left: .5rem;
+  padding-right: .5rem;
 }
 
 .refer-title {
   font-size: 1.7rem
+}
+
+.paging-block {
+  display: flex;
+  justify-content: space-between;
+}
+
+.paging-buttons {
+  display: block;
+  min-inline-size: min-content;
+  margin-inline: 2px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 
 .paging-buttons button {
@@ -68,6 +136,10 @@ body, pre, code, kbd, samp, .btn, p {
 /* 記事タイトルの内容同士の間隔 */
 .main-content-title > *:nth-child(n+2) {
   margin-left: .5rem
+}
+
+.panel-right-side fieldset {
+  border-width: 0;
 }
 
 /* 記事タイトルの日時 */
@@ -109,6 +181,10 @@ body {
   --main-panel-width: 733px;
 }
 
+#app {
+  text-align: left;
+}
+
 @media (width >= 1100px) {
   #app {
     margin: 0 auto;
@@ -144,7 +220,9 @@ body {
 
 /* preタグ */
 .masuda-pre {
-  background-color: #e7ebff
+  background-color: #e7ebff;
+  padding: .25rem;
+  border-radius: .25rem;
 }
 
 /* 右サイドバーの内容（表示） */
@@ -167,7 +245,7 @@ body {
   .card {
     background: rgb(50, 50, 50);
   }
-  .card.refer-entire {
+  .refer-entire {
     background-color: oklch(0.35 0 0);
   }
   .masuda-pre {

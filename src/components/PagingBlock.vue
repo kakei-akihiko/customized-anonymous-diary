@@ -10,7 +10,7 @@ const pageChange = newPage => {
 </script>
 
 <template>
-  <div class="d-flex justify-content-between v-interval">
+  <div class="paging-block">
     <PagingButtons @change="pageChange($event)" />
     <div class="v-interval text-right text-inconspicuous">
       p.{{ pageIndexRef }}
