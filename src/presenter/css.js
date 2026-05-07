@@ -221,8 +221,14 @@ body {
 /* preタグ */
 .masuda-pre {
   background-color: #e7ebff;
-  padding: .25rem;
+  padding: 0 .25rem .25rem 1rem;
   border-radius: .25rem;
+  margin-left: 0;
+  padding-left: 1rem;
+
+  & p:first-of-type {
+    margin-top: 0;
+  }
 }
 
 /* 右サイドバーの内容（表示） */
