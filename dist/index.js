@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         カスタマイズ版匿名日記
 // @namespace    http://tampermonkey.net/
-// @version      4.0.0
+// @version      4.0.1
 // @description  try to take over the world!
 // @author       You
 // @match        https://anond.hatelabo.jp/customized
@@ -250,8 +250,14 @@ body {
 /* preタグ */
 .masuda-pre {
   background-color: #e7ebff;
-  padding: .25rem;
+  padding: 0 .25rem .25rem 1rem;
   border-radius: .25rem;
+  margin-left: 0;
+  padding-left: 1rem;
+
+  & p:first-of-type {
+    margin-top: 0;
+  }
 }
 
 /* 右サイドバーの内容（表示） */
