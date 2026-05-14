@@ -41,6 +41,8 @@ body, pre, code, kbd, samp, .btn, .button, p {
 }
 
 .article-body {
+  word-wrap: break-word;
+
   & p,
   & li {
     line-height: 2.8rem;
