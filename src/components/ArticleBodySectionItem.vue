@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <p v-if="props.item.nodeName == 'P'">
+  <p v-if="props.item.nodeName == 'P'" :class="props.item.className">
     {{ props.item.text }}
   </p>
   <ul v-if="props.item.nodeName == 'UL'">

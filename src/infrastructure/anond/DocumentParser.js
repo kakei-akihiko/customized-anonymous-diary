@@ -96,10 +96,16 @@ class DocumentParser {
     switch (nodeName) {
       case 'BR': return null
       case 'P':
-        if (articleChildNode.classList.length > 0) {
+        const classes = Array.from(articleChildNode.classList)
+        if (classes.includes('sectionfooter') || classes.includes('share-button')) {
           return null
         }
-        return { nodeIndex, text: articleChildNode.textContent, nodeName }
+        return {
+          className: articleChildNode.className,
+          nodeIndex,
+          text: articleChildNode.textContent,
+          nodeName
+        }
       case 'UL':
       case 'OL': {
         const items = articleChildNode.querySelectorAll('li')
