@@ -34,9 +34,9 @@ body, pre, code, kbd, samp, .btn, .button, p {
 }
 
 .article-card {
-  margin-top: .3rem;
+  margin-top: 1rem;
   padding: .5rem 1rem .5rem 1.5rem;
-  border-radius: .25rem;
+  border-radius: 10px;
   background: oklch(0.3 0 0);
 }
 
@@ -97,10 +97,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
 
 .refer-entire {
   background-color: honeydew;
+  margin-top: 1.5rem;
   margin-bottom: .5rem;
-  padding-top: .5rem;
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding: 1.2rem 1.5rem .1rem;
+  border-radius: 5px;
 }
 
 .refer-title {
