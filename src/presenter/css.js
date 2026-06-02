@@ -34,16 +34,30 @@ body, pre, code, kbd, samp, .btn, .button, p {
 }
 
 .article-card {
-  margin-top: .3rem;
+  margin-top: 1.5rem;
   padding: .5rem 1rem .5rem 1.5rem;
-  border-radius: .25rem;
+  border-radius: 10px;
   background: oklch(0.3 0 0);
+}
+
+.article-card:first-of-type {
+  margin-top: .5rem;
+}
+
+.article-card:last-of-type {
+  margin-bottom: 1rem;
 }
 
 .article-body {
   word-wrap: break-word;
 
-  & p,
+  & p {
+    line-height: 2.8rem;
+    font-size: 1.8rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
   & li {
     line-height: 2.8rem;
     font-size: 1.8rem;
@@ -74,12 +88,16 @@ body, pre, code, kbd, samp, .btn, .button, p {
     font-size: 1rem;
     font-family: "源ノ角ゴシック Code JP";
   }
+
+  & > div > details {
+    margin-bottom: 1rem;
+  }
 }
 
 .main-content-title-bar {
   display: grid;
   grid-template-columns: 1fr auto;
-  margin-bottom: .75rem;
+  margin-top: .5rem;
 }
 
 .original-html {
@@ -97,10 +115,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
 
 .refer-entire {
   background-color: honeydew;
+  margin-top: 1.5rem;
   margin-bottom: .5rem;
-  padding-top: .5rem;
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding: 1.2rem 1.5rem .1rem;
+  border-radius: 5px;
 }
 
 .refer-title {

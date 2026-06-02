@@ -31,12 +31,14 @@ const referButtonClick = entry => {
   >
     <div class="panel-main">
       <PagingBlock @change="pagingClick($event)" />
-      <ArticleCard
-        v-for="entry in entriesRef"
-        :key="entry.url"
-        :entry="entry"
-        @refer="referButtonClick(entry)"
-      />
+      <div class="articles">
+        <ArticleCard
+          v-for="entry in entriesRef"
+          :key="entry.url"
+          :entry="entry"
+          @refer="referButtonClick(entry)"
+        />
+      </div>
       <PagingBlock @change="pagingClick($event)" />
     </div>
   </div>
