@@ -24,7 +24,7 @@
     "eslint-plugin-vue": "^10.9.1",
     "vite": "^8.0.12",
     "vite-plugin-banner": "^0.8.0",
-    "vitest": "^4.0.18",
+    "vitest": "^4.1.0",
     "vue-eslint-parser": "^10.4.0"
   },
   "volta": {
