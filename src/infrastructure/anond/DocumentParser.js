@@ -121,6 +121,11 @@ class DocumentParser {
           children: this.getArticleBody(articleChildNode),
           nodeName
         }
+      case 'HR':
+        return {
+          nodeIndex,
+          nodeName
+        }
       case 'PRE':
       case 'H4':
       case 'H5':
