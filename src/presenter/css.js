@@ -171,59 +171,62 @@ body, pre, code, kbd, samp, .btn, .button, p {
   display: none;
 }
 
-/* オリジナルページHTML */
+/*
+オリジナルページはヘッダーのみ表示する。
+*/
 
 #original > * {
-  display: none;
-}
-
-#original > #globalheader {
-  display: block;
+  & > * {
+    display: none;
+  }
+  
+  & > #globalheader {
+    display: block;
+  }
 }
 
 /* HTML全体 */
 
-html {
+html, body {
   margin: 0;
   padding: 0;
   height: 100%
 }
 
-body {
+#app {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 150pt auto;
   margin: 0;
   padding: 0;
   height: 100%;
-}
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  gap: 0 .5rem;
 
-:root {
-  --main-panel-width: 733px;
+  & > #original {
+    grid-area: header;
+  }
+
+  & > .panel-main {
+    grid-area: main;
+    overflow-y: auto;
+
+    & > * {
+      max-width: 500pt;
+      margin: 0 auto;
+    }
+  }
+
+  & > .panel-sidebar {
+    grid-area: sidebar;
+    overflow-y: auto;
+  }
 }
 
 #app {
   text-align: left;
-}
-
-@media (width >= 1100px) {
-  #app {
-    margin: 0 auto;
-    width: 100%;
-    display: grid;
-    grid-template-columns: calc(var(--main-panel-width) + (100% - var(--main-panel-width)) / 2)  1fr;
-  }
-
-  .panel-left {
-    height: 100%;
-    overflow-y: scroll;
-    display: grid;
-  }
-
-  .panel-main {
-    margin-left: auto;
-    margin-right: 0;
-    width: var(--main-panel-width);
-  }
 }
 
 /* ≡ボタン */
@@ -233,6 +236,16 @@ body {
 }
 
 /* 右サイドバーの内容（非表示） */
+
+.sidebar-item {
+  &:hover {
+    background: oklch(.4 0 0);
+  }
+  & .icon {
+    display: inline-block;
+    padding: 1.5rem;
+  }
+}
 
 .panel-right-side .panel-collapsed {
   display: none;

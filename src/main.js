@@ -5,20 +5,6 @@ import { addCss } from './presenter/css'
 
 addCss()
 
-document.body.insertAdjacentHTML(
-  'beforeend',
-  '<div id="original"></div><div id="app"></div>'
-)
-
-const originalParentNode = document.getElementById('original')
-
-// #original, #app以外は#original配下に移動
-Array.from(document.body.childNodes)
-  .filter(node =>
-    node.nodeName === '#text' || (
-      node.getAttribute('id') !== 'original' &&
-      node.getAttribute('id') !== 'app'
-    )
-  ).forEach(node => originalParentNode.appendChild(node))
+document.body.insertAdjacentHTML('beforeend', '<div id="app"></div>')
 
 createApp(App).mount('#app')
