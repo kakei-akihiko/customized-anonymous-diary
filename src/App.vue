@@ -52,7 +52,7 @@ const referButtonClick = entry => {
     <RightSidePanel class="panel-ng-words"/>
   </div>
   <div class="panel-sidebar">
-    <div class="sidebar-item">
+    <div class="sidebar-item active">
       <span class="icon">📰</span>
       <span class="text">記事</span>
     </div>

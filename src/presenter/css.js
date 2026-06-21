@@ -238,8 +238,9 @@ html, body {
 /* 右サイドバーの内容（非表示） */
 
 .sidebar-item {
-  &:hover {
-    background: oklch(.4 0 0);
+  &:hover,
+  &.active {
+    background: oklch(.3 0 0);
   }
   & .icon {
     display: inline-block;
