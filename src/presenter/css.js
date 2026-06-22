@@ -229,6 +229,16 @@ html, body {
   text-align: left;
 }
 
+.panel-main {
+  &:not(.articles-active) .panel-articles {
+    display: none;
+  }
+
+  &:not(.ngwords-active) .panel-ng-words {
+    display: none;
+  }
+}
+
 /* ≡ボタン */
 
 .panel-right-side .btn-toggle {
