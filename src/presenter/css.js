@@ -239,14 +239,6 @@ html, body {
   }
 }
 
-/* ≡ボタン */
-
-.panel-right-side .btn-toggle {
-  font-size: 1.8rem;
-}
-
-/* 右サイドバーの内容（非表示） */
-
 .sidebar-item {
   &:hover,
   &.active {
@@ -256,10 +248,6 @@ html, body {
     display: inline-block;
     padding: 1.5rem;
   }
-}
-
-.panel-right-side .panel-collapsed {
-  display: none;
 }
 
 /* preタグ */
@@ -273,18 +261,6 @@ html, body {
   & p:first-of-type {
     margin-top: 0;
   }
-}
-
-/* 右サイドバーの内容（表示） */
-
-.panel-right-side.collapsed .panel-collapsed {
-  display: block;
-  font-size: 1.8rem;
-}
-
-.btn-collapse {
-  display: block;
-  font-size: 1.8rem;
 }
 
 @media (prefers-color-scheme: dark) {
