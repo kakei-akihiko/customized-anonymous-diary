@@ -92,6 +92,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
   & > div > details {
     margin-bottom: 1rem;
   }
+
+  & hr {
+    border-color: oklch(.2 0 0);
+  }
 }
 
 .main-content-title-bar {
@@ -203,7 +207,7 @@ html, body {
   grid-template-areas:
     "header header"
     "sidebar main";
-  gap: 0 .5rem;
+  gap: 0 1.3rem;
 
   & > #original {
     grid-area: header;
@@ -215,13 +219,14 @@ html, body {
 
     & > * {
       max-width: 500pt;
-      margin: 0 auto;
+      margin: 0 auto 0 0;
     }
   }
 
   & > .panel-sidebar {
     grid-area: sidebar;
     overflow-y: auto;
+    border-right: solid 1px oklch(.3 0 0);
   }
 }
 
