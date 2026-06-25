@@ -179,7 +179,7 @@ body, pre, code, kbd, samp, .btn, .button, p {
 オリジナルページはヘッダーのみ表示する。
 */
 
-#original > * {
+#original {
   & > * {
     display: none;
   }
