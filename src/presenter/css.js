@@ -92,6 +92,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
   & > div > details {
     margin-bottom: 1rem;
   }
+
+  & hr {
+    border-color: oklch(.2 0 0);
+  }
 }
 
 .main-content-title-bar {
@@ -171,71 +175,84 @@ body, pre, code, kbd, samp, .btn, .button, p {
   display: none;
 }
 
-/* オリジナルページHTML */
+/*
+オリジナルページはヘッダーのみ表示する。
+*/
 
-#original > * {
-  display: none;
-}
-
-#original > #globalheader {
-  display: block;
+#original {
+  & > * {
+    display: none;
+  }
+  
+  & > #globalheader {
+    display: block;
+  }
 }
 
 /* HTML全体 */
 
-html {
+html, body {
   margin: 0;
   padding: 0;
   height: 100%
 }
 
-body {
+#app {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 150pt auto;
   margin: 0;
   padding: 0;
   height: 100%;
-}
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  gap: 0 1.3rem;
 
-:root {
-  --main-panel-width: 733px;
+  & > #original {
+    grid-area: header;
+  }
+
+  & > .panel-main {
+    grid-area: main;
+    overflow-y: auto;
+
+    & > * {
+      max-width: 500pt;
+      margin: 0 auto 0 0;
+    }
+  }
+
+  & > .panel-sidebar {
+    grid-area: sidebar;
+    overflow-y: auto;
+    border-right: solid 1px oklch(.3 0 0);
+  }
 }
 
 #app {
   text-align: left;
 }
 
-@media (width >= 1100px) {
-  #app {
-    margin: 0 auto;
-    width: 100%;
-    display: grid;
-    grid-template-columns: calc(var(--main-panel-width) + (100% - var(--main-panel-width)) / 2)  1fr;
+.panel-main {
+  &:not(.articles-active) .panel-articles {
+    display: none;
   }
 
-  .panel-left {
-    height: 100%;
-    overflow-y: scroll;
-    display: grid;
-  }
-
-  .panel-main {
-    margin-left: auto;
-    margin-right: 0;
-    width: var(--main-panel-width);
+  &:not(.ngwords-active) .panel-ng-words {
+    display: none;
   }
 }
 
-/* ≡ボタン */
-
-.panel-right-side .btn-toggle {
-  font-size: 1.8rem;
-}
-
-/* 右サイドバーの内容（非表示） */
-
-.panel-right-side .panel-collapsed {
-  display: none;
+.sidebar-item {
+  &:hover,
+  &.active {
+    background: oklch(.3 0 0);
+  }
+  & .icon {
+    display: inline-block;
+    padding: 1.5rem;
+  }
 }
 
 /* preタグ */
@@ -249,18 +266,6 @@ body {
   & p:first-of-type {
     margin-top: 0;
   }
-}
-
-/* 右サイドバーの内容（表示） */
-
-.panel-right-side.collapsed .panel-collapsed {
-  display: block;
-  font-size: 1.8rem;
-}
-
-.btn-collapse {
-  display: block;
-  font-size: 1.8rem;
 }
 
 @media (prefers-color-scheme: dark) {

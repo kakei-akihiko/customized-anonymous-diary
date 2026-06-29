@@ -51,6 +51,7 @@ const props = defineProps({
   >
     {{ props.item.text }}
   </h6>
+  <hr v-if="props.item.nodeName == 'HR'"/>
   <details v-if="props.item.unknownType">
     <summary>{{ props.item.text }}</summary>
     {{ props.item.html }}

@@ -2,8 +2,6 @@
 import { computed, ref } from 'vue'
 import { ngWordsRef, addNGWord, removeNGWord } from '../usecases/NGWord.js'
 
-const collapsedRef = ref(false)
-
 const newNGWordRef = ref('')
 
 const addNGWordButtonDisabled = computed(() => {
@@ -12,16 +10,11 @@ const addNGWordButtonDisabled = computed(() => {
 
 const panelClassName = computed(() => {
   return {
-    'panel-right-side': true,
-    collapsed: collapsedRef.value
+    'panel-right-side': true
   }
 })
 
 const ngWords = computed(() => ngWordsRef.value ?? [])
-
-const toggleButtonClick = () => {
-  collapsedRef.value = !collapsedRef.value
-}
 
 const addNGWordButtonClick = () => {
   addNGWord(newNGWordRef.value)
@@ -34,47 +27,39 @@ const deleteNGWordButtonClick = ngWord => {
 </script>
 
 <template>
-  <div :class="panelClassName">
-    <button
-      class="button button-link btn-toggle"
-      @click="toggleButtonClick"
-    >
-      ≡
-    </button>
-    <div class="panel-collapsed">
-      <div v-if="ngWords.length > 0">
-        <div
-          v-for="ngWord in ngWords"
-          :key="ngWord"
-          class="ng-word-item"
+  <div class="panel-right-side">
+    <div v-if="ngWords.length > 0">
+      <div
+        v-for="ngWord in ngWords"
+        :key="ngWord"
+        class="ng-word-item"
+      >
+        <span>
+          {{ ngWord }}
+        </span>
+        <button
+          type="button"
+          class="button button-link"
+          @click="deleteNGWordButtonClick(ngWord)"
         >
-          <span>
-            {{ ngWord }}
-          </span>
-          <button
-            type="button"
-            class="button button-link"
-            @click="deleteNGWordButtonClick(ngWord)"
-          >
-            &times;
-          </button>
-        </div>
+          &times;
+        </button>
       </div>
-      <div v-else>
-        NGワードはありません。
-      </div>
-      <form>
-        <fieldset>
-          <input v-model="newNGWordRef">
-          <button
-            :disabled="addNGWordButtonDisabled"
-            type="button"
-            @click="addNGWordButtonClick"
-          >
-            追加
-          </button>
-        </fieldset>
-      </form>
     </div>
+    <div v-else>
+      NGワードはありません。
+    </div>
+    <form>
+      <fieldset>
+        <input v-model="newNGWordRef">
+        <button
+          :disabled="addNGWordButtonDisabled"
+          type="button"
+          @click="addNGWordButtonClick"
+        >
+          追加
+        </button>
+      </fieldset>
+    </form>
   </div>
 </template>
