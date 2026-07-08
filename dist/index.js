@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         カスタマイズ版匿名日記
 // @namespace    http://tampermonkey.net/
-// @version      5.0.0
+// @version      5.0.1
 // @description  try to take over the world!
 // @author       You
 // @match        https://anond.hatelabo.jp/customized
