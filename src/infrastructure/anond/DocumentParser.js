@@ -1,5 +1,5 @@
 import ArticleHeading3 from './ArticleHeading3.js'
-import ArticleSectionFooter from './ArticleSectionFooter.js'
+import { parseFooter } from '../html/parseFooter.js'
 
 class DocumentParser {
   parse (document) {
@@ -10,7 +10,7 @@ class DocumentParser {
   getItemFromSectionNode (node) {
     const { id, title, url, reference } = this.getHeader(node)
 
-    const { refersCount, time } = this.getFooter(node)
+    const { refersCount, time } = parseFooter(node)
 
     const paragraphs = this.getArticleBody(node)
 
@@ -64,14 +64,6 @@ class DocumentParser {
     }
 
     return ArticleHeading3.instance.parse(header)
-  }
-
-  getFooter (node) {
-    const footerNode = node.querySelector(':scope .sectionfooter')
-    if (footerNode == null) {
-      return {}
-    }
-    return ArticleSectionFooter.instance.parse(footerNode)
   }
 
   getArticleBody (node) {
