@@ -1,0 +1,50 @@
+// 各記事のノード（.section）からヘッダーのデータを取得
+export const parseHeader = sectionNode => {
+  const title = parseHeaderTitle(sectionNode)
+
+  const anchors = sectionNode.querySelectorAll(':scope a')
+
+  const url = anchors?.length >= 1 ? anchors[0].href : null
+
+  const reference = (anchors.length >= 2 && anchors[1].textContent.match('anond:[0-9]'))
+    ? anchors[1].href
+    : null
+
+  const referMatch = reference == null ? null : reference.match('[0-9]+$')
+
+  const refer = referMatch == null
+    ? null
+    : {
+        id: referMatch[0],
+        visible: false,
+        title: null,
+        url: reference,
+        paragraphs: null,
+        loading: false
+      }
+
+  const idMatch = url == null ? null : url.match('[0-9]+$')
+
+  const id = idMatch == null ? -1 : idMatch[0]
+
+  return { id, title, url, refer }
+}
+
+// 各記事のノード（.section）からヘッダーの見出し文字列を取得
+export const parseHeaderTitle = sectionNode => {
+  /* 言及先がある場合 */
+  if (sectionNode.querySelector(':scope button')) {
+    return sectionNode.querySelector(':scope a:nth-of-type(2)')?.textContent
+  }
+
+  /* 言及先がない場合 */
+  return Array.from(sectionNode.childNodes).map(child => {
+    if (child.nodeName === '#text') {
+      return child.nodeValue
+    }
+    if (child.nodeName === 'A' && child.className === 'keyword') {
+      return child.textContent
+    }
+    return null;
+  }).filter(child => child != null).join('').trim()
+}

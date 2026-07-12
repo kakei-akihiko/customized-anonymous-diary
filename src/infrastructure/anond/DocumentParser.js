@@ -1,4 +1,4 @@
-import ArticleHeading3 from './ArticleHeading3.js'
+import { parseHeader } from '../html/parseHeader.js'
 import { parseFooter } from '../html/parseFooter.js'
 
 class DocumentParser {
@@ -8,7 +8,7 @@ class DocumentParser {
   }
 
   getItemFromSectionNode (node) {
-    const { id, title, url, reference } = this.getHeader(node)
+    const { id, title, url, refer } = this.getHeader(node)
 
     const { refersCount, time } = parseFooter(node)
 
@@ -20,18 +20,6 @@ class DocumentParser {
       .slice(1)
       .map(n => n.outerHTML)
       .join('')
-
-    const referMatch = reference == null ? null : reference.match('[0-9]+$')
-    const refer = referMatch == null
-      ? null
-      : {
-          id: referMatch[0],
-          visible: false,
-          title: null,
-          url: reference,
-          paragraphs: null,
-          loading: false
-        }
 
     const japanese = this.isJapaneseEntry(node)
 
@@ -63,7 +51,7 @@ class DocumentParser {
       return {}
     }
 
-    return ArticleHeading3.instance.parse(header)
+    return parseHeader(header)
   }
 
   getArticleBody (node) {
