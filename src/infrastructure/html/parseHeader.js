@@ -6,22 +6,8 @@ export const parseHeader = sectionNode => {
 
   const url = anchors?.length >= 1 ? anchors[0].href : null
 
-  const reference = (anchors.length >= 2 && anchors[1].textContent.match('anond:[0-9]'))
-    ? anchors[1].href
-    : null
 
-  const referMatch = reference == null ? null : reference.match('[0-9]+$')
-
-  const refer = referMatch == null
-    ? null
-    : {
-        id: referMatch[0],
-        visible: false,
-        title: null,
-        url: reference,
-        paragraphs: null,
-        loading: false
-      }
+  const refer = getReferencee(sectionNode)
 
   const idMatch = url == null ? null : url.match('[0-9]+$')
 
@@ -47,4 +33,30 @@ export const parseHeaderTitle = sectionNode => {
     }
     return null;
   }).filter(child => child != null).join('').trim()
+}
+
+// 記事のノード（.section）から言及先を取得
+export const getReferencee = sectionNode => {
+  const anchors = sectionNode.querySelectorAll(':scope a')
+
+  if (anchors.length < 2 || anchors[1].textContent.match('anond:[0-9]') == null) {
+    return null
+  }
+
+  const reference = anchors[1].href
+
+  const referMatch = reference?.match('[0-9]+$')
+
+  if (referMatch == null) {
+    return null
+  }
+
+  return {
+    id: referMatch[0],
+    visible: false,
+    title: null,
+    url: reference,
+    paragraphs: null,
+    loading: false
+  }
 }
