@@ -2,14 +2,11 @@
 export const parseHeader = sectionNode => {
   const title = getArticleTitle(sectionNode)
 
-  const anchors = sectionNode.querySelectorAll(':scope a')
-
-  const url = anchors?.length >= 1 ? anchors[0].href : null
-
+  const url = sectionNode.querySelector(':scope a')?.href
 
   const refer = getReferencee(sectionNode)
 
-  const idMatch = url == null ? null : url.match('[0-9]+$')
+  const idMatch = url?.match('[0-9]+$')
 
   const id = idMatch == null ? -1 : idMatch[0]
 
