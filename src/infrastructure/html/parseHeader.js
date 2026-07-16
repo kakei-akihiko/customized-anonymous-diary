@@ -1,6 +1,6 @@
 // 各記事のノード（.section）からヘッダーのデータを取得
 export const parseHeader = sectionNode => {
-  const title = parseHeaderTitle(sectionNode)
+  const title = getArticleTitle(sectionNode)
 
   const anchors = sectionNode.querySelectorAll(':scope a')
 
@@ -17,7 +17,7 @@ export const parseHeader = sectionNode => {
 }
 
 // 各記事のノード（.section）からヘッダーの見出し文字列を取得
-export const parseHeaderTitle = sectionNode => {
+export const getArticleTitle = sectionNode => {
   /* 言及先がある場合 */
   if (sectionNode.querySelector(':scope button')) {
     return sectionNode.querySelector(':scope a:nth-of-type(2)')?.textContent
