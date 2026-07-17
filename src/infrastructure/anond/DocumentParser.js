@@ -8,7 +8,7 @@ class DocumentParser {
   }
 
   getItemFromSectionNode (node) {
-    const { id, title, url, refer } = this.getHeader(node)
+    const { id, title, url, refer } = parseHeader(node) ?? {}
 
     const { refersCount, time } = parseFooter(node)
 
@@ -41,17 +41,6 @@ class DocumentParser {
       }
     }
     return false
-  }
-
-  getHeader (node) {
-    const header = node.querySelector('h3')
-
-    if (header == null) {
-      console.warn('articleNode has not h3', this._node)
-      return {}
-    }
-
-    return parseHeader(header)
   }
 
   getArticleBody (node) {

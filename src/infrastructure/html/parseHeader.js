@@ -1,10 +1,17 @@
 // 各記事のノード（.section）からヘッダーのデータを取得
 export const parseHeader = sectionNode => {
-  const title = getArticleTitle(sectionNode)
+  const headerNode = sectionNode.querySelector('h3')
 
-  const url = sectionNode.querySelector(':scope a')?.href
+  if (headerNode == null) {
+    console.warn('articleNode has not h3', this._node)
+    return {}
+  }
 
-  const refer = getReferencee(sectionNode)
+  const title = getArticleTitle(headerNode)
+
+  const url = headerNode.querySelector(':scope a')?.href
+
+  const refer = getReferencee(headerNode)
 
   const idMatch = url?.match('[0-9]+$')
 
@@ -14,14 +21,14 @@ export const parseHeader = sectionNode => {
 }
 
 // 各記事のノード（.section）からヘッダーの見出し文字列を取得
-export const getArticleTitle = sectionNode => {
+export const getArticleTitle = headerNode => {
   /* 言及先がある場合 */
-  if (sectionNode.querySelector(':scope button')) {
-    return sectionNode.querySelector(':scope a:nth-of-type(2)')?.textContent
+  if (headerNode.querySelector(':scope button')) {
+    return headerNode.querySelector(':scope a:nth-of-type(2)')?.textContent
   }
 
   /* 言及先がない場合 */
-  return Array.from(sectionNode.childNodes).map(child => {
+  return Array.from(headerNode.childNodes).map(child => {
     if (child.nodeName === '#text') {
       return child.nodeValue
     }
@@ -33,8 +40,8 @@ export const getArticleTitle = sectionNode => {
 }
 
 // 記事のノード（.section）から言及先を取得
-export const getReferencee = sectionNode => {
-  const anchors = sectionNode.querySelectorAll(':scope a')
+export const getReferencee = headerNode => {
+  const anchors = headerNode.querySelectorAll(':scope a')
 
   if (anchors.length < 2 || anchors[1].textContent.match('anond:[0-9]') == null) {
     return null
