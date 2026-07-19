@@ -1,6 +1,6 @@
 import { getParagraphs } from '../html/sectionNode/Paragraphs.js'
-import { parseHeader } from '../html/parseHeader.js'
-import { parseFooter } from '../html/parseFooter.js'
+import { parseHeader } from '../html/sectionNode/Header.js'
+import { parseFooter } from '../html/sectionNode/Footer.js'
 
 class DocumentParser {
   parse (document) {
