@@ -26,7 +26,7 @@ export const parseArticleBodyLine = (nodeIndex, articleChildNode) => {
         return null
       }
       return {
-        className: articleChildNode.className,
+        className: articleChildNode.className === "" ? null : articleChildNode.className,
         nodeIndex,
         text: articleChildNode.textContent,
         nodeName
