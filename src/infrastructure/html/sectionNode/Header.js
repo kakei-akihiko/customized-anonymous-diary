@@ -3,7 +3,7 @@ export const parseHeader = sectionNode => {
   const headerNode = sectionNode.querySelector('h3')
 
   if (headerNode == null) {
-    console.warn('articleNode has not h3', this._node)
+    console.warn('articleNode has not h3', sectionNode)
     return {}
   }
 

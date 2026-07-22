@@ -43,7 +43,7 @@ export const parseArticleBodyLine = (nodeIndex, articleChildNode) => {
     case 'BLOCKQUOTE':
       return {
         nodeIndex,
-        children: this.getArticleBody(articleChildNode),
+        children: getParagraphs(articleChildNode),
         nodeName
       }
     case 'HR':
