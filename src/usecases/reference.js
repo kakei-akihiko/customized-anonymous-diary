@@ -25,5 +25,5 @@ export const updateReference = async entry => {
 
   const paragraphs = documentParser.getArticleBody(bodyDiv)
 
-  entry.refer = { id, title, paragraphs, visible: true, loading: false }
+  entry.refer = { ...entry.refer, id, title, paragraphs, visible: true, loading: false }
 }

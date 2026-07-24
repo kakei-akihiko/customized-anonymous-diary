@@ -14,7 +14,7 @@ export default {
 <template>
   <div class="refer-entire">
     <div class="refer-title">
-      <a :href="url">■</a>
+      <a :href="url" target="_blank">■</a>
       <strong>{{ title }}</strong>
     </div>
     <div class="refer-text">
