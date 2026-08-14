@@ -31,12 +31,20 @@ const ngWordsSidebarItem = computed(() => {
   return {active, className}
 })
 
+// サイドバーの項目：人気・注目
+const hotEntrySidebarItem = computed(() => {
+  const active = activeSidebarItemRef.value === 'hotEntry'
+  const className = {'sidebar-item': true, active}
+  return {active, className}
+})
+
 // メインパネルの状態
 const mainPanel = computed(() => {
   const className = {
     'panel-main': true,
     'articles-active': articlesSidebarItem.value.active,
-    'ngwords-active': ngWordsSidebarItem.value.active
+    'ngwords-active': ngWordsSidebarItem.value.active,
+    'hotEntry-active': hotEntrySidebarItem.value.active
   }
   return {className}
 })
@@ -111,6 +119,13 @@ const ngWordsSidebarItemClick = () => {
     >
       <span class="icon">🚫</span>
       <span class="text">NGワード</span>
+    </div>
+    <div
+      :class="ngWordsSidebarItem.className"
+      @click="ngWordsSidebarItemClick"
+    >
+      <span class="icon">💫</span>
+      <span class="text">人気・注目</span>
     </div>
   </div>
 </template>
