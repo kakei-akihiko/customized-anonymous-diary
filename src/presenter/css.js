@@ -242,6 +242,10 @@ html, body {
   &:not(.ngwords-active) .panel-ng-words {
     display: none;
   }
+
+  &:not(.hotEntry-active) .panel-hot-entries {
+    display: none;
+  }
 }
 
 .sidebar-item {
