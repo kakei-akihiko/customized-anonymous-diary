@@ -14,7 +14,7 @@ export const connectingRef = ref(false)
 export const loadEntries = async ({ page }) => {
   const document = await getTopPageDocument(page)
 
-  const entries = documentParser.parse(document)
+  const {entries} = documentParser.parse(document)
 
   entries.sort((a, b) => a.time > b.time ? 1 : -1)
 

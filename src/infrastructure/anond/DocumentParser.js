@@ -2,8 +2,9 @@ import { parseSectionNode } from "../html/sectionNode/SectionNode"
 
 class DocumentParser {
   parse (document) {
-    return Array.from(document.body.querySelectorAll('.body > .section'))
+    const entries = Array.from(document.body.querySelectorAll('.body > .section'))
       .map(node => parseSectionNode(node))
+    return {entries}
   }
 }
 
