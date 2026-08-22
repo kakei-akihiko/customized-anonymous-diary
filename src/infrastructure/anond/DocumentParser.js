@@ -11,10 +11,7 @@ class DocumentParser {
     const hotLinks = Array.from(document.body.querySelectorAll('#hotentriesblock li'))
       .map(node => parseLinks(node))
 
-    console.log('popular:', popularLinks)
-    console.log('hot:', hotLinks)
-
-    return {entries, popularLinks}
+    return {entries, popularLinks, hotLinks}
   }
 }
 

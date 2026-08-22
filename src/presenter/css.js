@@ -246,6 +246,10 @@ html, body {
   &:not(.hotEntry-active) .panel-hot-entries {
     display: none;
   }
+
+  & .panel-hot-entries {
+    padding-top: 1.5rem;
+  }
 }
 
 .sidebar-item {
