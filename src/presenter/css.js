@@ -242,6 +242,14 @@ html, body {
   &:not(.ngwords-active) .panel-ng-words {
     display: none;
   }
+
+  &:not(.hotEntry-active) .panel-hot-entries {
+    display: none;
+  }
+
+  & .panel-hot-entries {
+    padding-top: 1.5rem;
+  }
 }
 
 .sidebar-item {

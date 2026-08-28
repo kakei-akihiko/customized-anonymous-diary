@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import ArticleCard from './components/ArticleCard.vue'
 import PagingBlock from './components/PagingBlock.vue'
 import RightSidePanel from './components/RightSidePanel.vue'
+import HotEntryPanel from './components/HotEntryPanel.vue'
 import { updateReference } from './usecases/reference.js'
 import { entriesRef, fetchEntries } from './usecases/data'
 
@@ -31,12 +32,20 @@ const ngWordsSidebarItem = computed(() => {
   return {active, className}
 })
 
+// サイドバーの項目：人気・注目
+const hotEntriesSidebarItem = computed(() => {
+  const active = activeSidebarItemRef.value === 'hotEntries'
+  const className = {'sidebar-item': true, active}
+  return {active, className}
+})
+
 // メインパネルの状態
 const mainPanel = computed(() => {
   const className = {
     'panel-main': true,
     'articles-active': articlesSidebarItem.value.active,
-    'ngwords-active': ngWordsSidebarItem.value.active
+    'ngwords-active': ngWordsSidebarItem.value.active,
+    'hotEntry-active': hotEntriesSidebarItem.value.active
   }
   return {className}
 })
@@ -78,6 +87,10 @@ const articlesSidebarItemClick = () => {
 const ngWordsSidebarItemClick = () => {
   activeSidebarItemRef.value = 'ngWords'
 }
+// 人気・注目クリックイベント
+const hotEntriesSidebarItemClick = () => {
+  activeSidebarItemRef.value = 'hotEntries'
+}
 </script>
 
 <template>
@@ -96,6 +109,7 @@ const ngWordsSidebarItemClick = () => {
       <PagingBlock @change="pagingClick($event)" />
     </div>
     <RightSidePanel class="panel-ng-words"/>
+    <HotEntryPanel class="panel-hot-entries"/>
   </div>
   <div class="panel-sidebar">
     <div
@@ -111,6 +125,13 @@ const ngWordsSidebarItemClick = () => {
     >
       <span class="icon">🚫</span>
       <span class="text">NGワード</span>
+    </div>
+    <div
+      :class="hotEntriesSidebarItem.className"
+      @click="hotEntriesSidebarItemClick"
+    >
+      <span class="icon">💫</span>
+      <span class="text">人気・注目</span>
     </div>
   </div>
 </template>
