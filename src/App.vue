@@ -19,7 +19,7 @@ const articlesSidebarItem = computed(() => {
     'sidebar-item': true,
     active
   }
-  return {active, className}
+  return { active, className }
 })
 
 // サイドバーの項目：NGワード
@@ -29,14 +29,14 @@ const ngWordsSidebarItem = computed(() => {
     'sidebar-item': true,
     active
   }
-  return {active, className}
+  return { active, className }
 })
 
 // サイドバーの項目：人気・注目
 const hotEntriesSidebarItem = computed(() => {
   const active = activeSidebarItemRef.value === 'hotEntries'
-  const className = {'sidebar-item': true, active}
-  return {active, className}
+  const className = { 'sidebar-item': true, active }
+  return { active, className }
 })
 
 // メインパネルの状態
@@ -47,7 +47,7 @@ const mainPanel = computed(() => {
     'ngwords-active': ngWordsSidebarItem.value.active,
     'hotEntry-active': hotEntriesSidebarItem.value.active
   }
-  return {className}
+  return { className }
 })
 
 // マウント時
@@ -94,8 +94,11 @@ const hotEntriesSidebarItemClick = () => {
 </script>
 
 <template>
-  <div id="original"></div>
-  <div :class="mainPanel.className" ref="scroll">
+  <div id="original" />
+  <div
+    ref="scroll"
+    :class="mainPanel.className"
+  >
     <div class="panel-articles">
       <PagingBlock @change="pagingClick($event)" />
       <div class="articles">
@@ -108,8 +111,8 @@ const hotEntriesSidebarItemClick = () => {
       </div>
       <PagingBlock @change="pagingClick($event)" />
     </div>
-    <RightSidePanel class="panel-ng-words"/>
-    <HotEntryPanel class="panel-hot-entries"/>
+    <RightSidePanel class="panel-ng-words" />
+    <HotEntryPanel class="panel-hot-entries" />
   </div>
   <div class="panel-sidebar">
     <div

@@ -8,7 +8,10 @@ const props = defineProps({
 </script>
 
 <template>
-  <p v-if="props.item.nodeName == 'P'" :class="props.item.className">
+  <p
+    v-if="props.item.nodeName == 'P'"
+    :class="props.item.className"
+  >
     {{ props.item.text }}
   </p>
   <ul v-if="props.item.nodeName == 'UL'">
@@ -51,7 +54,7 @@ const props = defineProps({
   >
     {{ props.item.text }}
   </h6>
-  <hr v-if="props.item.nodeName == 'HR'"/>
+  <hr v-if="props.item.nodeName == 'HR'">
   <details v-if="props.item.unknownType">
     <summary>{{ props.item.text }}</summary>
     {{ props.item.html }}

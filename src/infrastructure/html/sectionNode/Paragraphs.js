@@ -1,4 +1,3 @@
-
 export const getParagraphs = sectionNode => {
   return Array.from(sectionNode.childNodes)
     .map((child, index) => parseArticleBodyLine(index, child))
@@ -26,7 +25,7 @@ export const parseArticleBodyLine = (nodeIndex, articleChildNode) => {
         return null
       }
       return {
-        className: articleChildNode.className === "" ? null : articleChildNode.className,
+        className: articleChildNode.className === '' ? null : articleChildNode.className,
         nodeIndex,
         text: articleChildNode.textContent,
         nodeName
