@@ -19,7 +19,7 @@ export const parseArticleBodyLine = (nodeIndex, articleChildNode) => {
   const nodeName = articleChildNode.nodeName
   switch (nodeName) {
     case 'BR': return null
-    case 'P':
+    case 'P': {
       const classes = Array.from(articleChildNode.classList)
       if (classes.includes('sectionfooter') || classes.includes('share-button')) {
         return null
@@ -30,6 +30,7 @@ export const parseArticleBodyLine = (nodeIndex, articleChildNode) => {
         text: articleChildNode.textContent,
         nodeName
       }
+    }
     case 'UL':
     case 'OL': {
       const items = articleChildNode.querySelectorAll('li')

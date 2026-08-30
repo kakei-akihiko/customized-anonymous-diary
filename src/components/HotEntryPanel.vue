@@ -7,7 +7,10 @@ import { hotLinksRef, popularLinksRef } from '../usecases/data'
     <section class="popular-entries">
       <h2>人気のエントリー</h2>
       <ul>
-        <li v-for="link in popularLinksRef">
+        <li
+          v-for="link in popularLinksRef"
+          :key="link.id"
+        >
           <a
             :href="'https://anond.hatelabo.jp/' + link.id"
             target="_blank"
@@ -20,7 +23,10 @@ import { hotLinksRef, popularLinksRef } from '../usecases/data'
     <section class="hot-entries">
       <h2>注目のエントリー</h2>
       <ul>
-        <li v-for="link in hotLinksRef">
+        <li
+          v-for="link in hotLinksRef"
+          :key="link.id"
+        >
           <a
             :href="'https://anond.hatelabo.jp/' + link.id"
             target="_blank"
