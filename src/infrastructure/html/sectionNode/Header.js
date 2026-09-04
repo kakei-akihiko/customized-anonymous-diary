@@ -35,7 +35,7 @@ export const getArticleTitle = headerNode => {
     if (child.nodeName === 'A' && child.className === 'keyword') {
       return child.textContent
     }
-    return null;
+    return null
   }).filter(child => child != null).join('').trim()
 }
 

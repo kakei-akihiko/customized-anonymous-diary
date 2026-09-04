@@ -8,12 +8,6 @@ const addNGWordButtonDisabled = computed(() => {
   return newNGWordRef.value.length <= 0
 })
 
-const panelClassName = computed(() => {
-  return {
-    'panel-right-side': true
-  }
-})
-
 const ngWords = computed(() => ngWordsRef.value ?? [])
 
 const addNGWordButtonClick = () => {

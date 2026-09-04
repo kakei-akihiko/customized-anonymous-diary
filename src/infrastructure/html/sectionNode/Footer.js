@@ -1,4 +1,3 @@
-
 // 各記事のノード（.section）からフッターのデータを取得
 export const parseFooter = sectionNode => {
   const footerNode = sectionNode.querySelector(':scope .sectionfooter')

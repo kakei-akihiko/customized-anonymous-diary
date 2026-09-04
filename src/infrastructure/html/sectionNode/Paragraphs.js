@@ -1,4 +1,3 @@
-
 export const getParagraphs = sectionNode => {
   return Array.from(sectionNode.childNodes)
     .map((child, index) => parseArticleBodyLine(index, child))
@@ -20,17 +19,18 @@ export const parseArticleBodyLine = (nodeIndex, articleChildNode) => {
   const nodeName = articleChildNode.nodeName
   switch (nodeName) {
     case 'BR': return null
-    case 'P':
+    case 'P': {
       const classes = Array.from(articleChildNode.classList)
       if (classes.includes('sectionfooter') || classes.includes('share-button')) {
         return null
       }
       return {
-        className: articleChildNode.className === "" ? null : articleChildNode.className,
+        className: articleChildNode.className === '' ? null : articleChildNode.className,
         nodeIndex,
         text: articleChildNode.textContent,
         nodeName
       }
+    }
     case 'UL':
     case 'OL': {
       const items = articleChildNode.querySelectorAll('li')
