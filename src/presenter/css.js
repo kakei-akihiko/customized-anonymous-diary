@@ -189,6 +189,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
   }
 }
 
+.panel-hot-entries h2 {
+  background: transparent;
+}
+
 /* HTML全体 */
 
 html, body {
