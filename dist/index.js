@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         カスタマイズ版匿名日記
 // @namespace    http://tampermonkey.net/
-// @version      5.2.0
+// @version      5.3.0
 // @description  try to take over the world!
 // @author       You
 // @match        https://anond.hatelabo.jp/customized
@@ -49,16 +49,17 @@ body, pre, code, kbd, samp, .btn, .button, p {
 .article-card {
   margin-top: 1.5rem;
   padding: .5rem 1rem .5rem 1.5rem;
-  border-radius: 10px;
-  background: oklch(0.3 0 0);
-}
+  background: black;
 
-.article-card:first-of-type {
-  margin-top: .5rem;
-}
-
-.article-card:last-of-type {
-  margin-bottom: 1rem;
+  &:first-of-type {
+    margin-top: .5rem;
+  }
+  &:not(:first-of-type) {
+    border-top: solid 1px oklch(0.3 0 0);
+  }
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
 }
 
 .article-body {
@@ -202,6 +203,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
   }
 }
 
+.panel-hot-entries h2 {
+  background: transparent;
+}
+
 /* HTML全体 */
 
 html, body {
@@ -301,7 +306,7 @@ html, body {
     background-color: oklch(0.35 0 0);
   }
   .masuda-pre {
-    background-color: rgb(75, 75, 75);
+    background-color: oklch(.3 0 0);
   }
 }
 </style>
