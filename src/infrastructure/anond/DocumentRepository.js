@@ -20,15 +20,3 @@ export const getReferDocument = async id => {
     'text/html'
   )
 }
-
-export const getTopPageDocument = async pageIndex => {
-  const url = import.meta.env.MODE === 'development'
-    ? '/'
-    : '/?mode=top&page=' + pageIndex
-
-  const response = await fetch(url)
-
-  const html = await response.text()
-
-  return new DOMParser().parseFromString(html, 'text/html')
-}
