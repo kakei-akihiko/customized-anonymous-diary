@@ -1,4 +1,4 @@
-import { getReferDocument } from '../infrastructure/document/ReferenceDocument.js'
+import { getReferDocument, parseDocument } from '../infrastructure/document/ReferenceDocument.js'
 import { getParagraphs } from '../infrastructure/html/sectionNode/Paragraphs.js'
 
 export const updateReference = async entry => {
@@ -17,11 +17,7 @@ export const updateReference = async entry => {
 
   const document = await getReferDocument(id)
 
-  const title = document.querySelector('h2').textContent
-
-  const bodyDiv = document.getElementById('body')
-
-  const paragraphs = getParagraphs(bodyDiv)
+  const { title, paragraphs } = parseDocument(document)
 
   entry.refer = { ...entry.refer, id, title, paragraphs, visible: true, loading: false }
 }

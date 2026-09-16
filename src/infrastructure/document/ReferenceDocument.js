@@ -20,3 +20,13 @@ export const getReferDocument = async id => {
     'text/html'
   )
 }
+
+export const parseDocument = document => {
+  const title = document.querySelector('h2').textContent
+
+  const bodyDiv = document.getElementById('body')
+
+  const paragraphs = getParagraphs(bodyDiv)
+
+  return {title, paragraphs}
+}
