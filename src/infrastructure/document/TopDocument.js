@@ -1,5 +1,17 @@
 import { parseSectionNode } from '../html/sectionNode/SectionNode'
 
+export const getDocument = async pageIndex => {
+  const url = import.meta.env.MODE === 'development'
+    ? '/'
+    : '/?mode=top&page=' + pageIndex
+
+  const response = await fetch(url)
+
+  const html = await response.text()
+
+  return new DOMParser().parseFromString(html, 'text/html')
+}
+
 export const parseDocument = document => {
   const entries = Array.from(document.body.querySelectorAll('.body > .section'))
     .map(node => parseSectionNode(node))
