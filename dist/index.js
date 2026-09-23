@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         カスタマイズ版匿名日記
 // @namespace    http://tampermonkey.net/
-// @version      5.3.1
+// @version      5.4.0
 // @description  try to take over the world!
 // @author       You
 // @match        https://anond.hatelabo.jp/customized
@@ -12,7 +12,7 @@
   `,1)):Z(``,!0),t.item.nodeName==`H4`?(q(),J(`h4`,go,A(t.item.text),1)):Z(``,!0),t.item.nodeName==`H5`?(q(),J(`h5`,_o,A(t.item.text),1)):Z(``,!0),t.item.nodeName==`H6`?(q(),J(`h6`,vo,A(t.item.text),1)):Z(``,!0),t.item.nodeName==`HR`?(q(),J(`hr`,yo)):Z(``,!0),t.item.unknownType?(q(),J(`details`,bo,[Y(`summary`,null,A(t.item.text),1),Ii(` `+A(t.item.html),1)])):Z(``,!0)],64))}},So={class:`article-body article-items`},Co={key:0,class:`rounded p-1 masuda-pre`},wo={key:0},To={key:1},Eo={class:`article-items`},Do={__name:`ArticleBodySection`,props:{items:{type:Array,required:!0},readmoreCount:{type:Number,required:!0}},setup(e){let t=e,n=$(()=>{let e=0,n=[],r=null;for(let i of t.items){e>=t.readmoreCount&&r==null&&(r={nodeName:`#readmore`,children:[]},n.push(r));let a={...i,lineIndex:e};if(r==null?n.push(a):r.children.push(a),e++,i.children!=null){a.children=[];for(let t of i.children)a.children.push({...t,lineIndex:e}),e++}}return n});return(e,t)=>(q(),J(`div`,So,[(q(!0),J(G,null,H(n.value,e=>(q(),J(`div`,{key:e.nodeIndex},[X(xo,{item:e},null,8,[`item`]),e.nodeName==`BLOCKQUOTE`?(q(),J(`blockquote`,Co,[(q(!0),J(G,null,H(e.children,e=>(q(),J(`div`,{key:e.nodeIndex},[e.nodeName===`#readmore`?(q(),J(`details`,wo,[t[0]||=Y(`summary`,null,`続きを読む`,-1),(q(!0),J(G,null,H(e.children,e=>(q(),J(`div`,{key:e.nodeIndex},[X(xo,{item:e},null,8,[`item`])]))),128))])):(q(),Oi(xo,{key:1,item:e},null,8,[`item`]))]))),128))])):Z(``,!0),e.nodeName===`#readmore`?(q(),J(`details`,To,[t[1]||=Y(`summary`,null,`続きを読む`,-1),Y(`div`,Eo,[(q(!0),J(G,null,H(e.children,e=>(q(),J(`div`,{key:e.nodeIndex},[X(xo,{item:e},null,8,[`item`])]))),128))])])):Z(``,!0)]))),128))]))}},Oo={class:`main-content-title-bar`},ko={class:`main-content-title`},Ao=[`href`],jo={key:0},Mo={key:1},No={class:`text-inconspicuous`},Po={key:3,class:`text-refered`},Fo={class:`main-content-option`},Io={__name:`ArticleCardTitle`,props:or({entry:{type:Object,required:!0},ngWords:{type:Array,required:!0}},{showHtml:{default:!1,type:Boolean},showHtmlModifiers:{}}),emits:or([`refer`],[`update:showHtml`]),setup(e,{emit:t}){let n=e,r=si(e,`showHtml`),i=t;return(t,a)=>(q(),J(`div`,Oo,[Y(`div`,ko,[Y(`a`,{href:n.entry.url,target:`_blank`},`■`,8,Ao),n.ngWords.length<=0?(q(),J(`strong`,jo,A(n.entry.title),1)):(q(),J(`strong`,Mo,`NG`)),n.entry.refer==null?Z(``,!0):(q(),J(`button`,{key:2,class:`button button-refer`,onClick:a[0]||=e=>i(`refer`)},` 言及先を開く `)),Y(`span`,No,A(n.entry.time),1),e.entry.refersCount>0?(q(),J(`span`,Po,`被言及：`+A(n.entry.refersCount),1)):Z(``,!0)]),Y(`div`,Fo,[Tn(Y(`input`,{"onUpdate:modelValue":a[1]||=e=>r.value=e,type:`checkbox`},null,512),[[Qa,r.value]])])]))}},Lo=(e,t)=>{let n=e.__vccOpts||e;for(let[e,r]of t)n[e]=r;return n},Ro={components:{ArticleBodySection:Do},props:{title:{type:String,required:!0},url:{type:String,required:!0},paragraphs:{type:Array,required:!0}}},zo={class:`refer-entire`},Bo={class:`refer-title`},Vo=[`href`],Ho={class:`refer-text`};function Uo(e,t,n,r,i,a){let o=Zn(`ArticleBodySection`);return q(),J(`div`,zo,[Y(`div`,Bo,[Y(`a`,{href:n.url,target:`_blank`},`■`,8,Vo),Y(`strong`,null,A(n.title),1)]),Y(`div`,Ho,[X(o,{items:n.paragraphs},null,8,[`items`])])])}var Wo=Lo(Ro,[[`render`,Uo]]),Go={class:`article-card`},Ko={class:`card-text`},qo={key:0,class:`card pt-2 pl-2 pr-2 mb-2`},Jo={key:2},Yo=[`innerHTML`],Xo={key:3},Zo={__name:`ArticleCard`,props:{entry:{type:Object,required:!0}},emits:[`refer`],setup(e,{emit:t}){let n=Vt(!1),r=t,i=e,a=$(()=>i.entry.japanese?10:0);function o(e,t){return t.text!=null&&t.text.indexOf(e)>=0?!0:t.children==null?!1:t.children.filter(t=>t.text!=null&&t.text.indexOf(e)>=0).length>0}let s=$(()=>i.entry==null?[]:co.value.filter(e=>{let t=i.entry.title!=null&&i.entry.title.indexOf(e)>=0,n=i.entry.paragraphs.filter(t=>o(e,t)).length>0;return t||n})),c=$(()=>i.entry.paragraphs.filter(e=>e.nodeName!==`P`||e.text!==`link`));return(t,o)=>(q(),J(`div`,Go,[X(Io,{"show-html":n.value,"onUpdate:showHtml":o[0]||=e=>n.value=e,entry:i.entry,"ng-words":s.value,onRefer:o[1]||=e=>r(`refer`)},null,8,[`show-html`,`entry`,`ng-words`]),Y(`div`,Ko,[e.entry.refer!=null&&e.entry.refer.loading?(q(),J(`div`,qo,` ... `)):Z(``,!0),e.entry.refer!=null&&e.entry.refer.visible?(q(),Oi(Wo,{key:1,url:e.entry.refer.url,title:e.entry.refer.title,paragraphs:e.entry.refer.paragraphs},null,8,[`url`,`title`,`paragraphs`])):Z(``,!0),s.value.length<=0?(q(),J(`div`,Jo,[n.value?(q(),J(`div`,{key:0,class:`original-html`,innerHTML:e.entry.html},null,8,Yo)):(q(),Oi(Do,{key:1,items:c.value,"readmore-count":a.value},null,8,[`items`,`readmore-count`]))])):(q(),J(`div`,Xo,[o[2]||=Y(`strong`,null,`NG`,-1),o[3]||=Ii(`: `),(q(!0),J(G,null,H(s.value,e=>(q(),J(`span`,{key:e},A(e),1))),128))]))])]))}},Qo=e=>Array.from(e.childNodes).map((e,t)=>$o(t,e)).filter(e=>e!=null).reduce((e,t)=>{let n=e.length>0?e[e.length-1]:null,r=n?.unknownType??!1;return t.unknownType&&r?n.html+=t.html:e.push(t),e},[]),$o=(e,t)=>{let n=t.nodeName;switch(n){case`BR`:return null;case`P`:{let r=Array.from(t.classList);return r.includes(`sectionfooter`)||r.includes(`share-button`)?null:{className:t.className===``?null:t.className,nodeIndex:e,text:t.textContent,nodeName:n}}case`UL`:case`OL`:{let r=t.querySelectorAll(`li`);return{nodeIndex:e,texts:Array.from(r).map((e,t)=>({index:t,text:e.textContent})),nodeName:n}}case`BLOCKQUOTE`:return{nodeIndex:e,children:Qo(t),nodeName:n};case`HR`:return{nodeIndex:e,nodeName:n};case`PRE`:case`H4`:case`H5`:case`H6`:return{nodeIndex:e,text:t.textContent,nodeName:n};case`H3`:case`#text`:return null;default:return n===`DIV`&&t.id===`rectangle-middle`?null:{nodeIndex:e,text:`解析エラー`,nodeName:n,unknownType:!0,html:t.outerHTML}}},es=e=>{let t=e.querySelector(`h3`);if(t==null)return console.warn(`articleNode has not h3`,e),{};let n=ts(t),r=t.querySelector(`:scope a`)?.href,i=ns(t),a=r?.match(`[0-9]+$`);return{id:a==null?-1:a[0],title:n,url:r,refer:i}},ts=e=>e.querySelector(`:scope button`)?e.querySelector(`:scope a:nth-of-type(2)`)?.textContent:Array.from(e.childNodes).map(e=>e.nodeName===`#text`?e.nodeValue:e.nodeName===`A`&&e.className===`keyword`?e.textContent:null).filter(e=>e!=null).join(``).trim(),ns=e=>{let t=e.querySelectorAll(`:scope a`);if(t.length<2||t[1].textContent.match(`anond:[0-9]`)==null)return null;let n=t[1].href,r=n?.match(`[0-9]+$`);return r==null?null:{id:r[0],visible:!1,title:null,url:n,paragraphs:null,loading:!1}},rs=e=>{let t=e.querySelector(`:scope .sectionfooter`),n=t?.getElementsByTagName(`a`)??[],r=(n.length>=2?n[1].textContent:``).match(/\((\d+)\)/),i=r==null?null:parseInt(r[1]),a=t?.childNodes??[],o=a.length>0?a[a.length-1]:null,s=(o==null?``:o.textContent).match(/\d\d:\d\d/);return{refersCount:i,time:s==null?null:s[0]}},is=e=>{let{id:t,title:n,url:r,refer:i}=es(e)??{},{refersCount:a,time:o}=rs(e),s=Qo(e);return{id:t,title:n,url:r,html:Array.from(e.childNodes).filter(e=>e.nodeType===Node.ELEMENT_NODE).filter(e=>e.className!==`sectionfooter`&&e.className!==`share-button`).slice(1).map(e=>e.outerHTML).join(``),japanese:as(e),paragraphs:s,refer:i,refersCount:a,time:o}},as=e=>{let t=e.querySelector(`.sectionfooter`),n=/[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u;for(let r of e.children)if(r.nodeName!==`H3`){if(r===t)return!1;if(n.test(r.textContent))return!0}return!1},os=async e=>{let t=`/?mode=top&page=`+e,n=await(await fetch(t)).text();return new DOMParser().parseFromString(n,`text/html`)},ss=e=>({entries:Array.from(e.body.querySelectorAll(`.body > .section`)).map(e=>is(e)),popularLinks:Array.from(e.body.querySelectorAll(`#popularentriesblock li`)).map(e=>cs(e)),hotLinks:Array.from(e.body.querySelectorAll(`#hotentriesblock li`)).map(e=>cs(e))}),cs=e=>{let t=e.querySelector(`:scope > a`);return{id:t?.getAttribute(`href`)?.match(`\\d+$`)[0],title:t?.textContent,referCount:parseInt(e.querySelector(`a.trackback`)?.textContent)}},ls=Vt(1),us=Vt([]),ds=Vt([]),fs=Vt([]),ps=Vt(!1),ms=async({page:e})=>{let{entries:t,popularLinks:n,hotLinks:r}=ss(await os(e));return t.sort((e,t)=>e.time>t.time?1:-1),{entries:t,popularLinks:n,hotLinks:r}},hs=async e=>{ps.value=!0;let t=e??ls.value;console.log(`fetching... page:`,t);let{entries:n,popularLinks:r,hotLinks:i}=await ms({page:t});console.log(`fetched... entries:`,n.length),ps.value=!1,ls.value=t,us.value=n,ds.value=r,fs.value=i},gs=[`disabled`],_s={__name:`PagingButtons`,emits:[`change`],setup(e,{emit:t}){let n=t,r=$(()=>ps.value),i=async e=>{console.log(`buttonClick`,e),await hs(e),n(`change`,e)};return(e,t)=>(q(),J(`div`,{class:`paging-buttons`,disabled:r.value},[Y(`button`,{class:`button button-link p-0`,type:`button`,onClick:t[0]||=e=>i(z(ls))},` 再読み込み `),z(ls)>1?(q(),J(`button`,{key:0,class:`button button-link p-0`,type:`button`,onClick:t[1]||=e=>i(1)},` 最新を取得 `)):Z(``,!0),z(ls)>1?(q(),J(`button`,{key:1,class:`button button-link p-0`,type:`button`,onClick:t[2]||=e=>i(z(ls)-1)},` ← 前の25件 `)):Z(``,!0),Y(`button`,{class:`button button-link p-0`,type:`button`,onClick:t[3]||=e=>i(z(ls)+1)},` → 次の25件 `),Y(`button`,{class:`button button-link p-0`,type:`button`,onClick:t[4]||=e=>i(z(ls)+5)},` 古い方へ+5p `)],8,gs))}},vs={class:`paging-block`},ys={class:`v-interval text-right text-inconspicuous`},bs={__name:`PagingBlock`,emits:[`change`],setup(e,{emit:t}){let n=t,r=e=>{n(`change`,e)};return(e,t)=>(q(),J(`div`,vs,[X(_s,{onChange:t[0]||=e=>r(e)}),Y(`div`,ys,` p.`+A(z(ls)),1)]))}},xs={class:`panel-right-side`},Ss={key:0},Cs=[`onClick`],ws={key:1},Ts=[`disabled`],Es={__name:`RightSidePanel`,setup(e){let t=Vt(``),n=$(()=>t.value.length<=0),r=$(()=>co.value??[]),i=()=>{lo(t.value),t.value=``},a=e=>{uo(e)};return(e,o)=>(q(),J(`div`,xs,[r.value.length>0?(q(),J(`div`,Ss,[(q(!0),J(G,null,H(r.value,e=>(q(),J(`div`,{key:e,class:`ng-word-item`},[Y(`span`,null,A(e),1),Y(`button`,{type:`button`,class:`button button-link`,onClick:t=>a(e)},` × `,8,Cs)]))),128))])):(q(),J(`div`,ws,` NGワードはありません。 `)),Y(`form`,null,[Y(`fieldset`,null,[Tn(Y(`input`,{"onUpdate:modelValue":o[0]||=e=>t.value=e},null,512),[[Za,t.value]]),Y(`button`,{disabled:n.value,type:`button`,onClick:i},` 追加 `,8,Ts)])])]))}},Ds={class:`panel-hot-entries`},Os={class:`popular-entries`},ks=[`href`],As={class:`hot-entries`},js=[`href`],Ms={__name:`HotEntryPanel`,setup(e){return(e,t)=>(q(),J(`div`,Ds,[Y(`section`,Os,[t[0]||=Y(`h2`,null,`人気のエントリー`,-1),Y(`ul`,null,[(q(!0),J(G,null,H(z(ds),e=>(q(),J(`li`,{key:e.id},[Y(`a`,{href:`https://anond.hatelabo.jp/`+e.id,target:`_blank`},A(e.title),9,ks)]))),128))])]),Y(`section`,As,[t[1]||=Y(`h2`,null,`注目のエントリー`,-1),Y(`ul`,null,[(q(!0),J(G,null,H(z(fs),e=>(q(),J(`li`,{key:e.id},[Y(`a`,{href:`https://anond.hatelabo.jp/`+e.id,target:`_blank`},A(e.title),9,js)]))),128))])])]))}},Ns=async e=>{let t;return t=await(await fetch(`/`+e+`?mode=json`)).json(),new DOMParser().parseFromString(`<body>
       <h2>`+t.title+`</h2>
       <div id="body">`+t.body+`</div>
-    </body>`,`text/html`)},Ps=e=>{let t=e.querySelector(`h2`).textContent,n=e.getElementById(`body`);return{title:t,paragraphs:getParagraphs(n)}},Fs=async e=>{if(e.refer.visible||e.refer.title!=null){e.refer.visible=!e.refer.visible;return}if(e.refer.loading)return;e.refer.loading=!0;let t=e.refer.id,{title:n,paragraphs:r}=Ps(await Ns(t));e.refer={...e.refer,id:t,title:n,paragraphs:r,visible:!0,loading:!1}},Is={class:`panel-articles`},Ls={class:`articles`},Rs={class:`panel-sidebar`};document.getElementsByTagName(`head`)[0]?.insertAdjacentHTML(`beforeend`,`
+    </body>`,`text/html`)},Ps=e=>({title:e.querySelector(`h2`).textContent,paragraphs:Qo(e.getElementById(`body`))}),Fs=async e=>{if(e.refer.visible||e.refer.title!=null){e.refer.visible=!e.refer.visible;return}if(e.refer.loading)return;e.refer.loading=!0;let t=e.refer.id,{title:n,paragraphs:r}=Ps(await Ns(t));e.refer={...e.refer,id:t,title:n,paragraphs:r,visible:!0,loading:!1}},Is={class:`panel-articles`},Ls={class:`articles`},Rs={class:`panel-sidebar`};document.getElementsByTagName(`head`)[0]?.insertAdjacentHTML(`beforeend`,`
 <style>
 body, pre, code, kbd, samp, .btn, .button, p {
   font-family: sans-seif;
@@ -32,8 +32,8 @@ body, pre, code, kbd, samp, .btn, .button, p {
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 .button-refer {
-  color: oklch(0.6 0 0);
-  background-color: oklch(0.4 0 0);
+  color: oklch(0.3 0 0);
+  background-color: oklch(0.9 0 0);
   font-size: .9rem;
   padding: 0.15rem;
 }
@@ -49,7 +49,6 @@ body, pre, code, kbd, samp, .btn, .button, p {
 .article-card {
   margin-top: 1.5rem;
   padding: .5rem 1rem .5rem 1.5rem;
-  background: black;
 
   &:first-of-type {
     margin-top: .5rem;
@@ -132,10 +131,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
 }
 
 .refer-entire {
-  background-color: honeydew;
-  margin-top: 1.5rem;
+  background-color: oklch(.9 0 0);
+  margin-top: .5rem;
   margin-bottom: .5rem;
-  padding: 1.2rem 1.5rem .1rem;
+  padding: 1rem 1.5rem 1rem;
   border-radius: 5px;
 }
 
@@ -273,7 +272,7 @@ html, body {
 .sidebar-item {
   &:hover,
   &.active {
-    background: oklch(.3 0 0);
+    background: oklch(.9 0 0);
   }
   & .icon {
     display: inline-block;
@@ -298,6 +297,19 @@ html, body {
   #app {
     background: black;
     color: rgb(150, 150, 150);
+  }
+  .button-refer {
+    color: oklch(0.6 0 0);
+    background-color: oklch(0.4 0 0);
+  }
+  .sidebar-item {
+    &:hover,
+    &.active {
+      background: oklch(.3 0 0);
+    }
+  }
+  .article-card {
+    background: black;
   }
   .card {
     background: rgb(50, 50, 50);
