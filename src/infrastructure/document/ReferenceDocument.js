@@ -1,3 +1,5 @@
+import { getParagraphs } from "../html/sectionNode/Paragraphs"
+
 export const getReferDocument = async id => {
   let refer
 

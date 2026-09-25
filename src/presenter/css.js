@@ -19,8 +19,8 @@ body, pre, code, kbd, samp, .btn, .button, p {
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 .button-refer {
-  color: oklch(0.6 0 0);
-  background-color: oklch(0.4 0 0);
+  color: oklch(0.3 0 0);
+  background-color: oklch(0.9 0 0);
   font-size: .9rem;
   padding: 0.15rem;
 }
@@ -36,7 +36,6 @@ body, pre, code, kbd, samp, .btn, .button, p {
 .article-card {
   margin-top: 1.5rem;
   padding: .5rem 1rem .5rem 1.5rem;
-  background: black;
 
   &:first-of-type {
     margin-top: .5rem;
@@ -119,10 +118,10 @@ body, pre, code, kbd, samp, .btn, .button, p {
 }
 
 .refer-entire {
-  background-color: honeydew;
-  margin-top: 1.5rem;
+  background-color: oklch(.9 0 0);
+  margin-top: .5rem;
   margin-bottom: .5rem;
-  padding: 1.2rem 1.5rem .1rem;
+  padding: 1rem 1.5rem 1rem;
   border-radius: 5px;
 }
 
@@ -260,7 +259,7 @@ html, body {
 .sidebar-item {
   &:hover,
   &.active {
-    background: oklch(.3 0 0);
+    background: oklch(.9 0 0);
   }
   & .icon {
     display: inline-block;
@@ -285,6 +284,19 @@ html, body {
   #app {
     background: black;
     color: rgb(150, 150, 150);
+  }
+  .button-refer {
+    color: oklch(0.6 0 0);
+    background-color: oklch(0.4 0 0);
+  }
+  .sidebar-item {
+    &:hover,
+    &.active {
+      background: oklch(.3 0 0);
+    }
+  }
+  .article-card {
+    background: black;
   }
   .card {
     background: rgb(50, 50, 50);
