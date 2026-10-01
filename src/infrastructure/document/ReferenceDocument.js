@@ -1,4 +1,4 @@
-import { getParagraphs } from "../html/sectionNode/Paragraphs"
+import { getParagraphs } from '../html/sectionNode/Paragraphs'
 
 export const getReferDocument = async id => {
   let refer
@@ -30,5 +30,5 @@ export const parseDocument = document => {
 
   const paragraphs = getParagraphs(bodyDiv)
 
-  return {title, paragraphs}
+  return { title, paragraphs }
 }

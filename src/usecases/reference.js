@@ -1,5 +1,4 @@
 import { getReferDocument, parseDocument } from '../infrastructure/document/ReferenceDocument.js'
-import { getParagraphs } from '../infrastructure/html/sectionNode/Paragraphs.js'
 
 export const updateReference = async entry => {
   if (entry.refer.visible || entry.refer.title != null) {

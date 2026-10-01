@@ -16,6 +16,8 @@ export const parseDocument = document => {
   const entries = Array.from(document.body.querySelectorAll('.body > .section'))
     .map(node => parseSectionNode(node))
 
+  entries.sort((a, b) => a.time > b.time ? 1 : -1)
+
   const popularLinks = Array.from(document.body.querySelectorAll('#popularentriesblock li'))
     .map(node => parseLinks(node))
 
